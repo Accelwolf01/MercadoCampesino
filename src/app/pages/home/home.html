@@ -1,0 +1,169 @@
+<div class="container-fluid px-0">
+  <!-- Hero -->
+  <div class="bg-dark text-white" style="background:linear-gradient(135deg,#1a1a2e 0%,#16213e 50%,#0f3460 100%)!important;">
+    <div class="container py-5">
+      <div class="row align-items-center">
+        <div class="col-lg-7">
+          <h1 class="display-4 fw-bold mb-3" style="color:var(--amarillo);">MercadoCampesino</h1>
+          <p class="lead mb-4">Conectamos campesinos de Cundinamarca directamente contigo en Bogotá — productos frescos, sin intermediarios.</p>
+          <div class="d-flex gap-3 flex-wrap">
+            <a routerLink="/mapa" class="btn btn-warning btn-lg fw-semibold px-4" style="color:#8e0000;">Ver mapa en vivo</a>
+            <a routerLink="/register" class="btn btn-outline-light btn-lg px-4">Quiero registrarme</a>
+          </div>
+        </div>
+        <div class="col-lg-5 d-none d-lg-block text-center">
+          <i class="bi bi-basket-fill" style="font-size:10rem;color:var(--amarillo);opacity:.6;"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container py-4">
+    <!-- Ofertas flash -->
+    <section class="mb-5">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2 class="h4 fw-bold mb-0" style="color:var(--rojo);">🔥 Ofertas flash del día</h2>
+        <a routerLink="/mapa" class="btn btn-outline-danger btn-sm rounded-pill">Ver todas</a>
+      </div>
+      @if (ofertas.length === 0) {
+        <div class="card bg-light border-0 rounded-4">
+          <div class="card-body text-center py-5">
+            <i class="bi bi-lightning fs-1 text-muted d-block mb-2"></i>
+            <p class="text-muted mb-0">No hay ofertas activas en este momento. Vuelve pronto.</p>
+          </div>
+        </div>
+      }
+      @if (ofertas.length > 0) {
+        <div class="d-flex gap-3 overflow-auto pb-3" style="scroll-snap-type:x mandatory;">
+          @for (of of ofertas; track of.id) {
+            <div class="card shadow-sm border-0 rounded-4 flex-shrink-0" style="min-width:280px;scroll-snap-align:start;">
+              <div class="position-relative">
+                @if (of.viaje_producto.producto.foto_url) {
+                  <img [src]="of.viaje_producto.producto.foto_url" class="card-img-top rounded-top-4" style="height:160px;object-fit:cover;" />
+                } @else {
+                  <div class="bg-light d-flex align-items-center justify-content-center" style="height:160px;border-radius:16px 16px 0 0;">
+                    <i class="bi bi-box-seam fs-1 text-muted"></i>
+                  </div>
+                }
+                <span class="badge bg-danger position-absolute top-0 end-0 mt-2 me-2 fs-6 rounded-pill shadow">-{{ of.descuento_porcentaje }}%</span>
+              </div>
+              <div class="card-body">
+                <h5 class="card-title fw-bold">{{ of.viaje_producto.producto.nombre }}</h5>
+                <div class="d-flex align-items-center gap-2 mb-2">
+                  <span class="text-decoration-line-through text-muted small">${{ of.viaje_producto.precio.toLocaleString() }}</span>
+                  <span class="fs-4 fw-bold" style="color:var(--rojo);">${{ of.precio_oferta.toLocaleString() }}</span>
+                  <span class="badge bg-warning text-dark rounded-pill">{{ of.viaje_producto.producto.unidad }}</span>
+                </div>
+                <div class="small text-muted">
+                  <i class="bi bi-person me-1"></i>{{ of.viaje_producto.viaje.campesino.nombres }} {{ of.viaje_producto.viaje.campesino.apellidos }}
+                </div>
+                <div class="small text-primary">
+                  <i class="bi bi-geo-alt me-1"></i>{{ of.viaje_producto.viaje.ubicaciones[0]?.direccion || 'Ver en mapa' }}
+                </div>
+              </div>
+            </div>
+          }
+        </div>
+      }
+    </section>
+
+    <!-- Productos del día -->
+    <section class="mb-5">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2 class="h4 fw-bold mb-0" style="color:var(--rojo);">🛒 Productos disponibles hoy</h2>
+        <a routerLink="/mapa" class="btn btn-outline-danger btn-sm rounded-pill">Ver en mapa</a>
+      </div>
+      @if (viajes.length === 0) {
+        <div class="card bg-light border-0 rounded-4">
+          <div class="card-body text-center py-5">
+            <i class="bi bi-box-seam fs-1 text-muted d-block mb-2"></i>
+            <p class="text-muted mb-0">No hay productos disponibles hoy. Vuelve pronto.</p>
+          </div>
+        </div>
+      } @else {
+        <div class="row g-3">
+          @for (p of productosDisponibles; track p.id) {
+            <div class="col-6 col-md-4 col-lg-3">
+              <div class="card border-0 shadow-sm rounded-4 h-100">
+                @if (p.foto_url) {
+                  <img [src]="p.foto_url" class="card-img-top rounded-top-4" style="height:140px;object-fit:cover;" />
+                } @else {
+                  <div class="bg-light d-flex align-items-center justify-content-center rounded-top-4" style="height:140px;">
+                    <i class="bi bi-box-seam fs-2 text-muted"></i>
+                  </div>
+                }
+                <div class="card-body p-3 d-flex flex-column">
+                  <h6 class="fw-bold mb-1">{{ p.nombre }}</h6>
+                  <div class="small text-muted mb-1">
+                    <i class="bi bi-person me-1"></i>{{ p.campesino }}
+                  </div>
+                  <div class="small text-muted mb-2">
+                    <i class="bi bi-geo-alt me-1"></i>{{ p.direccion }}
+                  </div>
+                  <div class="d-flex justify-content-between align-items-center mt-auto">
+                    <span class="fw-bold fs-5" style="color:var(--rojo);">${{ p.precio.toLocaleString() }}</span>
+                    <span class="badge bg-secondary rounded-pill">{{ p.unidad }}</span>
+                  </div>
+                  <div class="mt-2">
+                    <div class="d-flex justify-content-between small">
+                      <span class="text-muted">Disponible</span>
+                      <span class="fw-semibold">{{ p.disponible }}/{{ p.inicial }}</span>
+                    </div>
+                    <div class="progress" style="height:4px;">
+                      <div class="progress-bar rounded-pill"
+                        [class.bg-success]="(p.disponible / p.inicial) > 0.5"
+                        [class.bg-warning]="(p.disponible / p.inicial) <= 0.5"
+                        [class.bg-danger]="(p.disponible / p.inicial) <= 0.2"
+                        [style.width.%]="(p.disponible / p.inicial) * 100">
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          }
+        </div>
+      }
+    </section>
+
+    <!-- Features -->
+    <section class="row g-4">
+      <div class="col-6 col-lg-3">
+        <div class="card border-0 shadow-sm rounded-4 h-100 text-center">
+          <div class="card-body py-4">
+            <div class="fs-1 mb-2">🌽</div>
+            <h3 class="h6 fw-bold">Directo del campo</h3>
+            <p class="small text-muted mb-0">Productos frescos sin intermediarios</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-6 col-lg-3">
+        <div class="card border-0 shadow-sm rounded-4 h-100 text-center">
+          <div class="card-body py-4">
+            <div class="fs-1 mb-2">📍</div>
+            <h3 class="h6 fw-bold">Mapa en vivo</h3>
+            <p class="small text-muted mb-0">Encuentra a tu campesino más cercano</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-6 col-lg-3">
+        <div class="card border-0 shadow-sm rounded-4 h-100 text-center">
+          <div class="card-body py-4">
+            <div class="fs-1 mb-2">📱</div>
+            <h3 class="h6 fw-bold">Preórdenes</h3>
+            <p class="small text-muted mb-0">Aparta tu pedido antes de ir a la plaza</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-6 col-lg-3">
+        <div class="card border-0 shadow-sm rounded-4 h-100 text-center">
+          <div class="card-body py-4">
+            <div class="fs-1 mb-2">⭐</div>
+            <h3 class="h6 fw-bold">Reseñas</h3>
+            <p class="small text-muted mb-0">Calidad garantizada por la comunidad</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>

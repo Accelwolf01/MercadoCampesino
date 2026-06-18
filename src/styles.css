@@ -1,0 +1,88 @@
+@import "bootstrap-icons/font/bootstrap-icons.css";
+
+:root {
+  --bs-primary: #0891B2;
+  --bs-primary-rgb: 8, 145, 178;
+  --bs-secondary: #64748B;
+  --bs-secondary-rgb: 100, 116, 139;
+  --bs-success: #059669;
+  --bs-success-rgb: 5, 150, 105;
+  --bs-info: #6366F1;
+  --bs-info-rgb: 99, 102, 241;
+  --bs-warning: #F59E0B;
+  --bs-warning-rgb: 245, 158, 11;
+  --bs-danger: #E85D3A;
+  --bs-danger-rgb: 232, 93, 58;
+  --bs-light: #F8FAFC;
+  --bs-light-rgb: 248, 250, 252;
+  --bs-dark: #0F172A;
+  --bs-dark-rgb: 15, 23, 42;
+  --bs-body-bg: #F8FAFC;
+  --bs-body-color: #334155;
+  --bs-body-font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  --bs-link-color: #0891B2;
+  --bs-link-hover-color: #0E7490;
+  --bs-border-color: #E2E8F0;
+  --bs-border-radius: .5rem;
+  --bs-border-radius-lg: .75rem;
+  --bs-border-radius-xl: 1rem;
+
+  --rojo: #E85D3A;
+  --amarillo: #F59E0B;
+  --crema: #F8FAFC;
+}
+
+body {
+  margin: 0;
+  font-family: var(--bs-body-font-family);
+  background: var(--bs-body-bg);
+  color: var(--bs-body-color);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+.card { transition: transform .15s ease, box-shadow .15s ease; }
+.card:hover { box-shadow: 0 .5rem 1rem rgba(0,0,0,.08)!important; }
+.card.border-0:hover { transform: translateY(-2px); }
+
+.btn { font-weight: 500; letter-spacing: .01em; }
+.btn-sm { font-weight: 500; }
+
+.badge { font-weight: 500; letter-spacing: .02em; vertical-align: middle; }
+
+.table thead th {
+  font-weight: 600;
+  font-size: .75rem;
+  text-transform: uppercase;
+  letter-spacing: .05em;
+  color: var(--bs-secondary);
+  border-bottom-width: 1px;
+}
+
+.form-control, .form-select {
+  border-color: #E2E8F0;
+  font-size: .925rem;
+}
+.form-control:focus, .form-select:focus {
+  border-color: var(--bs-primary);
+  box-shadow: 0 0 0 3px rgba(8,145,178,.1);
+}
+.form-label { font-weight: 500; color: #475569; }
+
+.nav-pills .nav-link { font-weight: 500; color: var(--bs-secondary); }
+.nav-pills .nav-link.active {
+  background-color: var(--bs-primary);
+  color: #fff;
+}
+
+.alert { border: none; border-radius: .75rem; }
+
+::-webkit-scrollbar { height: 6px; }
+::-webkit-scrollbar-track { background: #E2E8F0; border-radius: 3px; }
+::-webkit-scrollbar-thumb { background: #94A3B8; border-radius: 3px; }
+
+.progress { background-color: #E2E8F0; }

@@ -1,0 +1,551 @@
+<div class="container py-4">
+  <!-- Header -->
+  <div class="bg-dark text-white p-4 rounded-4 mb-4 shadow" style="background:linear-gradient(135deg,#1a1a2e,#16213e)!important;">
+    <div class="d-flex align-items-center gap-3">
+      <div class="rounded-circle bg-warning d-flex align-items-center justify-content-center flex-shrink-0" style="width:48px;height:48px;">
+        <i class="bi bi-person-workspace fs-4" style="color:#8e0000;"></i>
+      </div>
+      <div>
+        <h4 class="fw-bold mb-0" style="color:var(--amarillo);">Panel Campesino</h4>
+        <p class="text-white-50 small mb-0">Gestiona tus productos, viajes y ofertas flash</p>
+      </div>
+    </div>
+  </div>
+
+  @if (mensaje) { <div class="alert alert-success alert-dismissible py-2 small rounded-3 shadow-sm" (click)="limpiarMensajes()"><i class="bi bi-check-circle me-1"></i>{{ mensaje }}<button type="button" class="btn-close btn-close-sm float-end" (click)="limpiarMensajes()"></button></div> }
+  @if (error) { <div class="alert alert-danger alert-dismissible py-2 small rounded-3 shadow-sm" (click)="limpiarMensajes()"><i class="bi bi-exclamation-triangle me-1"></i>{{ error }}<button type="button" class="btn-close btn-close-sm float-end" (click)="limpiarMensajes()"></button></div> }
+
+  <!-- Tabs -->
+  <ul class="nav nav-pills nav-fill gap-2 mb-4 p-1 bg-light rounded-3 shadow-sm">
+    <li class="nav-item">
+      <button class="nav-link rounded-3" [class.active]="tab==='productos'" [class.fw-bold]="tab==='productos'" (click)="tab='productos'">
+        <i class="bi bi-box-seam me-1"></i>Productos
+      </button>
+    </li>
+    <li class="nav-item">
+      <button class="nav-link rounded-3" [class.active]="tab==='viajes'" [class.fw-bold]="tab==='viajes'" (click)="tab='viajes'">
+        <i class="bi bi-truck me-1"></i>Viajes
+      </button>
+    </li>
+    <li class="nav-item">
+      <button class="nav-link rounded-3" [class.active]="tab==='ofertas'" [class.fw-bold]="tab==='ofertas'" (click)="tab='ofertas'">
+        <i class="bi bi-lightning-fill me-1"></i>Ofertas
+      </button>
+    </li>
+  </ul>
+
+  <!-- PRODUCTOS TAB -->
+  @if (tab === 'productos') {
+    <!-- Agregar producto -->
+    <div class="card border-0 shadow-sm rounded-4 mb-4">
+      <div class="card-body p-4">
+        <h6 class="card-title fw-bold mb-3"><i class="bi bi-plus-circle" style="color:var(--rojo);"></i> Agregar producto</h6>
+        <div class="row g-3">
+          <div class="col-md-4">
+            <label class="form-label fw-semibold small">Nombre del producto</label>
+            <input class="form-control" [(ngModel)]="nuevoProducto.nombre" placeholder="Ej: Papas criollas" />
+          </div>
+          <div class="col-md-3">
+            <label class="form-label fw-semibold small">Categoría</label>
+            <select class="form-select" [(ngModel)]="nuevoProducto.id_categoria">
+              <option [ngValue]="null">Sin categoría</option>
+              @for (c of categorias; track c.id) { <option [ngValue]="c.id">{{ c.nombre }}</option> }
+            </select>
+          </div>
+          <div class="col-md-2">
+            <label class="form-label fw-semibold small">Unidad</label>
+            <select class="form-select form-select-sm" [(ngModel)]="nuevoProducto.unidad">
+              <option value="kg">kg</option><option value="libra">libra</option>
+              <option value="unidad">unidad</option><option value="atado">atado</option><option value="litro">litro</option>
+            </select>
+          </div>
+          <div class="col-md-2">
+            <label class="form-label fw-semibold small">Precio ($)</label>
+            <input type="number" class="form-control form-control-sm" [(ngModel)]="nuevoProducto.precio" min="1" placeholder="Ej: 5000" />
+          </div>
+          <div class="col-md-3">
+            <label class="form-label fw-semibold small">Foto</label>
+            <input class="form-control form-control-sm" type="file" accept="image/*" (change)="onFileSelected($event,'producto')" />
+          </div>
+          @if (nuevoProducto.foto_base64) {
+            <div class="col-12"><img [src]="nuevoProducto.foto_base64" class="img-thumbnail rounded-3" style="width:80px;height:80px;object-fit:cover;" /></div>
+          }
+          <div class="col-12">
+            <button class="btn btn-danger" (click)="agregarProducto()" [disabled]="guardando">
+              <i class="bi bi-floppy me-1"></i>{{ guardando ? 'Guardando...' : 'Guardar producto' }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mis productos -->
+    <div class="card border-0 shadow-sm rounded-4">
+      <div class="card-body p-4">
+        <h6 class="card-title fw-bold mb-3 d-flex justify-content-between align-items-center">
+          <span><i class="bi bi-grid-3x3-gap" style="color:var(--rojo);"></i> Mis productos</span>
+          <span class="badge bg-danger rounded-pill">{{ misProductos.length }}</span>
+        </h6>
+        @if (misProductos.length === 0) {
+          <div class="text-center py-5">
+            <i class="bi bi-box-seam fs-1 text-muted d-block mb-2"></i>
+            <p class="text-muted mb-0">Aún no has creado productos. ¡Agrega tu primer producto!</p>
+          </div>
+        } @else {
+          <div class="row g-3">
+            @for (p of misProductos; track p.id) {
+              <div class="col-md-6 col-lg-4">
+                @if (editandoId === p.id) {
+                  <div class="card border-warning shadow-sm rounded-4 h-100">
+                    <div class="card-body p-3">
+                      <h6 class="fw-semibold mb-2"><i class="bi bi-pencil-square" style="color:var(--rojo);"></i> Editando</h6>
+                      <input class="form-control form-control-sm mb-2" [(ngModel)]="editForm.nombre" placeholder="Nombre" />
+                      <select class="form-select form-select-sm mb-2" [(ngModel)]="editForm.id_categoria">
+                        <option [ngValue]="null">Sin categoría</option>
+                        @for (c of categorias; track c.id) { <option [ngValue]="c.id">{{ c.nombre }}</option> }
+                      </select>
+                      <select class="form-select form-select-sm mb-2" [(ngModel)]="editForm.unidad">
+                        <option value="kg">kg</option><option value="libra">libra</option>
+                        <option value="unidad">unidad</option><option value="atado">atado</option><option value="litro">litro</option>
+                      </select>
+                      <input type="number" class="form-control form-control-sm mb-2" [(ngModel)]="editForm.precio" min="1" placeholder="Precio ($)" />
+                      <input class="form-control form-control-sm mb-2" type="file" accept="image/*" (change)="onEditFileSelected($event)" />
+                      @if (editForm.foto_base64) { <img [src]="editForm.foto_base64" class="img-thumbnail rounded-3 mb-2" style="width:60px;height:60px;object-fit:cover;" /> }
+                      <div class="d-flex gap-2">
+                        <button class="btn btn-success btn-sm" (click)="guardarEdit(p.id)" [disabled]="guardandoEdit">
+                          <i class="bi" [class.bi-check]="!guardandoEdit" [class.bi-arrow-repeat]="guardandoEdit"></i>
+                          {{ guardandoEdit ? 'Guardando...' : 'Guardar' }}
+                        </button>
+                        <button class="btn btn-outline-secondary btn-sm" (click)="cancelarEdit()">Cancelar</button>
+                      </div>
+                    </div>
+                  </div>
+                } @else {
+                  <div class="card border-0 shadow-sm rounded-4 h-100">
+                    <div class="card-body p-3">
+                      <div class="d-flex align-items-center gap-3">
+                        @if (p.foto_url) {
+                          <img [src]="p.foto_url" class="rounded-3 flex-shrink-0" style="width:56px;height:56px;object-fit:cover;" />
+                        } @else {
+                          <div class="rounded-3 bg-light d-flex align-items-center justify-content-center flex-shrink-0" style="width:56px;height:56px;">
+                            <i class="bi bi-box-seam fs-4 text-muted"></i>
+                          </div>
+                        }
+                        <div class="flex-grow-1 min-w-0">
+                          <div class="fw-bold mb-1 text-truncate">{{ p.nombre }}
+                            @if (!p.activo) { <span class="badge bg-secondary ms-1">Inactivo</span> }
+                          </div>
+                          <div class="d-flex gap-1 flex-wrap align-items-center">
+                            <span class="badge bg-warning text-dark rounded-pill">{{ categoriaNombre(p.id_categoria) || 'Sin categoría' }}</span>
+                            <span class="badge bg-secondary rounded-pill">{{ p.unidad }}</span>
+                            @if (p.precio) {
+                              <span class="fw-bold small" style="color:var(--rojo);">${{ p.precio.toLocaleString() }}</span>
+                            } @else {
+                              <span class="small text-muted fst-italic">Sin precio</span>
+                            }
+                          </div>
+                        </div>
+                        <div class="d-flex flex-column gap-1">
+                          <button class="btn btn-outline-primary btn-sm border-0 rounded-3" (click)="editarProducto(p)" title="Editar"><i class="bi bi-pencil"></i></button>
+                          <button class="btn btn-sm border-0 rounded-3"
+                            [class.btn-outline-success]="!p.activo"
+                            [class.btn-outline-warning]="p.activo"
+                            (click)="toggleActivoProducto(p)" title="Activar / Desactivar">
+                            <i class="bi" [class.bi-eye]="!p.activo" [class.bi-eye-slash]="p.activo"></i>
+                          </button>
+                          <button class="btn btn-outline-danger btn-sm border-0 rounded-3" (click)="eliminarProducto(p.id)" title="Eliminar permanentemente"><i class="bi bi-trash"></i></button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                }
+              </div>
+            }
+          </div>
+        }
+      </div>
+    </div>
+  }
+
+  <!-- VIAJES TAB -->
+  @if (tab === 'viajes') {
+    <!-- Crear nuevo viaje -->
+    <div class="card border-0 shadow-sm rounded-4 mb-4">
+      <div class="card-body p-4">
+        <h6 class="card-title fw-bold mb-3"><i class="bi bi-truck" style="color:var(--rojo);"></i> Crear nuevo viaje</h6>
+        <div class="row g-3">
+          <div class="col-md-4">
+            <label class="form-label fw-semibold small">Fecha del viaje</label>
+            <input type="date" class="form-control" [(ngModel)]="viajeForm.fecha" />
+          </div>
+          <div class="col-md-4">
+            <label class="form-label fw-semibold small">Hora inicio</label>
+            <input type="time" class="form-control" [(ngModel)]="viajeForm.hora_inicio" />
+          </div>
+          <div class="col-md-4">
+            <label class="form-label fw-semibold small">Hora fin</label>
+            <input type="time" class="form-control" [(ngModel)]="viajeForm.hora_fin" />
+          </div>
+          <div class="col-md-6">
+            <label class="form-label fw-semibold small">Plaza de mercado</label>
+            <select class="form-select" [(ngModel)]="viajeForm.id_plaza">
+              <option [ngValue]="null">Selecciona una plaza</option>
+              @for (p of plazas; track p.id) { <option [ngValue]="p.id">{{ p.nombre }} — {{ p.direccion }}</option> }
+            </select>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label fw-semibold small">Foto del puesto</label>
+            <input class="form-control" type="file" accept="image/*" (change)="onFileSelected($event,'ubicacion')" />
+          </div>
+          <div class="col-12">
+            <label class="form-label fw-semibold small">Notas</label>
+            <textarea class="form-control" [(ngModel)]="viajeForm.notas" rows="2" placeholder="Ej: Estaré en el puesto 42, cerca de la entrada principal"></textarea>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Selección de productos para el viaje -->
+    <div class="card border-0 shadow-sm rounded-4 mb-4">
+      <div class="card-body p-4">
+        <div class="d-flex align-items-center justify-content-between mb-3">
+          <h6 class="card-title fw-bold mb-0"><i class="bi bi-boxes" style="color:var(--rojo);"></i> Productos para el viaje</h6>
+          @if (viajeProductos.length > 0) {
+            <span class="badge bg-warning text-dark rounded-pill fs-6 px-3">{{ viajeProductos.length }} seleccionados</span>
+          }
+        </div>
+        @if (misProductos.length === 0) {
+          <div class="text-center py-4">
+            <i class="bi bi-box-seam fs-1 text-muted d-block mb-2"></i>
+            <p class="text-muted mb-0">Crea productos primero desde la pestaña Productos.</p>
+          </div>
+        } @else {
+          <div class="row g-2 mb-3">
+            @for (p of misProductos; track p.id) {
+              @if (p.activo) {
+              <div class="col-md-6 col-lg-4">
+                <div class="card border-0 shadow-sm rounded-3 cursor-pointer" [class.bg-warning]="productoSeleccionado(p.id)" [class.bg-opacity-10]="productoSeleccionado(p.id)" [class.border-danger]="productoSeleccionado(p.id)" [class.border]="productoSeleccionado(p.id)" (click)="toggleProductoEnViaje(p)">
+                  <div class="card-body p-3">
+                    <div class="d-flex justify-content-between align-items-center">
+                      <div>
+                        <span class="fw-semibold">{{ p.nombre }}</span>
+                        <span class="badge bg-secondary rounded-pill ms-1">{{ p.unidad }}</span>
+                      </div>
+                      <div class="rounded-circle d-flex align-items-center justify-content-center flex-shrink-0" style="width:24px;height:24px;border:2px solid var(--rojo);" [class.bg-danger]="productoSeleccionado(p.id)">
+                        @if (productoSeleccionado(p.id)) { <i class="bi bi-check text-white small"></i> }
+                      </div>
+                    </div>
+                      @if (productoSeleccionado(p.id)) {
+                        <hr class="my-2" />
+                        <div (click)="$event.stopPropagation()">
+                          <div class="row g-2">
+                            <div class="col-12">
+                              <label class="form-label small fw-semibold">Cantidad</label>
+                              <input type="number" class="form-control form-control-sm" [(ngModel)]="viajeProductos[viajeProductos.findIndex(x => x.id_producto === p.id)].cantidad_inicial" min="1" value="1" />
+                            </div>
+                          </div>
+                        </div>
+                      }
+                    </div>
+                  </div>
+                </div>
+              }
+            }
+          </div>
+          <button class="btn btn-danger w-100 fw-semibold" (click)="crearViaje()" [disabled]="creandoViaje || viajeProductos.length === 0">
+            <i class="bi bi-send me-1"></i>
+            {{ creandoViaje ? 'Creando viaje...' : viajeProductos.length === 0 ? 'Selecciona productos para crear viaje' : 'Crear viaje (' + viajeProductos.length + ' productos)' }}
+          </button>
+        }
+      </div>
+    </div>
+
+    <!-- Historial de viajes -->
+    <div class="card border-0 shadow-sm rounded-4">
+      <div class="card-body p-4">
+        <h6 class="card-title fw-bold mb-3 d-flex justify-content-between align-items-center">
+          <span><i class="bi bi-clock-history" style="color:var(--rojo);"></i> Mis viajes</span>
+          <span class="badge bg-danger rounded-pill">{{ viajes.length }}</span>
+        </h6>
+        @if (cargandoViajes) {
+          <div class="text-center py-4">
+            <div class="spinner-border text-danger" role="status"></div>
+            <p class="text-muted small mt-2 mb-0">Cargando viajes...</p>
+          </div>
+        } @else if (viajes.length === 0) {
+          <div class="text-center py-5">
+            <i class="bi bi-truck fs-1 text-muted d-block mb-2"></i>
+            <p class="text-muted mb-0">No has creado ningún viaje todavía.</p>
+          </div>
+        } @else {
+          <div class="accordion" id="viajesAccordion">
+            @for (v of viajes; track v.id) {
+              <div class="accordion-item border-0 mb-2 rounded-3 shadow-sm">
+                <h2 class="accordion-header">
+                  <button class="accordion-button rounded-3" [class.collapsed]="viajeExpandido !== v.id" type="button" (click)="toggleViaje(v.id)">
+                    <div class="d-flex flex-wrap align-items-center gap-2 w-100 me-3">
+                      <span class="fw-bold" style="color:var(--rojo);"><i class="bi bi-calendar-event me-1"></i>{{ v.fecha_viaje }}</span>
+                      @if (v.hora_inicio) { <span class="small text-muted"><i class="bi bi-clock me-1"></i>{{ v.hora_inicio }}{{ v.hora_fin ? '-' + v.hora_fin : '' }}</span> }
+                      <span class="small text-muted"><i class="bi bi-geo-alt me-1"></i>{{ plazaNombre(v) }}</span>
+                      <span class="badge bg-info text-dark rounded-pill">{{ (v.productos || []).length }} productos</span>
+                      <span class="badge rounded-pill ms-auto"
+                        [class.bg-success]="viajeStatus(v) === 'activo'"
+                        [class.bg-secondary]="viajeStatus(v) === 'inactivo'"
+                        [class.bg-danger]="viajeStatus(v) === 'expirado'">
+                        {{ viajeStatus(v) === 'activo' ? 'Activo' : viajeStatus(v) === 'expirado' ? 'Expirado' : 'Inactivo' }}
+                      </span>
+                    </div>
+                  </button>
+                </h2>
+                <div class="accordion-collapse collapse" [class.show]="viajeExpandido === v.id">
+                  <div class="accordion-body p-3 bg-light rounded-bottom-3">
+                    @if (v.notas) { <div class="small mb-3 bg-white rounded-3 p-2 border"><i class="bi bi-chat-text me-1 text-muted"></i>{{ v.notas }}</div> }
+                     <div class="table-responsive">
+                      <table class="table table-sm align-middle mb-0">
+                        <thead class="table-light">
+                          <tr>
+                            <th class="fw-semibold">Producto</th>
+                            <th class="text-end fw-semibold">Precio</th>
+                            <th class="text-center fw-semibold">Cant.</th>
+                            <th class="text-center fw-semibold">Disponible</th>
+                            @if (viajeStatus(v) === 'activo') { <th class="text-center"></th> }
+                          </tr>
+                        </thead>
+                        <tbody>
+                          @for (vp of (v.productos || []); track vp.id) {
+                            @if (vp.activo) {
+                            <tr>
+                              <td class="fw-semibold">{{ vp.producto?.nombre || 'Producto' }}</td>
+                              <td class="text-end">${{ vp.precio.toLocaleString() }}</td>
+                              <td class="text-center">{{ vp.cantidad_inicial }}</td>
+                              <td class="text-center">
+                                <div class="d-flex align-items-center justify-content-center gap-2">
+                                  <div class="progress flex-grow-1" style="max-width:80px;height:6px;">
+                                    <div class="progress-bar rounded-pill" [class.bg-success]="(vp.cantidad_disponible / vp.cantidad_inicial) > 0.5" [class.bg-warning]="(vp.cantidad_disponible / vp.cantidad_inicial) <= 0.5" [class.bg-danger]="(vp.cantidad_disponible / vp.cantidad_inicial) <= 0.2" [style.width.%]="(vp.cantidad_disponible / vp.cantidad_inicial) * 100"></div>
+                                  </div>
+                                  <small class="fw-semibold">{{ vp.cantidad_disponible }}/{{ vp.cantidad_inicial }}</small>
+                                </div>
+                              </td>
+                              @if (viajeStatus(v) === 'activo') {
+                                <td class="text-center">
+                                  <button class="btn btn-outline-danger btn-sm border-0 rounded-3" (click)="retirarProductoViaje(vp.id)" title="Retirar del viaje"><i class="bi bi-x-lg"></i></button>
+                                </td>
+                              }
+                            </tr>
+                          }
+                        }
+                        </tbody>
+                      </table>
+                    </div>
+                    @if (viajeStatus(v) === 'activo') {
+                      <div class="mt-3 p-3 bg-white rounded-3 border">
+                        <div class="d-flex align-items-center gap-2 mb-2">
+                          <button class="btn btn-outline-danger btn-sm" (click)="desactivarViaje(v.id)">
+                            <i class="bi bi-x-circle me-1"></i>Desactivar viaje
+                          </button>
+                          <button class="btn btn-outline-success btn-sm" (click)="toggleAgregarProductoAViaje(v.id)">
+                            <i class="bi bi-plus-circle me-1"></i>Agregar producto
+                          </button>
+                        </div>
+                        @if (agregarProductoViajeId === v.id) {
+                          <div class="row g-2 mt-2">
+                            @for (p of productosNoEnViaje(v); track p.id) {
+                              <div class="col-md-4">
+                                <div class="card border-0 shadow-sm rounded-3 cursor-pointer" (click)="toggleProductoAViaje(p)">
+                                  <div class="card-body p-2 d-flex align-items-center gap-2">
+                                    @if (p.foto_url) {
+                                      <img [src]="p.foto_url" class="rounded-3 flex-shrink-0" style="width:40px;height:40px;object-fit:cover;" />
+                                    }
+                                    <div class="flex-grow-1 min-w-0">
+                                      <div class="fw-semibold small text-truncate">{{ p.nombre }}</div>
+                                      <span class="badge bg-secondary rounded-pill">{{ p.unidad }}</span>
+                                    </div>
+                                    @if (productoAViajeTemp.id_producto === p.id) {
+                                      <div class="d-flex gap-1 align-items-center">
+                                        <input type="number" class="form-control form-control-sm" style="width:56px;" [(ngModel)]="productoAViajeTemp.cantidad" min="1" value="1" (click)="$event.stopPropagation()" />
+                                        <button class="btn btn-sm btn-success" (click)="confirmarAgregarProductoAViaje(v.id); $event.stopPropagation()"><i class="bi bi-check-lg"></i></button>
+                                      </div>
+                                    } @else {
+                                      <i class="bi bi-plus-circle text-success"></i>
+                                    }
+                                  </div>
+                                </div>
+                              </div>
+                            } @empty {
+                              <div class="col-12"><p class="text-muted small mb-0">Todos tus productos ya están en este viaje.</p></div>
+                            }
+                          </div>
+                        }
+                      </div>
+                    } @else {
+                      @if (reprogramandoViajeId === v.id) {
+                        <div class="mt-3 p-3 bg-white rounded-3 border">
+                          <div class="row g-2 align-items-end">
+                            <div class="col-md-4">
+                              <label class="form-label small fw-semibold">Nueva fecha</label>
+                              <input type="date" class="form-control form-control-sm" [(ngModel)]="reprogramarForm.fecha">
+                            </div>
+                            <div class="col-md-3">
+                              <label class="form-label small fw-semibold">Inicio</label>
+                              <input type="time" class="form-control form-control-sm" [(ngModel)]="reprogramarForm.hora_inicio">
+                            </div>
+                            <div class="col-md-3">
+                              <label class="form-label small fw-semibold">Fin</label>
+                              <input type="time" class="form-control form-control-sm" [(ngModel)]="reprogramarForm.hora_fin">
+                            </div>
+                            <div class="col-md-2 d-flex gap-1">
+                              <button class="btn btn-sm btn-success" (click)="reprogramarViaje(v.id)" title="Guardar"><i class="bi bi-check-lg"></i></button>
+                              <button class="btn btn-sm btn-outline-secondary" (click)="cancelarReprogramar()" title="Cancelar"><i class="bi bi-x-lg"></i></button>
+                            </div>
+                          </div>
+                        </div>
+                      } @else {
+                        <button class="btn btn-outline-primary btn-sm mt-3" (click)="iniciarReprogramar(v)">
+                          <i class="bi bi-arrow-clockwise me-1"></i>{{ viajeStatus(v) === 'expirado' ? 'Reprogramar (expirado)' : 'Reprogramar' }}
+                        </button>
+                      }
+                    }
+                  </div>
+                </div>
+              </div>
+            }
+          </div>
+        }
+      </div>
+    </div>
+  }
+
+  <!-- OFERTAS FLASH TAB -->
+  @if (tab === 'ofertas') {
+    <!-- Activar oferta -->
+    <div class="card border-0 shadow-sm rounded-4 mb-4">
+      <div class="card-body p-4">
+        <h6 class="card-title fw-bold mb-3"><i class="bi bi-lightning-fill" style="color:var(--rojo);"></i> Activar oferta flash</h6>
+        @if (viajesParaOfertas.length === 0) {
+          <div class="text-center py-4">
+            <i class="bi bi-truck fs-1 text-muted d-block mb-2"></i>
+            <p class="text-muted mb-0">No tienes viajes activos. Crea un viaje primero.</p>
+          </div>
+        } @else {
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label class="form-label fw-semibold small">Viaje activo</label>
+              <select class="form-select" [(ngModel)]="ofertaForm.id_viaje" (change)="ofertaForm.id_vp = null">
+                <option [ngValue]="null">Selecciona un viaje</option>
+                @for (v of viajesParaOfertas; track v.id) { <option [ngValue]="v.id">{{ v.fecha_viaje }} — {{ plazaNombre(v) }}</option> }
+              </select>
+            </div>
+            @if (ofertaForm.id_viaje) {
+              <div class="col-md-6">
+                <label class="form-label fw-semibold small">Producto</label>
+                <select class="form-select" [(ngModel)]="ofertaForm.id_vp">
+                  <option [ngValue]="null">Selecciona un producto</option>
+                  @for (vp of productosParaOferta; track vp.id) { <option [ngValue]="vp.id">{{ vp.producto?.nombre || 'Producto' }} — ${{ vp.precio.toLocaleString() }}</option> }
+                </select>
+              </div>
+            }
+            @if (ofertaForm.id_vp) {
+              <div class="col-12">
+                <div class="bg-warning bg-opacity-10 rounded-4 p-4 border border-warning">
+                  <div class="row g-3 align-items-end">
+                    <div class="col-md-4 text-center">
+                      <div class="mb-2">
+                        <span class="text-decoration-line-through text-muted fs-5">${{ ofertaSeleccionPrecio.toLocaleString() }}</span>
+                        <span class="fs-2 fw-bold ms-2" style="color:var(--rojo);">${{ precioOfertaCalculado.toLocaleString() }}</span>
+                      </div>
+                      <span class="badge bg-warning text-dark fs-5 rounded-pill px-3">-{{ ofertaForm.descuento }}%</span>
+                    </div>
+                    <div class="col-md-3">
+                      <label class="form-label fw-semibold small">% Descuento</label>
+                      <input type="number" class="form-control" [(ngModel)]="ofertaForm.descuento" min="1" max="100" />
+                    </div>
+                    <div class="col-md-3">
+                      <label class="form-label fw-semibold small">Cantidad límite</label>
+                      <input type="number" class="form-control" [(ngModel)]="ofertaForm.cantidad_limite" min="1" placeholder="Sin límite" />
+                    </div>
+                    <div class="col-md-2">
+                      <button class="btn btn-danger w-100 fw-semibold" (click)="activarOferta()" [disabled]="activandoOferta">
+                        <i class="bi bi-lightning-fill me-1"></i>{{ activandoOferta ? 'Activando...' : 'Activar' }}
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            }
+          </div>
+        }
+      </div>
+    </div>
+
+    <!-- Mis ofertas -->
+    <div class="card border-0 shadow-sm rounded-4">
+      <div class="card-body p-4">
+        <h6 class="card-title fw-bold mb-3 d-flex justify-content-between align-items-center">
+          <span><i class="bi bi-lightning" style="color:var(--rojo);"></i> Mis ofertas flash</span>
+          <span class="badge bg-danger rounded-pill">{{ ofertas.length }}</span>
+        </h6>
+        @if (cargandoOfertas) {
+          <div class="text-center py-4">
+            <div class="spinner-border text-danger" role="status"></div>
+            <p class="text-muted small mt-2 mb-0">Cargando ofertas...</p>
+          </div>
+        } @else if (ofertas.length === 0) {
+          <div class="text-center py-5">
+            <i class="bi bi-lightning fs-1 text-muted d-block mb-2"></i>
+            <p class="text-muted mb-0">No has creado ninguna oferta flash todavía.</p>
+          </div>
+        } @else {
+          <div class="row g-3">
+            @for (o of ofertas; track o.id) {
+              <div class="col-md-6 col-lg-4">
+                @if (editandoOfertaId === o.id) {
+                  <div class="card border-warning shadow-sm rounded-4 h-100 text-center">
+                    <div class="card-body p-4">
+                      <h6 class="fw-semibold mb-2"><i class="bi bi-pencil-square" style="color:var(--rojo);"></i> Editando oferta</h6>
+                      <p class="fw-bold mb-2">{{ o.viaje_producto?.producto?.nombre || 'Producto' }}</p>
+                      <div class="mb-2">
+                        <label class="form-label small fw-semibold">% Descuento</label>
+                        <input type="number" class="form-control text-center" [(ngModel)]="editOfertaForm.descuento" min="1" max="100" />
+                      </div>
+                      <div class="mb-3">
+                        <label class="form-label small fw-semibold">Cantidad límite</label>
+                        <input type="number" class="form-control text-center" [(ngModel)]="editOfertaForm.cantidad_limite" min="1" placeholder="Sin límite" />
+                      </div>
+                      <div class="d-flex gap-2 justify-content-center">
+                        <button class="btn btn-success btn-sm" (click)="guardarEditarOferta(o.id)"><i class="bi bi-check me-1"></i>Guardar</button>
+                        <button class="btn btn-outline-secondary btn-sm" (click)="cancelarEditarOferta()">Cancelar</button>
+                      </div>
+                    </div>
+                  </div>
+                } @else {
+                  <div class="card border-0 shadow-sm rounded-4 h-100 text-center">
+                    <div class="card-body p-4">
+                      @if (o.viaje_producto?.producto?.foto_url) {
+                        <img [src]="o.viaje_producto?.producto?.foto_url" class="rounded-3 mb-2" style="width:48px;height:48px;object-fit:cover;" />
+                      }
+                      <div class="bg-warning rounded-circle d-flex align-items-center justify-content-center mx-auto mb-2" style="width:64px;height:64px;">
+                        <span class="fw-bold fs-4" style="color:#8e0000;">-{{ o.descuento_porcentaje }}%</span>
+                      </div>
+                      <h6 class="fw-bold mb-1">{{ o.viaje_producto?.producto?.nombre || 'Sin producto' }}</h6>
+                      <h4 class="fw-bold mb-1" style="color:var(--rojo);">${{ o.precio_oferta.toLocaleString() }}</h4>
+                      @if (o.cantidad_limite) { <p class="text-muted small mb-2">Límite: {{ o.cantidad_limite }} unidades</p> }
+                      <span class="badge rounded-pill px-3 py-1" [class.bg-success]="o.activa" [class.bg-secondary]="!o.activa">{{ o.activa ? 'Activa' : 'Inactiva' }}</span>
+                      <div class="d-flex gap-2 mt-3">
+                        <button class="btn btn-outline-danger btn-sm flex-fill" (click)="eliminarOferta(o.id)">
+                          <i class="bi bi-trash"></i> Eliminar
+                        </button>
+                        <button class="btn btn-outline-primary btn-sm flex-fill" (click)="iniciarEditarOferta(o)">
+                          <i class="bi bi-pencil"></i> Editar
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                }
+              </div>
+            }
+          </div>
+        }
+      </div>
+    </div>
+  }
+</div>

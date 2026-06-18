@@ -1,0 +1,289 @@
+<div class="container py-4">
+  <!-- Header -->
+  <div class="bg-dark text-white p-4 rounded-4 mb-4 shadow" style="background:linear-gradient(135deg,#1a1a2e,#16213e)!important;">
+    <div class="d-flex align-items-center gap-3">
+      <div class="rounded-circle bg-warning d-flex align-items-center justify-content-center flex-shrink-0" style="width:48px;height:48px;">
+        <i class="bi bi-cart3 fs-4" style="color:#8e0000;"></i>
+      </div>
+      <div>
+        <h4 class="fw-bold mb-0" style="color:var(--amarillo);">Mi perfil de comprador</h4>
+        <p class="text-white-50 small mb-0">Explora, preordena y califica productos campesinos</p>
+      </div>
+    </div>
+  </div>
+
+  @if (mensaje) { <div class="alert alert-success alert-dismissible py-2 small rounded-3 shadow-sm"><i class="bi bi-check-circle me-1"></i>{{ mensaje }}<button type="button" class="btn-close btn-close-sm float-end" (click)="limpiarMensajes()"></button></div> }
+  @if (error) { <div class="alert alert-danger alert-dismissible py-2 small rounded-3 shadow-sm"><i class="bi bi-exclamation-triangle me-1"></i>{{ error }}<button type="button" class="btn-close btn-close-sm float-end" (click)="limpiarMensajes()"></button></div> }
+
+  <!-- Tabs -->
+  <ul class="nav nav-pills nav-fill gap-2 mb-4 p-1 bg-light rounded-3 shadow-sm">
+    <li class="nav-item">
+      <button class="nav-link rounded-3" [class.active]="tab==='explorar'" [class.fw-bold]="tab==='explorar'" (click)="tab='explorar'">
+        <i class="bi bi-compass me-1"></i>Explorar
+      </button>
+    </li>
+    <li class="nav-item">
+      <button class="nav-link rounded-3" [class.active]="tab==='preordenes'" [class.fw-bold]="tab==='preordenes'" (click)="tab='preordenes'">
+        <i class="bi bi-bag-check me-1"></i>Preórdenes
+      </button>
+    </li>
+    <li class="nav-item">
+      <button class="nav-link rounded-3" [class.active]="tab==='resenias'" [class.fw-bold]="tab==='resenias'" (click)="tab='resenias'">
+        <i class="bi bi-star me-1"></i>Reseñas
+      </button>
+    </li>
+  </ul>
+
+  <!-- EXPLORAR -->
+  @if (tab === 'explorar') {
+    @if (cargando) {
+      <div class="text-center py-5">
+        <div class="spinner-border text-danger" role="status" style="width:3rem;height:3rem;"></div>
+        <p class="text-muted mt-3">Cargando productos disponibles...</p>
+      </div>
+    }
+    @if (!cargando && viajes.length === 0) {
+      <div class="card border-0 shadow-sm rounded-4">
+        <div class="card-body text-center py-5">
+          <i class="bi bi-basket fs-1 text-muted d-block mb-2"></i>
+          <p class="text-muted mb-0">No hay viajes activos hoy. Vuelve más tarde.</p>
+        </div>
+      </div>
+    }
+    @if (!cargando && viajes.length > 0) {
+      <!-- Filter pills - Plazas -->
+      <div class="d-flex gap-2 mb-3 flex-wrap">
+        <button class="btn btn-sm rounded-pill" [class.btn-danger]="!filtroPlaza" [class.btn-outline-secondary]="filtroPlaza" (click)="filtroPlaza=null">
+          <i class="bi bi-grid me-1"></i>Todas ({{ viajes.length }})
+        </button>
+        @for (p of plazasConViajes; track p.id) {
+          <button class="btn btn-sm rounded-pill" [class.btn-danger]="filtroPlaza === p.id" [class.btn-outline-secondary]="filtroPlaza !== p.id" (click)="filtroPlaza=p.id">
+            <i class="bi bi-building me-1"></i>{{ p.nombre }} ({{ p.totalProductos }})
+          </button>
+        }
+      </div>
+
+      <!-- Search bar -->
+      <div class="row g-2 mb-3">
+        <div class="col-md-8">
+          <div class="input-group shadow-sm rounded-3">
+            <span class="input-group-text bg-white border-0"><i class="bi bi-search text-muted"></i></span>
+            <input [(ngModel)]="searchTerm" placeholder="Buscar producto..." class="form-control border-0" />
+          </div>
+        </div>
+        <div class="col-md-4">
+          <select [(ngModel)]="filtroCategoria" class="form-select shadow-sm rounded-3">
+            <option [ngValue]="null">Todas las categorías</option>
+            @for (c of categorias; track c.id) { <option [ngValue]="c.id">{{ c.nombre }}</option> }
+          </select>
+        </div>
+      </div>
+
+      @if (totalProductosVisibles === 0) {
+        <div class="card border-0 shadow-sm rounded-4">
+          <div class="card-body text-center py-5">
+            <i class="bi bi-search fs-1 text-muted d-block mb-2"></i>
+            <p class="text-muted mb-0">No hay productos que coincidan con tu búsqueda.</p>
+          </div>
+        </div>
+      }
+
+      <!-- Product groups by plaza -->
+      @for (grupo of gruposPorPlaza; track grupo.plaza.id) {
+        <div class="card border-0 shadow-sm rounded-4 mb-3">
+          <div class="card-body p-4">
+            <h6 class="card-title fw-bold mb-3">
+              <i class="bi bi-building" style="color:var(--rojo);"></i> {{ grupo.plaza.nombre }}
+              @if (grupo.plaza.direccion) { <small class="text-muted fw-normal ms-2"><i class="bi bi-geo-alt me-1"></i>{{ grupo.plaza.direccion }}</small> }
+            </h6>
+            @for (camp of grupo.campesinos; track camp.viaje.id) {
+              <div class="bg-light rounded-4 p-3 mb-3 border">
+                <div class="d-flex align-items-center gap-2 mb-2">
+                  <div class="rounded-circle bg-danger d-flex align-items-center justify-content-center flex-shrink-0" style="width:32px;height:32px;">
+                    <i class="bi bi-person-fill text-white small"></i>
+                  </div>
+                  <span class="fw-bold">{{ camp.viaje.campesino?.nombres || '' }} {{ camp.viaje.campesino?.apellidos || '' }}</span>
+                  @if (camp.viaje.hora_inicio && camp.viaje.hora_fin) {
+                    <span class="badge bg-info text-dark rounded-pill ms-2"><i class="bi bi-clock me-1"></i>{{ camp.viaje.hora_inicio }} - {{ camp.viaje.hora_fin }}</span>
+                  }
+                </div>
+                @if (camp.viaje.notas) { <div class="small text-muted mb-3 bg-white rounded-3 p-2 border"><i class="bi bi-chat-text me-1"></i>{{ camp.viaje.notas }}</div> }
+                <div class="row g-3">
+                  @for (vp of camp.items; track vp.id) {
+                    <div class="col-md-6 col-lg-4">
+                      <div class="card border-0 shadow-sm rounded-4 h-100">
+                        <div class="card-body p-3">
+                          <div class="d-flex align-items-start gap-3">
+                            @if (vp.producto?.foto_url) {
+                              <img [src]="vp.producto!.foto_url" class="rounded-3 flex-shrink-0" style="width:56px;height:56px;object-fit:cover;" />
+                            } @else {
+                              <div class="rounded-3 bg-light d-flex align-items-center justify-content-center flex-shrink-0" style="width:56px;height:56px;">
+                                <i class="bi bi-box-seam fs-4 text-muted"></i>
+                              </div>
+                            }
+                            <div class="flex-grow-1 min-w-0">
+                              <div class="fw-bold mb-1">{{ vp.producto!.nombre }}</div>
+                              <div><small class="text-muted">{{ vp.producto!.categoria?.nombre || '' }}</small></div>
+                              <div class="d-flex align-items-center gap-1 mb-1">
+                                <span class="fw-bold fs-5" style="color:var(--rojo);">${{ vp.precio.toLocaleString() }}</span>
+                                <small class="text-muted">/{{ vp.producto!.unidad }}</small>
+                              </div>
+                              @if ((vp.ofertas || []).length > 0) {
+                                @for (of of vp.ofertas; track of.id) {
+                                  @if (of.activa) {
+                                    <span class="badge bg-warning text-dark rounded-pill mb-1"><i class="bi bi-lightning-fill me-1"></i>-{{ of.descuento_porcentaje }}%</span>
+                                  }
+                                }
+                              }
+                              <div class="d-flex align-items-center gap-1 mt-2">
+                                <input type="number" [(ngModel)]="preordenCantidad[vp.id]" min="1" [max]="vp.cantidad_disponible || 1" class="form-control form-control-sm text-center" style="width:54px;" />
+                                <button class="btn btn-danger btn-sm flex-grow-1" (click)="crearPreorden(vp)" [disabled]="vp.cantidad_disponible <= 0">
+                                  <i class="bi bi-cart-plus me-1"></i>{{ vp.cantidad_disponible > 0 ? 'Preordenar' : 'Agotado' }}
+                                </button>
+                              </div>
+                              <small class="text-muted mt-1 d-block"><i class="bi bi-box me-1"></i>{{ vp.cantidad_disponible }} disponibles</small>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  }
+                </div>
+              </div>
+            }
+          </div>
+        </div>
+      }
+      @if (preordenMensaje) { <div class="alert alert-success alert-dismissible py-2 small rounded-3 shadow-sm" (click)="preordenMensaje=''">{{ preordenMensaje }}</div> }
+    }
+  }
+
+  <!-- PREÓRDENES -->
+  @if (tab === 'preordenes') {
+    <div class="card border-0 shadow-sm rounded-4">
+      <div class="card-body p-4">
+        <h6 class="card-title fw-bold mb-3"><i class="bi bi-bag-check" style="color:var(--rojo);"></i> Mis preórdenes</h6>
+        @if (preordenes.length === 0) {
+          <div class="text-center py-5">
+            <i class="bi bi-bag fs-1 text-muted d-block mb-2"></i>
+            <p class="text-muted mb-0">No has hecho ninguna preorden aún. ¡Explora y preordena!</p>
+          </div>
+        } @else {
+          <div class="table-responsive">
+            <table class="table table-sm align-middle mb-0">
+              <thead class="table-light">
+                <tr>
+                  <th class="fw-semibold">Producto</th>
+                  <th class="fw-semibold">Cant.</th>
+                  <th class="fw-semibold">Campesino</th>
+                  <th class="fw-semibold">Plaza</th>
+                  <th class="fw-semibold">Fecha</th>
+                  <th class="fw-semibold">Estado</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (p of preordenes; track p.id) {
+                  <tr>
+                    <td class="fw-bold">{{ p.viaje_producto?.producto?.nombre || 'Producto' }}</td>
+                    <td>{{ p.cantidad }} {{ p.viaje_producto?.producto?.unidad || 'unidad' }}</td>
+                    <td>{{ p.viaje_producto?.viaje?.campesino?.nombres || '' }} {{ p.viaje_producto?.viaje?.campesino?.apellidos || '' }}</td>
+                    <td class="small">{{ plazaNombre(p.viaje_producto?.viaje) }}</td>
+                    <td class="small">{{ p.created_at | date:'short' }}</td>
+                    <td>
+                      <span class="badge rounded-pill" [class.bg-success]="p.estado==='completado'||p.estado==='entregado'" [class.bg-danger]="p.estado==='cancelado'||p.estado==='no_retiro'" [class.bg-warning]="p.estado==='pendiente'">{{ p.estado }}</span>
+                    </td>
+                    <td>
+                      @if (p.estado === 'pendiente') {
+                        <button class="btn btn-sm btn-outline-danger border-0 rounded-3" (click)="cancelarPreorden(p.id)" title="Cancelar"><i class="bi bi-x-circle"></i></button>
+                      }
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        }
+      </div>
+    </div>
+  }
+
+  <!-- RESEÑAS -->
+  @if (tab === 'resenias') {
+    <!-- Escribir reseña -->
+    <div class="card border-0 shadow-sm rounded-4 mb-4">
+      <div class="card-body p-4">
+        <h6 class="card-title fw-bold mb-3"><i class="bi bi-chat-square-text" style="color:var(--rojo);"></i> Escribir reseña</h6>
+        <div class="row g-3">
+          <div class="col-md-6">
+            <label class="form-label fw-semibold small">Campesino a calificar</label>
+            <select [(ngModel)]="nuevaResenia.id_destino" class="form-select">
+              <option [ngValue]="null">Selecciona un campesino</option>
+              @for (c of campesinosDisponibles; track c.id) { <option [ngValue]="c.id">{{ c.nombres }} {{ c.apellidos }}</option> }
+            </select>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label fw-semibold small">Puntuación</label>
+            <div class="d-flex align-items-center gap-1">
+              @for (s of [1,2,3,4,5]; track s) {
+                <span class="fs-3" style="cursor:pointer;" [style.color]="s <= nuevaResenia.puntuacion ? '#fdd835' : '#ddd'" (click)="nuevaResenia.puntuacion = s">{{ s <= nuevaResenia.puntuacion ? '★' : '☆' }}</span>
+              }
+              <span class="small text-muted ms-2">({{ nuevaResenia.puntuacion }}/5)</span>
+            </div>
+          </div>
+          <div class="col-12">
+            <label class="form-label fw-semibold small">Comentario</label>
+            <textarea class="form-control" [(ngModel)]="nuevaResenia.comentario" placeholder="Escribe tu opinión sobre el producto y la atención..." rows="3"></textarea>
+          </div>
+          <div class="col-12">
+            <button class="btn btn-danger" (click)="enviarResenia()">
+              <i class="bi bi-send me-1"></i>Publicar reseña
+            </button>
+          </div>
+        </div>
+        @if (reseniaMensaje) { <div class="alert alert-success mt-3 py-2 small rounded-3" (click)="reseniaMensaje=''">{{ reseniaMensaje }}</div> }
+      </div>
+    </div>
+
+    <!-- Mis reseñas -->
+    <div class="card border-0 shadow-sm rounded-4">
+      <div class="card-body p-4">
+        <h6 class="card-title fw-bold mb-3 d-flex justify-content-between align-items-center">
+          <span><i class="bi bi-star" style="color:var(--rojo);"></i> Mis reseñas</span>
+          <span class="badge bg-danger rounded-pill">{{ resenias.length }}</span>
+        </h6>
+        @if (resenias.length === 0) {
+          <div class="text-center py-5">
+            <i class="bi bi-star fs-1 text-muted d-block mb-2"></i>
+            <p class="text-muted mb-0">Aún no has escrito ninguna reseña.</p>
+          </div>
+        } @else {
+          <div class="list-group list-group-flush">
+            @for (r of resenias; track r.id) {
+              <div class="list-group-item px-0 border-0 mb-2 bg-light rounded-3 p-3">
+                <div class="d-flex align-items-center gap-2 mb-1">
+                  <div class="rounded-circle bg-danger d-flex align-items-center justify-content-center flex-shrink-0" style="width:28px;height:28px;">
+                    <i class="bi bi-person-fill text-white small"></i>
+                  </div>
+                  <strong>{{ r.destino?.nombres || 'Campesino' }} {{ r.destino?.apellidos || '' }}</strong>
+                  <div class="d-flex gap-0">
+                    @for (s of [1,2,3,4,5]; track s) {
+                      <span [style.color]="s <= r.puntuacion ? '#fdd835' : '#ddd'" class="small">★</span>
+                    }
+                  </div>
+                  <span class="small text-muted">{{ r.created_at | date:'shortDate' }}</span>
+                </div>
+                @if (r.comentario) { <p class="mb-1 small ps-5">{{ r.comentario }}</p> }
+                @if (r.respuesta) {
+                  <div class="bg-white rounded-3 p-2 small mt-1 ms-5 border">
+                    <strong class="text-muted"><i class="bi bi-reply me-1"></i>Respuesta:</strong> {{ r.respuesta }}
+                  </div>
+                }
+              </div>
+            }
+          </div>
+        }
+      </div>
+    </div>
+  }
+</div>
