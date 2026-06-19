@@ -114,12 +114,16 @@ interface Usuario {
                               <i class="bi bi-check-lg"></i>
                             </button>
                           }
-                          <button class="btn btn-sm btn-outline-secondary border-0 rounded-3" (click)="toggleBloqueo(u)" title="Bloquear/Desbloquear">
-                            <i class="bi" [class.bi-lock]="u.id_perfil!==5" [class.bi-unlock]="u.id_perfil===5"></i>
-                          </button>
-                          <button class="btn btn-sm btn-outline-warning border-0 rounded-3" (click)="resetPassword(u.id)" title="Resetear contraseña">
-                            <i class="bi bi-key"></i>
-                          </button>
+                          @if (auth.usuario()?.id_perfil === 1 || u.id_perfil !== 1) {
+                            <button class="btn btn-sm btn-outline-secondary border-0 rounded-3" (click)="toggleBloqueo(u)" title="Bloquear/Desbloquear">
+                              <i class="bi" [class.bi-lock]="u.id_perfil!==5" [class.bi-unlock]="u.id_perfil===5"></i>
+                            </button>
+                          }
+                          @if (auth.usuario()?.id_perfil === 1 || u.id_perfil !== 1) {
+                            <button class="btn btn-sm btn-outline-warning border-0 rounded-3" (click)="resetPassword(u.id)" title="Resetear contraseña">
+                              <i class="bi bi-key"></i>
+                            </button>
+                          }
                         </div>
                       </td>
                     </tr>
