@@ -33,6 +33,7 @@ import { AuthService } from '../../services/auth.service';
                 <li class="nav-item"><a class="nav-link" routerLink="/consumidor" routerLinkActive="active">Compra</a></li>
               }
               <li class="nav-item"><span class="nav-link disabled"><i class="bi bi-person-circle"></i> {{ auth.usuario()?.nombres }}</span></li>
+              <li class="nav-item"><a class="nav-link" routerLink="/perfil" routerLinkActive="active" title="Mi perfil"><i class="bi bi-gear"></i></a></li>
               <li class="nav-item"><button class="btn btn-outline-light btn-sm ms-2" (click)="auth.logout()">Salir</button></li>
             } @else {
               <li class="nav-item"><a class="nav-link" routerLink="/login" routerLinkActive="active">Ingresar</a></li>

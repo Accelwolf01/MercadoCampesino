@@ -297,6 +297,9 @@ interface Usuario {
                   <i class="bi" [class.bi-check-lg]="!verificarCargando" [class.bi-arrow-repeat]="verificarCargando"></i>
                   {{ verificarCargando ? 'Verificando...' : 'Aprobar y verificar' }}
                 </button>
+                <button class="btn btn-outline-danger rounded-3" (click)="rechazar(fotoModal.id)">
+                  <i class="bi bi-x me-1"></i>Rechazar
+                </button>
               }
             </div>
           </div>
@@ -394,6 +397,13 @@ export class Admin implements OnInit {
     this.api.put(`/usuarios/${id}/verificar`).subscribe({
       next: () => { this.verificarCargando = false; this.fotoModal = null; this.cargarUsuarios(); },
       error: () => { this.verificarCargando = false; }
+    });
+  }
+
+  rechazar(id: number) {
+    if (!confirm('¿Estás seguro? Se eliminará la solicitud y el usuario podrá volver a registrarse.')) return;
+    this.api.put(`/usuarios/${id}/rechazar`).subscribe({
+      next: () => { this.fotoModal = null; this.cargarUsuarios(); }
     });
   }
 
