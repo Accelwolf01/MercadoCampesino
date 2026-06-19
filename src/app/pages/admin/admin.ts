@@ -115,7 +115,7 @@ interface Usuario {
                             </button>
                           }
                           <button class="btn btn-sm btn-outline-secondary border-0 rounded-3" (click)="toggleBloqueo(u)" title="Bloquear/Desbloquear">
-                            <i class="bi" [class.bi-lock]="u.activo" [class.bi-unlock]="!u.activo"></i>
+                            <i class="bi" [class.bi-lock]="u.id_perfil!==5" [class.bi-unlock]="u.id_perfil===5"></i>
                           </button>
                           <button class="btn btn-sm btn-outline-warning border-0 rounded-3" (click)="resetPassword(u.id)" title="Resetear contraseña">
                             <i class="bi bi-key"></i>
@@ -390,7 +390,11 @@ export class Admin implements OnInit {
   }
 
   toggleBloqueo(u: Usuario) {
-    this.api.put(`/usuarios/${u.id}/bloquear`, { activo: !u.activo }).subscribe({ next: () => this.cargarUsuarios() });
+    if (u.id_perfil === 5) {
+      this.api.put(`/usuarios/${u.id}/activar`).subscribe({ next: () => this.cargarUsuarios() });
+    } else {
+      this.api.put(`/usuarios/${u.id}/bloquear`).subscribe({ next: () => this.cargarUsuarios() });
+    }
   }
 
   resetPassword(id: number) {
