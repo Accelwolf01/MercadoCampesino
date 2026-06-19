@@ -251,18 +251,44 @@ interface Usuario {
             <div class="modal-header border-0 pb-0">
               <h5 class="modal-title fw-bold">
                 <i class="bi bi-card-image me-1" style="color:var(--rojo);"></i>
-                Documento de {{ fotoModal.nombres }} {{ fotoModal.apellidos }}
+                Verificar documento
               </h5>
               <button type="button" class="btn-close" (click)="fotoModal = null"></button>
             </div>
-            <div class="modal-body text-center p-4">
-              <img [src]="fotoModal.foto_cedula" class="img-fluid rounded-3 shadow-sm" style="max-height:500px;" />
+            <div class="modal-body p-4">
+              <div class="row mb-3">
+                <div class="col-md-6">
+                  <div class="bg-light rounded-3 p-3">
+                    <h6 class="fw-bold mb-3"><i class="bi bi-person me-1"></i>Datos del usuario</h6>
+                    <div class="mb-1"><small class="text-muted">Nombre:</small></div>
+                    <div class="fw-semibold mb-2">{{ fotoModal.nombres }} {{ fotoModal.apellidos }}</div>
+                    <div class="mb-1"><small class="text-muted">Cédula registrada:</small></div>
+                    <div class="fw-semibold mb-2" style="color:var(--rojo);">CC {{ fotoModal.cedula }}</div>
+                    <div class="mb-1"><small class="text-muted">Email:</small></div>
+                    <div class="mb-2">{{ fotoModal.email }}</div>
+                    <div class="mb-1"><small class="text-muted">Celular:</small></div>
+                    <div class="mb-0">{{ fotoModal.celular }}</div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <h6 class="fw-bold mb-3"><i class="bi bi-camera me-1"></i>Foto del documento</h6>
+                  @if (fotoModal.foto_cedula) {
+                    <img [src]="fotoModal.foto_cedula" class="img-fluid rounded-3 shadow-sm w-100" style="max-height:350px;object-fit:contain;" />
+                    <small class="text-muted d-block mt-1">Verifica que el número de cédula coincida con el documento</small>
+                  } @else {
+                    <div class="bg-light rounded-3 d-flex align-items-center justify-content-center" style="height:200px;">
+                      <i class="bi bi-file-earmark-x fs-1 text-muted"></i>
+                      <span class="ms-2 text-muted">Sin foto</span>
+                    </div>
+                  }
+                </div>
+              </div>
             </div>
             <div class="modal-footer border-0 pt-0 justify-content-center gap-2">
               <button class="btn btn-outline-secondary rounded-3" (click)="fotoModal = null">
                 <i class="bi bi-x me-1"></i>Cerrar
               </button>
-              @if (!fotoModal.verificado_por_admin) {
+              @if (!fotoModal.verificado_por_admin && fotoModal.foto_cedula) {
                 <button class="btn btn-danger rounded-3" (click)="verificar(fotoModal.id)">
                   <i class="bi bi-check-lg me-1"></i>Aprobar y verificar
                 </button>
