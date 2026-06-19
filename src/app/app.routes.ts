@@ -12,5 +12,6 @@ export const routes: Routes = [
   { path: 'consumidor', loadComponent: () => import('./pages/consumidor/consumidor').then(m => m.Consumidor), canActivate: [authGuard] },
   { path: 'superadmin', loadComponent: () => import('./pages/superadmin/superadmin').then(m => m.Superadmin), canActivate: [adminGuard] },
   { path: 'perfil', loadComponent: () => import('./pages/profile/profile').then(m => m.Profile), canActivate: [authGuard] },
+  { path: 'soporte', loadComponent: () => import('./pages/soporte/soporte').then(m => m.Soporte), canActivate: [authGuard] },
   { path: '**', redirectTo: '' }
 ];
