@@ -62,6 +62,7 @@ interface Usuario {
                     <th class="fw-semibold">Usuario</th>
                     <th class="fw-semibold">Email</th>
                     <th class="fw-semibold">Perfil</th>
+                    <th class="fw-semibold">Documento</th>
                     <th class="fw-semibold">Verificado</th>
                     <th class="fw-semibold">Estado</th>
                     <th class="fw-semibold text-end">Acciones</th>
@@ -83,6 +84,15 @@ interface Usuario {
                       <td><small>{{ u.email }}</small></td>
                       <td><span class="badge bg-info text-dark rounded-pill">{{ perfiles[u.id_perfil] }}</span></td>
                       <td>
+                        @if (u.foto_cedula) {
+                          <button class="btn btn-sm btn-outline-info border-0 rounded-3" (click)="verFoto(u)" title="Ver foto del documento">
+                            <i class="bi bi-eye"></i>
+                          </button>
+                        } @else {
+                          <span class="text-muted small">—</span>
+                        }
+                      </td>
+                      <td>
                         <span class="badge rounded-pill" [class.bg-success]="u.verificado_por_admin" [class.bg-secondary]="!u.verificado_por_admin">
                           {{ u.verificado_por_admin ? 'Sí' : 'No' }}
                         </span>
@@ -95,7 +105,9 @@ interface Usuario {
                       <td class="text-end">
                         <div class="d-flex gap-1 justify-content-end">
                           @if (!u.verificado_por_admin) {
-                            <button class="btn btn-sm btn-outline-success border-0 rounded-3" (click)="verificar(u.id)" title="Verificar"><i class="bi bi-check-lg"></i></button>
+                            <button class="btn btn-sm btn-outline-success border-0 rounded-3" (click)="verificar(u.id)" title="Verificar">
+                              <i class="bi bi-check-lg"></i>
+                            </button>
                           }
                           <button class="btn btn-sm btn-outline-secondary border-0 rounded-3" (click)="toggleBloqueo(u)" title="Bloquear/Desbloquear">
                             <i class="bi" [class.bi-lock]="u.activo" [class.bi-unlock]="!u.activo"></i>
@@ -161,6 +173,36 @@ interface Usuario {
         </div>
       }
     </div>
+
+    <!-- Modal foto documento -->
+    @if (fotoModal) {
+      <div class="modal d-block" tabindex="-1" style="background:rgba(0,0,0,0.6);">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+          <div class="modal-content border-0 shadow rounded-4">
+            <div class="modal-header border-0 pb-0">
+              <h5 class="modal-title fw-bold">
+                <i class="bi bi-card-image me-1" style="color:var(--rojo);"></i>
+                Documento de {{ fotoModal.nombres }} {{ fotoModal.apellidos }}
+              </h5>
+              <button type="button" class="btn-close" (click)="fotoModal = null"></button>
+            </div>
+            <div class="modal-body text-center p-4">
+              <img [src]="fotoModal.foto_cedula" class="img-fluid rounded-3 shadow-sm" style="max-height:500px;" />
+            </div>
+            <div class="modal-footer border-0 pt-0 justify-content-center gap-2">
+              <button class="btn btn-outline-secondary rounded-3" (click)="fotoModal = null">
+                <i class="bi bi-x me-1"></i>Cerrar
+              </button>
+              @if (!fotoModal.verificado_por_admin) {
+                <button class="btn btn-danger rounded-3" (click)="verificar(fotoModal.id)">
+                  <i class="bi bi-check-lg me-1"></i>Aprobar y verificar
+                </button>
+              }
+            </div>
+          </div>
+        </div>
+      </div>
+    }
   `
 })
 export class Admin implements OnInit {
@@ -174,6 +216,7 @@ export class Admin implements OnInit {
   busqueda = '';
   categorias: any[] = [];
   nuevaCat = '';
+  fotoModal: Usuario | null = null;
 
   perfiles: Record<number,string> = { 1:'Superadmin', 2:'Admin', 3:'Campesino', 4:'Consumidor', 5:'Bloqueado' };
 
@@ -197,8 +240,14 @@ export class Admin implements OnInit {
     );
   }
 
+  verFoto(u: Usuario) {
+    this.fotoModal = u;
+  }
+
   verificar(id: number) {
-    this.api.put(`/usuarios/${id}/verificar`).subscribe({ next: () => this.cargarUsuarios() });
+    this.api.put(`/usuarios/${id}/verificar`).subscribe({
+      next: () => { this.fotoModal = null; this.cargarUsuarios(); }
+    });
   }
 
   toggleBloqueo(u: Usuario) {
