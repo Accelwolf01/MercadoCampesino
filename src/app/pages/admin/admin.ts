@@ -49,9 +49,14 @@ interface Usuario {
           <div class="card-body p-4">
             <div class="d-flex justify-content-between align-items-center mb-3">
               <h6 class="card-title fw-bold mb-0"><i class="bi bi-people" style="color:var(--rojo);"></i> Usuarios</h6>
-              <div class="input-group input-group-sm shadow-sm rounded-3" style="max-width:280px;">
-                <span class="input-group-text bg-white border-0"><i class="bi bi-search text-muted"></i></span>
-                <input [(ngModel)]="busqueda" (input)="filtrarUsuarios()" placeholder="Buscar por nombre, email o cédula..." class="form-control border-0" />
+              <div class="d-flex gap-2">
+                <button class="btn btn-sm btn-danger rounded-3" (click)="abrirCrearUsuario()">
+                  <i class="bi bi-plus-lg me-1"></i>Crear usuario
+                </button>
+                <div class="input-group input-group-sm shadow-sm rounded-3" style="max-width:280px;">
+                  <span class="input-group-text bg-white border-0"><i class="bi bi-search text-muted"></i></span>
+                  <input [(ngModel)]="busqueda" (input)="filtrarUsuarios()" placeholder="Buscar por nombre, email o cédula..." class="form-control border-0" />
+                </div>
               </div>
             </div>
             <div class="table-responsive">
@@ -174,6 +179,70 @@ interface Usuario {
       }
     </div>
 
+    <!-- Modal crear usuario -->
+    @if (crearModal) {
+      <div class="modal d-block" tabindex="-1" style="background:rgba(0,0,0,0.6);">
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content border-0 shadow rounded-4">
+            <div class="modal-header border-0 pb-0">
+              <h5 class="modal-title fw-bold">
+                <i class="bi bi-person-plus me-1" style="color:var(--rojo);"></i>
+                Crear usuario
+              </h5>
+              <button type="button" class="btn-close" (click)="crearModal = false"></button>
+            </div>
+            <div class="modal-body p-4">
+              @if (crearError) {
+                <div class="alert alert-danger py-2 small rounded-3">{{ crearError }}</div>
+              }
+              <div class="row g-3 mb-3">
+                <div class="col-md-6">
+                  <label class="form-label fw-semibold small">Nombres</label>
+                  <input class="form-control form-control-sm" [(ngModel)]="crearForm.nombres" placeholder="Nombres" />
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label fw-semibold small">Apellidos</label>
+                  <input class="form-control form-control-sm" [(ngModel)]="crearForm.apellidos" placeholder="Apellidos" />
+                </div>
+              </div>
+              <div class="mb-2">
+                <label class="form-label fw-semibold small">Cédula</label>
+                <input class="form-control form-control-sm" [(ngModel)]="crearForm.cedula" placeholder="Número de cédula" />
+              </div>
+              <div class="mb-2">
+                <label class="form-label fw-semibold small">Email</label>
+                <input class="form-control form-control-sm" [(ngModel)]="crearForm.email" type="email" placeholder="correo@ejemplo.com" />
+              </div>
+              <div class="mb-2">
+                <label class="form-label fw-semibold small">Celular</label>
+                <input class="form-control form-control-sm" [(ngModel)]="crearForm.celular" placeholder="Número de celular" />
+              </div>
+              <div class="mb-2">
+                <label class="form-label fw-semibold small">Contraseña</label>
+                <input class="form-control form-control-sm" [(ngModel)]="crearForm.password" type="password" placeholder="Mínimo 6 caracteres" />
+              </div>
+              <div class="mb-2">
+                <label class="form-label fw-semibold small">Perfil</label>
+                <select class="form-select form-select-sm" [(ngModel)]="crearForm.id_perfil">
+                  @for (p of perfilesDisponibles; track p.id) {
+                    <option [ngValue]="p.id">{{ p.nombre }}</option>
+                  }
+                </select>
+              </div>
+            </div>
+            <div class="modal-footer border-0 pt-0 justify-content-center gap-2">
+              <button class="btn btn-outline-secondary rounded-3" (click)="crearModal = false">
+                <i class="bi bi-x me-1"></i>Cancelar
+              </button>
+              <button class="btn btn-danger rounded-3" (click)="guardarUsuario()" [disabled]="crearCargando">
+                <i class="bi bi-check-lg me-1"></i>{{ crearCargando ? 'Creando...' : 'Crear usuario' }}
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    }
+
     <!-- Modal foto documento -->
     @if (fotoModal) {
       <div class="modal d-block" tabindex="-1" style="background:rgba(0,0,0,0.6);">
@@ -217,12 +286,56 @@ export class Admin implements OnInit {
   categorias: any[] = [];
   nuevaCat = '';
   fotoModal: Usuario | null = null;
+  crearModal = false;
+  crearCargando = false;
+  crearError = '';
+  crearForm = { nombres: '', apellidos: '', cedula: '', email: '', celular: '', password: '', id_perfil: 2 };
+  perfilesDisponibles: { id: number; nombre: string }[] = [];
 
   perfiles: Record<number,string> = { 1:'Superadmin', 2:'Admin', 3:'Campesino', 4:'Consumidor', 5:'Bloqueado' };
 
   ngOnInit() {
     this.cargarUsuarios();
     this.cargarCategorias();
+    this.cargarPerfilesDisponibles();
+  }
+
+  cargarPerfilesDisponibles() {
+    const perfilActual = this.auth.usuario()?.id_perfil;
+    const todos = [
+      { id: 1, nombre: 'Superadmin' },
+      { id: 2, nombre: 'Admin' },
+      { id: 3, nombre: 'Campesino' },
+      { id: 4, nombre: 'Consumidor' },
+    ];
+    if (perfilActual === 1) {
+      this.perfilesDisponibles = todos;
+    } else {
+      this.perfilesDisponibles = todos.filter(p => p.id >= 2);
+    }
+    this.crearForm.id_perfil = this.perfilesDisponibles[0]?.id || 2;
+  }
+
+  abrirCrearUsuario() {
+    this.crearForm = { nombres: '', apellidos: '', cedula: '', email: '', celular: '', password: '', id_perfil: this.perfilesDisponibles[0]?.id || 2 };
+    this.crearError = '';
+    this.crearModal = true;
+  }
+
+  guardarUsuario() {
+    this.crearCargando = true;
+    this.crearError = '';
+    this.api.post<any>('/usuarios', this.crearForm).subscribe({
+      next: () => {
+        this.crearModal = false;
+        this.crearCargando = false;
+        this.cargarUsuarios();
+      },
+      error: e => {
+        this.crearError = e.error?.detail || 'Error al crear usuario';
+        this.crearCargando = false;
+      }
+    });
   }
 
   cargarUsuarios() {
