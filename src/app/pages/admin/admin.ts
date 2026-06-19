@@ -110,8 +110,8 @@ interface Usuario {
                       <td class="text-end">
                         <div class="d-flex gap-1 justify-content-end">
                           @if (!u.verificado_por_admin) {
-                            <button class="btn btn-sm btn-outline-success border-0 rounded-3" (click)="verificar(u.id)" title="Verificar">
-                              <i class="bi bi-check-lg"></i>
+                            <button class="btn btn-sm btn-outline-success border-0 rounded-3" (click)="verificar(u.id)" [disabled]="verificarCargando" title="Verificar">
+                              <i class="bi" [class.bi-check-lg]="!verificarCargando" [class.bi-arrow-repeat]="verificarCargando"></i>
                             </button>
                           }
                           @if (auth.usuario()?.id_perfil === 1 || u.id_perfil !== 1) {
@@ -293,8 +293,9 @@ interface Usuario {
                 <i class="bi bi-x me-1"></i>Cerrar
               </button>
               @if (!fotoModal.verificado_por_admin && fotoModal.foto_cedula) {
-                <button class="btn btn-danger rounded-3" (click)="verificar(fotoModal.id)">
-                  <i class="bi bi-check-lg me-1"></i>Aprobar y verificar
+                <button class="btn btn-danger rounded-3" (click)="verificar(fotoModal.id)" [disabled]="verificarCargando">
+                  <i class="bi" [class.bi-check-lg]="!verificarCargando" [class.bi-arrow-repeat]="verificarCargando"></i>
+                  {{ verificarCargando ? 'Verificando...' : 'Aprobar y verificar' }}
                 </button>
               }
             </div>
@@ -316,6 +317,7 @@ export class Admin implements OnInit {
   categorias: any[] = [];
   nuevaCat = '';
   fotoModal: Usuario | null = null;
+  verificarCargando = false;
   crearModal = false;
   crearCargando = false;
   crearError = '';
@@ -388,8 +390,10 @@ export class Admin implements OnInit {
   }
 
   verificar(id: number) {
+    this.verificarCargando = true;
     this.api.put(`/usuarios/${id}/verificar`).subscribe({
-      next: () => { this.fotoModal = null; this.cargarUsuarios(); }
+      next: () => { this.verificarCargando = false; this.fotoModal = null; this.cargarUsuarios(); },
+      error: () => { this.verificarCargando = false; }
     });
   }
 
