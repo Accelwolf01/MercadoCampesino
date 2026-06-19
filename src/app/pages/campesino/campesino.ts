@@ -61,6 +61,9 @@ export class Campesino implements OnInit {
   reprogramandoViajeId: number | null = null;
   reprogramarForm = { fecha: '', hora_inicio: '', hora_fin: '' };
 
+  editandoUbicacionViajeId: number | null = null;
+  editUbicacionForm = { id_plaza: null as number | null, foto_url: '' };
+
   agregarProductoViajeId: number | null = null;
   productoAViajeTemp = { id_producto: 0, cantidad: 1 };
 
@@ -344,6 +347,42 @@ export class Campesino implements OnInit {
         this.cargarViajes();
       },
       error: e => this.error = e.error?.detail || 'Error al reprogramar'
+    });
+  }
+
+  toggleEditUbicacion(v: Viaje) {
+    if (this.editandoUbicacionViajeId === v.id) {
+      this.editandoUbicacionViajeId = null;
+      return;
+    }
+    const ubi = v.ubicaciones?.find(u => u.activa) || v.ubicaciones?.[0];
+    this.editUbicacionForm = { id_plaza: ubi?.id_plaza || null, foto_url: '' };
+    this.editandoUbicacionViajeId = v.id;
+  }
+
+  guardarUbicacion(v: Viaje) {
+    const ubi = v.ubicaciones?.find(u => u.activa) || v.ubicaciones?.[0];
+    if (!ubi) { this.error = 'No hay ubicación para actualizar'; return; }
+    const plaza = this.plazas.find(p => p.id === this.editUbicacionForm.id_plaza);
+    const payload: any = {};
+    if (this.editUbicacionForm.id_plaza !== ubi.id_plaza) {
+      payload.id_plaza = this.editUbicacionForm.id_plaza;
+    }
+    if (plaza?.latitud !== ubi.latitud || plaza?.longitud !== ubi.longitud) {
+      if (plaza?.latitud) payload.latitud = plaza.latitud;
+      if (plaza?.longitud) payload.longitud = plaza.longitud;
+    }
+    if (plaza?.direccion !== ubi.direccion && plaza?.direccion) {
+      payload.direccion = plaza.direccion;
+    }
+    if (Object.keys(payload).length === 0) { this.editandoUbicacionViajeId = null; return; }
+    this.api.put<Viaje>(`/viajes/ubicacion/${ubi.id}`, payload).subscribe({
+      next: () => {
+        this.mensaje = 'Ubicación actualizada';
+        this.editandoUbicacionViajeId = null;
+        this.cargarViajes();
+      },
+      error: e => { this.error = e.error?.detail || 'Error al actualizar ubicación'; this.cdr.detectChanges(); }
     });
   }
 

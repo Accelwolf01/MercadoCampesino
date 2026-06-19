@@ -339,14 +339,32 @@
                     </div>
                     @if (viajeStatus(v) === 'activo') {
                       <div class="mt-3 p-3 bg-white rounded-3 border">
-                        <div class="d-flex align-items-center gap-2 mb-2">
+                        <div class="d-flex align-items-center gap-2 mb-2 flex-wrap">
                           <button class="btn btn-outline-danger btn-sm" (click)="desactivarViaje(v.id)">
                             <i class="bi bi-x-circle me-1"></i>Desactivar viaje
                           </button>
                           <button class="btn btn-outline-success btn-sm" (click)="toggleAgregarProductoAViaje(v.id)">
                             <i class="bi bi-plus-circle me-1"></i>Agregar producto
                           </button>
+                          <button class="btn btn-outline-warning btn-sm" (click)="toggleEditUbicacion(v)">
+                            <i class="bi bi-geo-alt me-1"></i>Cambiar ubicación
+                          </button>
                         </div>
+                        @if (editandoUbicacionViajeId === v.id) {
+                          <div class="row g-2 mt-2 p-3 bg-white rounded-3 border">
+                            <div class="col-md-8">
+                              <label class="form-label small fw-semibold">Nueva plaza</label>
+                              <select class="form-select form-select-sm" [(ngModel)]="editUbicacionForm.id_plaza">
+                                <option [ngValue]="null">Selecciona una plaza</option>
+                                @for (p of plazas; track p.id) { <option [ngValue]="p.id">{{ p.nombre }} — {{ p.direccion }}</option> }
+                              </select>
+                            </div>
+                            <div class="col-md-4 d-flex align-items-end gap-1">
+                              <button class="btn btn-sm btn-success" (click)="guardarUbicacion(v)" [disabled]="!editUbicacionForm.id_plaza"><i class="bi bi-check-lg"></i> Guardar</button>
+                              <button class="btn btn-sm btn-outline-secondary" (click)="editandoUbicacionViajeId = null"><i class="bi bi-x-lg"></i></button>
+                            </div>
+                          </div>
+                        }
                         @if (agregarProductoViajeId === v.id) {
                           <div class="row g-2 mt-2">
                             @for (p of productosNoEnViaje(v); track p.id) {
