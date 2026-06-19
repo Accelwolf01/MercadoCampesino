@@ -28,7 +28,7 @@ export class AuthService {
     const user = localStorage.getItem('usuario');
     if (saved && user) {
       this.token.set(saved);
-      this.usuario.set(JSON.parse(user));
+      this.usuario.set(JSON.parse(user) as Usuario);
     }
   }
 

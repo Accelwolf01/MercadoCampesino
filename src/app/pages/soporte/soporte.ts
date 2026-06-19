@@ -1,10 +1,9 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ApiService } from '../../services/api.service';
 import { AuthService } from '../../services/auth.service';
-import { timeout } from 'rxjs/operators';
 
 interface UsuarioMini { id: number; nombres: string; apellidos: string; id_perfil: number; perfil?: { nombre: string }; }
 interface TicketRespuesta { id: number; id_ticket: number; id_autor: number; mensaje: string; created_at: string; autor?: UsuarioMini; }
@@ -160,6 +159,7 @@ export class Soporte implements OnInit {
   private api = inject(ApiService);
   private auth = inject(AuthService);
   private router = inject(Router);
+  private cdr = inject(ChangeDetectorRef);
 
   esAdmin = false;
   tickets: Ticket[] = [];
@@ -186,13 +186,21 @@ export class Soporte implements OnInit {
 
   cargar() {
     this.cargando = true;
-    this.api.get<Ticket[]>('/soporte/tickets').pipe(timeout(15000)).subscribe({
-      next: r => { this.tickets = r; this.cargando = false; },
-      error: e => { this.cargando = false; if (e.name === 'TimeoutError') this.error = 'Servidor no responde'; }
+    this.api.get<Ticket[]>('/soporte/tickets').subscribe({
+      next: r => {
+        this.tickets = r;
+        this.cargando = false;
+        this.cdr.detectChanges();
+      },
+      error: () => {
+        this.cargando = false;
+        this.error = 'Error al cargar tickets. Verifica tu conexión.';
+        this.cdr.detectChanges();
+      }
     });
     if (this.esAdmin) {
-      this.api.get<Ticket[]>('/soporte/tickets/pendientes').pipe(timeout(15000)).subscribe({
-        next: r => this.pendientes = r,
+      this.api.get<Ticket[]>('/soporte/tickets/pendientes').subscribe({
+        next: r => { this.pendientes = r; this.cdr.detectChanges(); },
         error: () => {}
       });
     }
@@ -201,35 +209,45 @@ export class Soporte implements OnInit {
   crearTicket() {
     if (!this.nuevoTicket.asunto || !this.nuevoTicket.mensaje) return;
     this.enviando = true;
-    this.api.post<Ticket>('/soporte/tickets', this.nuevoTicket).pipe(timeout(20000)).subscribe({
+    this.api.post<Ticket>('/soporte/tickets', this.nuevoTicket).subscribe({
       next: () => {
         this.mensaje = 'Ticket creado correctamente';
         this.nuevoTicket = { asunto: '', mensaje: '' };
         this.enviando = false;
         this.cargar();
       },
-      error: e => { this.error = e.error?.detail || (e.name === 'TimeoutError' ? 'Servidor no responde' : 'Error al crear ticket'); this.enviando = false; }
+      error: e => {
+        this.error = e.error?.detail || 'Error al crear ticket';
+        this.enviando = false;
+        this.cdr.detectChanges();
+      }
     });
   }
 
   agregarRespuesta(t: Ticket) {
     if (!this.respuestaTexto[t.id]) return;
-    this.api.post<TicketRespuesta>(`/soporte/tickets/${t.id}/respuestas`, { mensaje: this.respuestaTexto[t.id] }).pipe(timeout(20000)).subscribe({
+    this.api.post<TicketRespuesta>(`/soporte/tickets/${t.id}/respuestas`, { mensaje: this.respuestaTexto[t.id] }).subscribe({
       next: () => {
         this.respuestaTexto[t.id] = '';
         this.cargar();
       },
-      error: e => this.error = e.error?.detail || (e.name === 'TimeoutError' ? 'Servidor no responde' : 'Error al enviar')
+      error: e => {
+        this.error = e.error?.detail || 'Error al enviar';
+        this.cdr.detectChanges();
+      }
     });
   }
 
   cambiarEstado(t: Ticket, estado: string) {
-    this.api.put<Ticket>(`/soporte/tickets/${t.id}/estado?nuevo_estado=${estado}`, {}).pipe(timeout(20000)).subscribe({
+    this.api.put<Ticket>(`/soporte/tickets/${t.id}/estado?nuevo_estado=${estado}`, {}).subscribe({
       next: () => {
         this.mensaje = `Ticket marcado como "${ESTADOS[estado]}"`;
         this.cargar();
       },
-      error: e => this.error = e.error?.detail || (e.name === 'TimeoutError' ? 'Servidor no responde' : 'Error al cambiar estado')
+      error: e => {
+        this.error = e.error?.detail || 'Error al cambiar estado';
+        this.cdr.detectChanges();
+      }
     });
   }
 }

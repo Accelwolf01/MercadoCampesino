@@ -4,7 +4,6 @@ import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { ApiService } from '../../services/api.service';
-import { timeout } from 'rxjs/operators';
 
 @Component({
   selector: 'app-profile',
@@ -97,7 +96,7 @@ export class Profile {
     this.cargando = true;
     this.mensaje = '';
     this.error = '';
-    this.api.put<any>('/auth/me', this.data).pipe(timeout(20000)).subscribe({
+    this.api.put<any>('/auth/me', this.data).subscribe({
       next: r => {
         this.auth.usuario.set(r);
         localStorage.setItem('usuario', JSON.stringify(r));
@@ -105,7 +104,7 @@ export class Profile {
         this.cargando = false;
       },
       error: e => {
-        this.error = e.error?.detail || (e.name === 'TimeoutError' ? 'El servidor no respondió. ¿Render dormido?' : 'Error al actualizar perfil');
+        this.error = e.error?.detail || 'Error al actualizar perfil';
         this.cargando = false;
       }
     });
