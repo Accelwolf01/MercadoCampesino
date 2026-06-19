@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ApiService } from '../../services/api.service';
 import { AuthService } from '../../services/auth.service';
+import { timeout } from 'rxjs/operators';
 
 interface UsuarioMini { id: number; nombres: string; apellidos: string; id_perfil: number; perfil?: { nombre: string }; }
 interface TicketRespuesta { id: number; id_ticket: number; id_autor: number; mensaje: string; created_at: string; autor?: UsuarioMini; }
@@ -185,12 +186,12 @@ export class Soporte implements OnInit {
 
   cargar() {
     this.cargando = true;
-    this.api.get<Ticket[]>('/soporte/tickets').subscribe({
+    this.api.get<Ticket[]>('/soporte/tickets').pipe(timeout(15000)).subscribe({
       next: r => { this.tickets = r; this.cargando = false; },
-      error: () => this.cargando = false
+      error: e => { this.cargando = false; if (e.name === 'TimeoutError') this.error = 'Servidor no responde'; }
     });
     if (this.esAdmin) {
-      this.api.get<Ticket[]>('/soporte/tickets/pendientes').subscribe({
+      this.api.get<Ticket[]>('/soporte/tickets/pendientes').pipe(timeout(15000)).subscribe({
         next: r => this.pendientes = r,
         error: () => {}
       });
@@ -200,35 +201,35 @@ export class Soporte implements OnInit {
   crearTicket() {
     if (!this.nuevoTicket.asunto || !this.nuevoTicket.mensaje) return;
     this.enviando = true;
-    this.api.post<Ticket>('/soporte/tickets', this.nuevoTicket).subscribe({
+    this.api.post<Ticket>('/soporte/tickets', this.nuevoTicket).pipe(timeout(20000)).subscribe({
       next: () => {
         this.mensaje = 'Ticket creado correctamente';
         this.nuevoTicket = { asunto: '', mensaje: '' };
         this.enviando = false;
         this.cargar();
       },
-      error: e => { this.error = e.error?.detail || 'Error al crear ticket'; this.enviando = false; }
+      error: e => { this.error = e.error?.detail || (e.name === 'TimeoutError' ? 'Servidor no responde' : 'Error al crear ticket'); this.enviando = false; }
     });
   }
 
   agregarRespuesta(t: Ticket) {
     if (!this.respuestaTexto[t.id]) return;
-    this.api.post<TicketRespuesta>(`/soporte/tickets/${t.id}/respuestas`, { mensaje: this.respuestaTexto[t.id] }).subscribe({
+    this.api.post<TicketRespuesta>(`/soporte/tickets/${t.id}/respuestas`, { mensaje: this.respuestaTexto[t.id] }).pipe(timeout(20000)).subscribe({
       next: () => {
         this.respuestaTexto[t.id] = '';
         this.cargar();
       },
-      error: e => this.error = e.error?.detail || 'Error al enviar'
+      error: e => this.error = e.error?.detail || (e.name === 'TimeoutError' ? 'Servidor no responde' : 'Error al enviar')
     });
   }
 
   cambiarEstado(t: Ticket, estado: string) {
-    this.api.put<Ticket>(`/soporte/tickets/${t.id}/estado?nuevo_estado=${estado}`, {}).subscribe({
+    this.api.put<Ticket>(`/soporte/tickets/${t.id}/estado?nuevo_estado=${estado}`, {}).pipe(timeout(20000)).subscribe({
       next: () => {
         this.mensaje = `Ticket marcado como "${ESTADOS[estado]}"`;
         this.cargar();
       },
-      error: e => this.error = e.error?.detail || 'Error al cambiar estado'
+      error: e => this.error = e.error?.detail || (e.name === 'TimeoutError' ? 'Servidor no responde' : 'Error al cambiar estado')
     });
   }
 }
