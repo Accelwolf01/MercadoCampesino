@@ -507,7 +507,7 @@ export class Campesino implements OnInit {
   toggleViaje(id: number) { this.viajeExpandido = this.viajeExpandido === id ? null : id; }
 
   viajeStatus(v: Viaje): string {
-    const hoy = new Date().toISOString().split('T')[0];
+    const hoy = new Date().toLocaleDateString('en-CA');
     if (v.fecha_viaje < hoy) return 'expirado';
     if (v.fecha_viaje === hoy && v.hora_fin) {
       const ahora = new Date();
