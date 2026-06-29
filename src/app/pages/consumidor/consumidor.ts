@@ -100,7 +100,11 @@ export class Consumidor implements OnInit {
       error: () => {}
     });
     this.api.get<CampesinoInfo[]>('/resenias/campesinos-activos').subscribe({
-      next: r => { this.campesinos = r; this.cdr.detectChanges(); },
+      next: r => {
+        const user = this.auth.usuario();
+        this.campesinos = r.filter(c => c.id !== user?.id);
+        this.cdr.detectChanges();
+      },
       error: () => {}
     });
   }
