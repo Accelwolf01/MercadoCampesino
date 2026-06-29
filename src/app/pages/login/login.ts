@@ -25,10 +25,10 @@ import { AuthService } from '../../services/auth.service';
               }
               <form (ngSubmit)="login()">
                 <div class="mb-3">
-                  <label class="form-label fw-semibold small">Correo electrónico</label>
+                  <label class="form-label fw-semibold small">Cédula</label>
                   <div class="input-group shadow-sm rounded-3">
-                    <span class="input-group-text bg-white border-0"><i class="bi bi-envelope text-muted"></i></span>
-                    <input class="form-control border-0" [(ngModel)]="email" name="email" type="email" placeholder="tu@correo.com" required />
+                    <span class="input-group-text bg-white border-0"><i class="bi bi-card-text text-muted"></i></span>
+                    <input class="form-control border-0" [(ngModel)]="cedula" name="cedula" placeholder="Número de cédula" required />
                   </div>
                 </div>
                 <div class="mb-4">
@@ -53,7 +53,7 @@ import { AuthService } from '../../services/auth.service';
 export class Login {
   private auth = inject(AuthService);
   private router = inject(Router);
-  email = '';
+  cedula = '';
   password = '';
   error = '';
   cargando = false;
@@ -61,7 +61,7 @@ export class Login {
   login() {
     this.cargando = true;
     this.error = '';
-    this.auth.login(this.email, this.password).subscribe({
+    this.auth.login(this.cedula, this.password).subscribe({
       next: r => {
         const perfil = r.usuario.id_perfil;
         if (perfil === 1) this.router.navigate(['/superadmin']);

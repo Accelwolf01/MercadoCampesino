@@ -49,7 +49,7 @@ import { AuthService } from '../../services/auth.service';
                 </div>
                 @if (data.tipo === 'campesino') {
                   <div class="mb-3">
-                    <label class="form-label fw-semibold small">Foto del documento</label>
+                    <label class="form-label fw-semibold small">Selfie con tu documento</label>
                     <div class="input-group shadow-sm rounded-3">
                       <span class="input-group-text bg-white border-0"><i class="bi bi-camera text-muted"></i></span>
                       <input class="form-control border-0" type="file" accept="image/*" (change)="onFileSelected($event)" required />
@@ -60,14 +60,14 @@ import { AuthService } from '../../services/auth.service';
                         <small class="text-success ms-2"><i class="bi bi-check-circle"></i> Foto cargada</small>
                       </div>
                     }
-                    <small class="text-muted">Sube una foto clara de tu cédula para verificar tu identidad</small>
+                    <small class="text-muted">Tómate una foto sosteniendo tu cédula para verificar tu identidad</small>
                   </div>
                 }
                 <div class="mb-3">
-                  <label class="form-label fw-semibold small">Correo electrónico</label>
+                  <label class="form-label fw-semibold small">Correo electrónico <span class="text-muted">(opcional)</span></label>
                   <div class="input-group shadow-sm rounded-3">
                     <span class="input-group-text bg-white border-0"><i class="bi bi-envelope text-muted"></i></span>
-                    <input class="form-control border-0" [(ngModel)]="data.email" name="email" type="email" placeholder="tu@correo.com" required />
+                    <input class="form-control border-0" [(ngModel)]="data.email" name="email" type="email" placeholder="tu@correo.com" />
                   </div>
                 </div>
                 <div class="mb-3">

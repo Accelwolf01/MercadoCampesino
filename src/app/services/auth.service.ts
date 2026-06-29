@@ -32,8 +32,8 @@ export class AuthService {
     }
   }
 
-  login(email: string, password: string) {
-    return this.http.post<LoginResponse>(`${environment.apiUrl}/auth/login`, { email, password }).pipe(
+  login(cedula: string, password: string) {
+    return this.http.post<LoginResponse>(`${environment.apiUrl}/auth/login`, { cedula, password }).pipe(
       tap(r => {
         this.token.set(r.access_token);
         this.usuario.set(r.usuario);
