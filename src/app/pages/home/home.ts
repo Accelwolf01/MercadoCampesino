@@ -1,5 +1,6 @@
 import { Component, OnInit, inject, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { ApiService } from '../../services/api.service';
 
@@ -23,10 +24,13 @@ interface OfertaActiva {
   };
 }
 
+interface CampesinoInfo { id: number; nombres: string; apellidos: string; }
+interface ReseniaPub { id: number; puntuacion: number; comentario: string | null; created_at: string; autor: { nombres: string; apellidos: string; }; }
+
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, FormsModule, RouterLink],
   templateUrl: './home.html'
 })
 export class Home implements OnInit {
@@ -35,6 +39,10 @@ export class Home implements OnInit {
   ofertas: OfertaActiva[] = [];
   viajes: any[] = [];
   error = '';
+  campesinos: CampesinoInfo[] = [];
+  campesinoSeleccionado: number | null = null;
+  reseniasPublicas: ReseniaPub[] = [];
+  cargandoReseniasPub = false;
 
   ngOnInit() {
     this.api.get<OfertaActiva[]>('/ofertas/activas').subscribe({
@@ -44,6 +52,20 @@ export class Home implements OnInit {
     this.api.get<any[]>('/viajes/activos').subscribe({
       next: r => { this.viajes = r; this.cdr.detectChanges(); },
       error: () => this.cdr.detectChanges()
+    });
+    this.api.get<CampesinoInfo[]>('/resenias/campesinos-activos').subscribe({
+      next: r => { this.campesinos = r; this.cdr.detectChanges(); },
+      error: () => this.cdr.detectChanges()
+    });
+  }
+
+  cargarReseniasPublicas() {
+    if (!this.campesinoSeleccionado) return;
+    this.cargandoReseniasPub = true;
+    this.reseniasPublicas = [];
+    this.api.get<ReseniaPub[]>(`/resenias/usuario/${this.campesinoSeleccionado}`).subscribe({
+      next: r => { this.reseniasPublicas = r; this.cargandoReseniasPub = false; this.cdr.detectChanges(); },
+      error: () => { this.cargandoReseniasPub = false; this.cdr.detectChanges(); }
     });
   }
 

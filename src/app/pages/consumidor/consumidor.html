@@ -236,8 +236,8 @@
             <textarea class="form-control" [(ngModel)]="nuevaResenia.comentario" placeholder="Escribe tu opinión sobre el producto y la atención..." rows="3"></textarea>
           </div>
           <div class="col-12">
-            <button class="btn btn-danger" (click)="enviarResenia()">
-              <i class="bi bi-send me-1"></i>Publicar reseña
+            <button class="btn btn-danger" (click)="enviarResenia()" [disabled]="cargandoResenia">
+              <i class="bi" [class.bi-send]="!cargandoResenia" [class.bi-arrow-repeat]="cargandoResenia"></i> {{ cargandoResenia ? 'Publicando...' : 'Publicar reseña' }}
             </button>
           </div>
         </div>

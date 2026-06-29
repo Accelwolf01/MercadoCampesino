@@ -43,6 +43,7 @@ export class Consumidor implements OnInit {
   campesinos: CampesinoInfo[] = [];
   nuevaResenia = { id_destino: null as number | null, puntuacion: 5, comentario: '' };
   reseniaMensaje = '';
+  cargandoResenia = false;
 
   mensaje = '';
   error = '';
@@ -209,6 +210,7 @@ export class Consumidor implements OnInit {
   }
 
   enviarResenia() {
+    if (this.cargandoResenia) return;
     if (!this.nuevaResenia.id_destino) {
       this.reseniaMensaje = 'Selecciona un campesino';
       return;
@@ -217,6 +219,8 @@ export class Consumidor implements OnInit {
       this.reseniaMensaje = 'Escribe un comentario';
       return;
     }
+    this.cargandoResenia = true;
+    this.reseniaMensaje = 'Publicando reseña...';
     this.api.post<Resenia>('/resenias', {
       id_destino: this.nuevaResenia.id_destino,
       puntuacion: this.nuevaResenia.puntuacion,
@@ -225,9 +229,13 @@ export class Consumidor implements OnInit {
       next: () => {
         this.reseniaMensaje = 'Reseña publicada';
         this.nuevaResenia = { id_destino: null, puntuacion: 5, comentario: '' };
+        this.cargandoResenia = false;
         this.cargarResenias();
       },
-      error: e => this.reseniaMensaje = e.error?.detail || 'Error al publicar reseña'
+      error: e => {
+        this.reseniaMensaje = e.error?.detail || 'Error al publicar reseña';
+        this.cargandoResenia = false;
+      }
     });
   }
 

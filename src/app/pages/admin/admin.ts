@@ -48,6 +48,11 @@ interface Usuario {
             <i class="bi bi-chat-dots me-1"></i>Chat {{ chatPendientes.length > 0 ? '('+chatPendientes.length+')' : '' }}
           </button>
         </li>
+        <li class="nav-item">
+          <button class="nav-link rounded-3" [class.active]="tab==='alertas'" [class.fw-bold]="tab==='alertas'" (click)="tab='alertas';cargarAlertas()">
+            <i class="bi bi-exclamation-triangle me-1"></i>Alertas{{ reseniasBajas.length > 0 ? ' ('+reseniasBajas.length+')' : '' }}
+          </button>
+        </li>
       </ul>
 
       @if (tab === 'usuarios') {
@@ -305,6 +310,60 @@ interface Usuario {
         </div>
       }
 
+      @if (tab === 'alertas') {
+        <div class="card border-0 shadow-sm rounded-4">
+          <div class="card-body p-4">
+            <h6 class="card-title fw-bold mb-3"><i class="bi bi-exclamation-triangle" style="color:var(--rojo);"></i> Alertas de salubridad</h6>
+            <p class="text-muted small mb-3">Reseñas de 1 estrella que requieren revisión — posible problema de salubridad o mala práctica.</p>
+            @if (cargandoAlertas) {
+              <div class="text-center py-4"><div class="spinner-border spinner-border-sm text-danger me-2"></div>Cargando alertas...</div>
+            }
+            @if (!cargandoAlertas && reseniasBajas.length === 0) {
+              <div class="text-center py-4">
+                <i class="bi bi-check-circle fs-1 text-success d-block mb-2"></i>
+                <p class="text-muted mb-0">No hay reseñas de 1 estrella. Todo en orden.</p>
+              </div>
+            }
+            @if (!cargandoAlertas && reseniasBajas.length > 0) {
+              <div class="table-responsive">
+                <table class="table table-sm align-middle mb-0">
+                  <thead class="table-light">
+                    <tr>
+                      <th class="fw-semibold">#</th>
+                      <th class="fw-semibold">De</th>
+                      <th class="fw-semibold">Campesino</th>
+                      <th class="fw-semibold">Puntuación</th>
+                      <th class="fw-semibold">Comentario</th>
+                      <th class="fw-semibold">Fecha</th>
+                      <th class="fw-semibold text-end">Acción</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    @for (r of reseniasBajas; track r.id) {
+                      <tr>
+                        <td class="text-muted small">{{ r.id }}</td>
+                        <td class="small">{{ r.autor?.nombres }} {{ r.autor?.apellidos }}</td>
+                        <td class="small">{{ r.destino?.nombres }} {{ r.destino?.apellidos }}</td>
+                        <td>
+                          <span class="text-danger fw-bold">1 <i class="bi bi-star-fill"></i></span>
+                        </td>
+                        <td class="small" style="max-width:250px;white-space:normal;">{{ r.comentario || '—' }}</td>
+                        <td class="small text-muted">{{ r.created_at | date:'shortDate' }}</td>
+                        <td class="text-end">
+                          <button class="btn btn-sm btn-outline-danger rounded-3" (click)="eliminarResenia(r.id)">
+                            <i class="bi bi-trash"></i> Eliminar
+                          </button>
+                        </td>
+                      </tr>
+                    }
+                  </tbody>
+                </table>
+              </div>
+            }
+          </div>
+        </div>
+      }
+
     <!-- Modal crear usuario -->
     @if (crearModal) {
       <div class="modal d-block" tabindex="-1" style="background:rgba(0,0,0,0.6);">
@@ -461,6 +520,9 @@ export class Admin implements OnInit {
   chatCargando = false;
   chatBusqueda = '';
 
+  reseniasBajas: any[] = [];
+  cargandoAlertas = false;
+
   ngOnInit() {
     this.cargarUsuarios();
     this.cargarCategorias();
@@ -615,6 +677,25 @@ export class Admin implements OnInit {
     if (!confirm('¿Finalizar esta conversación?')) return;
     this.chatSvc.finalizar(id).subscribe({
       next: () => { this.chatSeleccionada = null; this.cargarChat(); this.cdr.detectChanges(); }
+    });
+  }
+
+  cargarAlertas() {
+    this.cargandoAlertas = true;
+    this.api.get<any[]>('/resenias/bajas').subscribe({
+      next: r => { this.reseniasBajas = r; this.cargandoAlertas = false; this.cdr.detectChanges(); },
+      error: () => { this.cargandoAlertas = false; this.cdr.detectChanges(); }
+    });
+  }
+
+  eliminarResenia(id: number) {
+    if (!confirm('¿Eliminar esta reseña? El campesino no será penalizado, solo se retira la alerta.')) return;
+    this.api.delete(`/resenias/${id}`).subscribe({
+      next: () => {
+        this.reseniasBajas = this.reseniasBajas.filter(r => r.id !== id);
+        this.cdr.detectChanges();
+      },
+      error: e => alert(e.error?.detail || 'Error al eliminar')
     });
   }
 }
