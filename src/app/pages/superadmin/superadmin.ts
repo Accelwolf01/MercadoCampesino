@@ -80,13 +80,52 @@ import { AuthService } from '../../services/auth.service';
         <div class="card border-0 shadow-sm rounded-4">
           <div class="card-body p-4">
             <h6 class="card-title fw-bold mb-3"><i class="bi bi-gear" style="color:var(--rojo);"></i> Configuración del sistema</h6>
-            <div class="text-center py-5">
-              <div class="bg-light rounded-4 p-5 d-inline-block">
-                <i class="bi bi-tools fs-1 text-muted d-block mb-3"></i>
-                <p class="text-muted mb-1 fw-semibold">Configuración del sistema</p>
-                <p class="text-muted small mb-0">Los parámetros configurables estarán disponibles próximamente.</p>
+            <p class="text-muted small mb-4">Parámetros globales de la plataforma. Los cambios son inmediatos.</p>
+            @if (configMensaje) {
+              <div class="alert alert-success py-2 small rounded-3 d-flex justify-content-between align-items-center" (click)="configMensaje=''">
+                {{ configMensaje }}
+                <i class="bi bi-x cursor-pointer"></i>
               </div>
-            </div>
+            }
+            @if (configError) {
+              <div class="alert alert-danger py-2 small rounded-3 d-flex justify-content-between align-items-center" (click)="configError=''">
+                {{ configError }}
+                <i class="bi bi-x cursor-pointer"></i>
+              </div>
+            }
+            @if (configCargando) {
+              <div class="text-center py-4"><div class="spinner-border spinner-border-sm text-danger me-2"></div>Cargando configuración...</div>
+            }
+            @if (!configCargando) {
+              <div class="table-responsive">
+                <table class="table table-sm align-middle mb-0">
+                  <thead class="table-light">
+                    <tr>
+                      <th class="fw-semibold">Parámetro</th>
+                      <th class="fw-semibold">Descripción</th>
+                      <th class="fw-semibold" style="width:160px;">Valor</th>
+                      <th class="fw-semibold text-end" style="width:100px;">Actualizado</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    @for (c of configItems; track c.clave) {
+                      <tr>
+                        <td class="fw-semibold small">{{ c.clave }}</td>
+                        <td class="small text-muted">{{ c.descripcion }}</td>
+                        <td>
+                          <input class="form-control form-control-sm" [(ngModel)]="c.editValor" [class.is-invalid]="c.error" (keydown.enter)="guardarConfig(c)" />
+                        </td>
+                        <td class="text-end">
+                          <button class="btn btn-sm btn-danger rounded-3" (click)="guardarConfig(c)" [disabled]="c.guardando || c.editValor === c.valor">
+                            <i class="bi" [class.bi-check-lg]="!c.guardando" [class.bi-arrow-repeat]="c.guardando"></i>
+                          </button>
+                        </td>
+                      </tr>
+                    }
+                  </tbody>
+                </table>
+              </div>
+            }
           </div>
         </div>
       }
@@ -106,6 +145,7 @@ export class Superadmin implements OnInit {
   ngOnInit() {
     this.api.get<any[]>('/permisos').subscribe({ next: r => { this.todosPermisos = r; this.cdr.detectChanges(); } });
     this.cargarPerfiles();
+    this.cargarConfig();
   }
 
   cargarPerfiles() {
@@ -130,5 +170,44 @@ export class Superadmin implements OnInit {
       ? this.api.post(`/perfiles/${idPerfil}/permisos`, { id_permiso: idPermiso })
       : this.api.delete(`/perfiles/${idPerfil}/permisos/${idPermiso}`);
     obs.subscribe({ next: () => this.cargarPerfiles() });
+  }
+
+  configItems: any[] = [];
+  configCargando = false;
+  configMensaje = '';
+  configError = '';
+
+  cargarConfig() {
+    this.configCargando = true;
+    this.api.get<any[]>('/configuracion').subscribe({
+      next: r => {
+        this.configItems = r.map(c => ({ ...c, editValor: c.valor, guardando: false, error: false }));
+        this.configCargando = false;
+        this.cdr.detectChanges();
+      },
+      error: () => { this.configCargando = false; this.cdr.detectChanges(); }
+    });
+  }
+
+  guardarConfig(c: any) {
+    if (c.guardando || c.editValor === c.valor) return;
+    if (!c.editValor.trim()) { c.error = true; return; }
+    c.error = false;
+    c.guardando = true;
+    this.configMensaje = '';
+    this.configError = '';
+    this.api.put<any>(`/configuracion/${c.clave}`, { valor: c.editValor.trim() }).subscribe({
+      next: () => {
+        c.valor = c.editValor.trim();
+        c.guardando = false;
+        this.configMensaje = `"${c.clave}" actualizado a "${c.valor}"`;
+        this.cdr.detectChanges();
+      },
+      error: e => {
+        c.guardando = false;
+        this.configError = e.error?.detail || 'Error al guardar';
+        this.cdr.detectChanges();
+      }
+    });
   }
 }
