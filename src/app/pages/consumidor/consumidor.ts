@@ -40,6 +40,7 @@ export class Consumidor implements OnInit {
   preordenMensaje = '';
 
   resenias: Resenia[] = [];
+  campesinos: CampesinoInfo[] = [];
   nuevaResenia = { id_destino: null as number | null, puntuacion: 5, comentario: '' };
   reseniaMensaje = '';
 
@@ -96,6 +97,10 @@ export class Consumidor implements OnInit {
   cargarResenias() {
     this.api.get<Resenia[]>('/resenias/mis-resenias').subscribe({
       next: r => { this.resenias = r; this.cdr.detectChanges(); },
+      error: () => {}
+    });
+    this.api.get<CampesinoInfo[]>('/resenias/campesinos-activos').subscribe({
+      next: r => { this.campesinos = r; this.cdr.detectChanges(); },
       error: () => {}
     });
   }
