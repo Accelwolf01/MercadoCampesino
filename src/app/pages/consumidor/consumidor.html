@@ -213,7 +213,7 @@
     <!-- Escribir reseña -->
     <div class="card border-0 shadow-sm rounded-4 mb-4">
       <div class="card-body p-4">
-        <h6 class="card-title fw-bold mb-3"><i class="bi bi-chat-square-text" style="color:var(--rojo);"></i> Escribir reseña</h6>
+        <h6 class="card-title fw-bold mb-3"><i class="bi bi-chat-square-text" style="color:var(--rojo);"></i> {{ editandoResenia ? 'Editar reseña' : 'Escribir reseña' }}</h6>
         <div class="row g-3">
           <div class="col-md-6">
             <label class="form-label fw-semibold small">Campesino a calificar</label>
@@ -237,8 +237,13 @@
           </div>
           <div class="col-12">
             <button class="btn btn-danger" (click)="enviarResenia()" [disabled]="cargandoResenia">
-              <i class="bi" [class.bi-send]="!cargandoResenia" [class.bi-arrow-repeat]="cargandoResenia"></i> {{ cargandoResenia ? 'Publicando...' : 'Publicar reseña' }}
+              <i class="bi" [class.bi-send]="!cargandoResenia" [class.bi-arrow-repeat]="cargandoResenia"></i> {{ cargandoResenia ? (editandoResenia ? 'Guardando...' : 'Publicando...') : (editandoResenia ? 'Guardar cambios' : 'Publicar reseña') }}
             </button>
+            @if (editandoResenia) {
+              <button class="btn btn-outline-secondary ms-2" (click)="cancelarEdicion()">
+                <i class="bi bi-x"></i> Cancelar
+              </button>
+            }
           </div>
         </div>
         @if (reseniaMensaje) { <div class="alert alert-success mt-3 py-2 small rounded-3" (click)="reseniaMensaje=''">{{ reseniaMensaje }}</div> }
@@ -272,6 +277,9 @@
                     }
                   </div>
                   <span class="small text-muted">{{ r.created_at | date:'shortDate' }}</span>
+                  <button class="btn btn-sm btn-outline-danger border-0 ms-auto rounded-3" (click)="iniciarEdicion(r)" title="Editar reseña">
+                    <i class="bi bi-pencil"></i>
+                  </button>
                 </div>
                 @if (r.comentario) { <p class="mb-1 small ps-5">{{ r.comentario }}</p> }
                 @if (r.respuesta) {

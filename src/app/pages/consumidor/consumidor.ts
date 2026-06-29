@@ -44,6 +44,7 @@ export class Consumidor implements OnInit {
   nuevaResenia = { id_destino: null as number | null, puntuacion: 5, comentario: '' };
   reseniaMensaje = '';
   cargandoResenia = false;
+  editandoResenia: Resenia | null = null;
 
   mensaje = '';
   error = '';
@@ -220,14 +221,18 @@ export class Consumidor implements OnInit {
       return;
     }
     this.cargandoResenia = true;
-    this.reseniaMensaje = 'Publicando reseña...';
-    this.api.post<Resenia>('/resenias', {
-      id_destino: this.nuevaResenia.id_destino,
+    this.reseniaMensaje = this.editandoResenia ? 'Guardando cambios...' : 'Publicando reseña...';
+    const body = {
       puntuacion: this.nuevaResenia.puntuacion,
       comentario: this.nuevaResenia.comentario.trim()
-    }).subscribe({
+    };
+    const req = this.editandoResenia
+      ? this.api.put<Resenia>(`/resenias/${this.editandoResenia.id}`, body)
+      : this.api.post<Resenia>('/resenias', { ...body, id_destino: this.nuevaResenia.id_destino });
+    req.subscribe({
       next: () => {
-        this.reseniaMensaje = 'Reseña publicada';
+        this.reseniaMensaje = this.editandoResenia ? 'Reseña actualizada' : 'Reseña publicada';
+        this.editandoResenia = null;
         this.nuevaResenia = { id_destino: null, puntuacion: 5, comentario: '' };
         this.cargandoResenia = false;
         this.cargarResenias();
@@ -237,6 +242,22 @@ export class Consumidor implements OnInit {
         this.cargandoResenia = false;
       }
     });
+  }
+
+  iniciarEdicion(r: Resenia) {
+    this.editandoResenia = r;
+    this.nuevaResenia = {
+      id_destino: r.id_destino,
+      puntuacion: r.puntuacion,
+      comentario: r.comentario || ''
+    };
+    this.reseniaMensaje = '';
+  }
+
+  cancelarEdicion() {
+    this.editandoResenia = null;
+    this.nuevaResenia = { id_destino: null, puntuacion: 5, comentario: '' };
+    this.reseniaMensaje = '';
   }
 
   estadoClass(e: string): string {
