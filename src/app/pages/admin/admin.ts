@@ -53,6 +53,11 @@ interface Usuario {
             <i class="bi bi-exclamation-triangle me-1"></i>Alertas{{ reseniasBajas.length > 0 ? ' ('+reseniasBajas.length+')' : '' }}
           </button>
         </li>
+        <li class="nav-item">
+          <button class="nav-link rounded-3" [class.active]="tab==='plazas'" [class.fw-bold]="tab==='plazas'" (click)="tab='plazas';cargarPlazasAdmin()">
+            <i class="bi bi-geo-alt me-1"></i>Plazas
+          </button>
+        </li>
       </ul>
 
       @if (tab === 'usuarios') {
@@ -364,6 +369,55 @@ interface Usuario {
         </div>
       }
 
+      @if (tab === 'plazas') {
+        <div class="card border-0 shadow-sm rounded-4">
+          <div class="card-body p-4">
+            <h6 class="card-title fw-bold mb-3"><i class="bi bi-geo-alt" style="color:var(--rojo);"></i> Gestionar plazas</h6>
+            <div class="d-flex gap-2 mb-4">
+              <input class="form-control shadow-sm rounded-3" style="max-width:300px;" [(ngModel)]="nuevaPlazaNombre" placeholder="Nombre de la plaza" />
+              <input class="form-control shadow-sm rounded-3" style="max-width:300px;" [(ngModel)]="nuevaPlazaDireccion" placeholder="Dirección (opcional)" />
+              <button class="btn btn-danger" (click)="agregarPlaza()"><i class="bi bi-plus-lg me-1"></i>Agregar</button>
+            </div>
+            <div class="table-responsive">
+              <table class="table table-sm align-middle mb-0">
+                <thead class="table-light">
+                  <tr>
+                    <th class="fw-semibold">#</th>
+                    <th class="fw-semibold">Nombre</th>
+                    <th class="fw-semibold">Dirección</th>
+                    <th class="fw-semibold">Estado</th>
+                    <th class="fw-semibold text-end">Acción</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  @for (p of plazasAdmin; track p.id) {
+                    <tr>
+                      <td class="text-muted small">{{ p.id }}</td>
+                      <td class="fw-semibold">{{ p.nombre }}</td>
+                      <td class="small text-muted">{{ p.direccion || '—' }}</td>
+                      <td>
+                        <span class="badge rounded-pill" [class.bg-success]="p.activo" [class.bg-secondary]="!p.activo">{{ p.activo ? 'Activa' : 'Inactiva' }}</span>
+                      </td>
+                      <td class="text-end">
+                        <button class="btn btn-sm rounded-pill" [class.btn-outline-danger]="p.activo" [class.btn-outline-success]="!p.activo" (click)="togglePlaza(p)">
+                          <i class="bi" [class.bi-pause-circle]="p.activo" [class.bi-play-circle]="!p.activo"></i> {{ p.activo ? 'Desactivar' : 'Activar' }}
+                        </button>
+                      </td>
+                    </tr>
+                  }
+                </tbody>
+              </table>
+            </div>
+            @if (mensajePlaza) {
+              <div class="alert alert-success mt-3 py-2 small rounded-3" (click)="mensajePlaza=''">{{ mensajePlaza }}</div>
+            }
+            @if (errorPlaza) {
+              <div class="alert alert-danger mt-3 py-2 small rounded-3" (click)="errorPlaza=''">{{ errorPlaza }}</div>
+            }
+          </div>
+        </div>
+      }
+
     <!-- Modal crear usuario -->
     @if (crearModal) {
       <div class="modal d-block" tabindex="-1" style="background:rgba(0,0,0,0.6);">
@@ -522,6 +576,12 @@ export class Admin implements OnInit {
 
   reseniasBajas: any[] = [];
   cargandoAlertas = false;
+
+  plazasAdmin: any[] = [];
+  nuevaPlazaNombre = '';
+  nuevaPlazaDireccion = '';
+  mensajePlaza = '';
+  errorPlaza = '';
 
   ngOnInit() {
     this.cargarUsuarios();
@@ -696,6 +756,33 @@ export class Admin implements OnInit {
         this.cdr.detectChanges();
       },
       error: e => alert(e.error?.detail || 'Error al eliminar')
+    });
+  }
+
+  cargarPlazasAdmin() {
+    this.api.get<any[]>('/plazas').subscribe({
+      next: r => { this.plazasAdmin = r; this.cdr.detectChanges(); },
+      error: () => {}
+    });
+  }
+
+  agregarPlaza() {
+    if (!this.nuevaPlazaNombre.trim()) { this.errorPlaza = 'El nombre es obligatorio'; return; }
+    this.api.post<any>('/plazas', { nombre: this.nuevaPlazaNombre.trim(), direccion: this.nuevaPlazaDireccion.trim() || null }).subscribe({
+      next: () => {
+        this.mensajePlaza = 'Plaza agregada correctamente';
+        this.nuevaPlazaNombre = '';
+        this.nuevaPlazaDireccion = '';
+        this.cargarPlazasAdmin();
+      },
+      error: e => this.errorPlaza = e.error?.detail || 'Error al agregar plaza'
+    });
+  }
+
+  togglePlaza(p: any) {
+    this.api.put<any>(`/plazas/${p.id}`, { activo: !p.activo }).subscribe({
+      next: () => { this.cargarPlazasAdmin(); this.mensajePlaza = `Plaza ${p.activo ? 'desactivada' : 'activada'}`; },
+      error: e => this.errorPlaza = e.error?.detail || 'Error'
     });
   }
 }

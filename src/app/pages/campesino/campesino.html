@@ -32,6 +32,11 @@
         <i class="bi bi-lightning-fill me-1"></i>Ofertas
       </button>
     </li>
+    <li class="nav-item">
+      <button class="nav-link rounded-3" [class.active]="tab==='preordenes'" [class.fw-bold]="tab==='preordenes'" (click)="tab='preordenes';cargarPreordenes()">
+        <i class="bi bi-cart-check me-1"></i>Preórdenes{{ preordenesRecibidas.length > 0 ? ' ('+preordenesRecibidas.length+')' : '' }}
+      </button>
+    </li>
   </ul>
 
   <!-- PRODUCTOS TAB -->
@@ -584,6 +589,80 @@
                 }
               </div>
             }
+          </div>
+        }
+      </div>
+    </div>
+  }
+
+  <!-- PREÓRDENES TAB -->
+  @if (tab === 'preordenes') {
+    <div class="card border-0 shadow-sm rounded-4">
+      <div class="card-body p-4">
+        <h6 class="card-title fw-bold mb-3 d-flex justify-content-between align-items-center">
+          <span><i class="bi bi-cart-check" style="color:var(--rojo);"></i> Preórdenes recibidas</span>
+          <span class="badge bg-danger rounded-pill">{{ preordenesRecibidas.length }}</span>
+        </h6>
+        @if (cargandoPreordenes) {
+          <div class="text-center py-4"><div class="spinner-border spinner-border-sm text-danger me-2"></div>Cargando...</div>
+        }
+        @if (!cargandoPreordenes && preordenesRecibidas.length === 0) {
+          <div class="text-center py-5">
+            <i class="bi bi-inbox fs-1 text-muted d-block mb-2"></i>
+            <p class="text-muted mb-0">No tienes preórdenes todavía.</p>
+          </div>
+        }
+        @if (!cargandoPreordenes && preordenesRecibidas.length > 0) {
+          <div class="table-responsive">
+            <table class="table table-sm align-middle mb-0">
+              <thead class="table-light">
+                <tr>
+                  <th class="fw-semibold">#</th>
+                  <th class="fw-semibold">Producto</th>
+                  <th class="fw-semibold">Consumidor</th>
+                  <th class="fw-semibold">Contacto</th>
+                  <th class="fw-semibold">Cant.</th>
+                  <th class="fw-semibold">Fecha</th>
+                  <th class="fw-semibold">Estado</th>
+                  <th class="fw-semibold text-end">Acción</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (p of preordenesRecibidas; track p.id) {
+                  <tr>
+                    <td class="text-muted small">{{ p.id }}</td>
+                    <td class="small fw-semibold">{{ p.viaje_producto?.producto?.nombre || '—' }}</td>
+                    <td class="small">{{ p.consumidor?.nombres }} {{ p.consumidor?.apellidos }}</td>
+                    <td class="small text-muted">
+                      <div>{{ p.consumidor?.celular }}</div>
+                      <div style="font-size:11px;">CC {{ p.consumidor?.cedula }}</div>
+                    </td>
+                    <td class="small">{{ p.cantidad }}</td>
+                    <td class="small text-muted">{{ p.created_at | date:'short' }}</td>
+                    <td>
+                      <span class="badge rounded-pill"
+                        [class.bg-warning.text-dark]="p.estado === 'pendiente'"
+                        [class.bg-success]="p.estado === 'entregado'"
+                        [class.bg-danger]="p.estado === 'no_retiro'"
+                        [class.bg-secondary]="p.estado === 'cancelado'">{{ p.estado }}</span>
+                    </td>
+                    <td class="text-end">
+                      @if (p.estado === 'pendiente') {
+                        <div class="dropdown">
+                          <button class="btn btn-sm btn-outline-danger border-0 rounded-3 dropdown-toggle" data-bs-toggle="dropdown">
+                            <i class="bi bi-three-dots-vertical"></i>
+                          </button>
+                          <ul class="dropdown-menu dropdown-menu-end shadow-sm rounded-3 border-0">
+                            <li><button class="dropdown-item small" (click)="entregarPreorden(p.id)"><i class="bi bi-check-circle text-success me-2"></i>Marcar entregado</button></li>
+                            <li><button class="dropdown-item small" (click)="noRetiroPreorden(p.id)"><i class="bi bi-x-circle text-danger me-2"></i>No retiró</button></li>
+                          </ul>
+                        </div>
+                      }
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
           </div>
         }
       </div>

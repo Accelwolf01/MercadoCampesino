@@ -72,6 +72,9 @@ export class Campesino implements OnInit {
 
   viajeExpandido: number | null = null;
 
+  preordenesRecibidas: any[] = [];
+  cargandoPreordenes = false;
+
   mensaje = '';
   error = '';
 
@@ -518,6 +521,30 @@ export class Campesino implements OnInit {
       if (minutosAhora > minutosFin) return 'expirado';
     }
     return v.activo ? 'activo' : 'inactivo';
+  }
+
+  cargarPreordenes() {
+    this.cargandoPreordenes = true;
+    this.api.get<any[]>('/preordenes/campesino').subscribe({
+      next: r => { this.preordenesRecibidas = r; this.cargandoPreordenes = false; this.cdr.detectChanges(); },
+      error: () => { this.cargandoPreordenes = false; this.cdr.detectChanges(); }
+    });
+  }
+
+  entregarPreorden(id: number) {
+    if (!confirm('¿Marcar esta preorden como entregada?')) return;
+    this.api.put(`/preordenes/${id}/entregar`).subscribe({
+      next: () => { this.mensaje = 'Preorden marcada como entregada'; this.cargarPreordenes(); this.cdr.detectChanges(); },
+      error: e => { this.error = e.error?.detail || 'Error'; this.cdr.detectChanges(); }
+    });
+  }
+
+  noRetiroPreorden(id: number) {
+    if (!confirm('¿Marcar como no retirada? El consumidor perderá 10 puntos de confianza y el producto volverá a stock.')) return;
+    this.api.put(`/preordenes/${id}/no-retiro`).subscribe({
+      next: () => { this.mensaje = 'Preorden marcada como no retirada'; this.cargarPreordenes(); this.cdr.detectChanges(); },
+      error: e => { this.error = e.error?.detail || 'Error'; this.cdr.detectChanges(); }
+    });
   }
 
   trackById(_: number, item: any) { return item.id; }
