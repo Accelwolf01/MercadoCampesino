@@ -43,7 +43,7 @@ export class Campesino implements OnInit {
   guardandoEdit = false;
 
   viajeForm = {
-    fecha: new Date().toISOString().split('T')[0],
+    fecha: new Date().toLocaleDateString('en-CA', { timeZone: 'America/Bogota' }),
     hora_inicio: '',
     hora_fin: '',
     notas: '',
@@ -306,7 +306,7 @@ export class Campesino implements OnInit {
       next: () => {
         this.mensaje = 'Viaje creado correctamente';
         this.creandoViaje = false;
-        this.viajeForm = { fecha: new Date().toISOString().split('T')[0], hora_inicio: '', hora_fin: '', notas: '', id_plaza: null, foto_url: '' };
+        this.viajeForm = { fecha: new Date().toLocaleDateString('en-CA', { timeZone: 'America/Bogota' }), hora_inicio: '', hora_fin: '', notas: '', id_plaza: null, foto_url: '' };
         this.viajeProductos = [];
         this.cargarViajes();
       },
@@ -507,13 +507,15 @@ export class Campesino implements OnInit {
   toggleViaje(id: number) { this.viajeExpandido = this.viajeExpandido === id ? null : id; }
 
   viajeStatus(v: Viaje): string {
-    const hoy = new Date().toLocaleDateString('en-CA');
+    const hoy = new Date().toLocaleDateString('en-CA', { timeZone: 'America/Bogota' });
     if (v.fecha_viaje < hoy) return 'expirado';
     if (v.fecha_viaje === hoy && v.hora_fin) {
-      const ahora = new Date();
-      const [h, m] = v.hora_fin.split(':').map(Number);
-      const fin = new Date(); fin.setHours(h, m, 0);
-      if (ahora > fin) return 'expirado';
+      const ahora = new Date().toLocaleTimeString('en-CA', { timeZone: 'America/Bogota', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false });
+      const [h, m, s] = v.hora_fin.split(':').map(Number);
+      const [ah, am, as] = ahora.split(':').map(Number);
+      const minutosAhora = ah * 60 + am;
+      const minutosFin = h * 60 + m;
+      if (minutosAhora > minutosFin) return 'expirado';
     }
     return v.activo ? 'activo' : 'inactivo';
   }
