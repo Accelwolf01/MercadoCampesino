@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ApiService } from '../../services/api.service';
 import { AuthService } from '../../services/auth.service';
+import { ChatService, ChatConvMini, ChatMsg } from '../../services/chat.service';
 
 interface Usuario {
   id: number; nombres: string; apellidos: string; cedula: string;
@@ -40,6 +41,11 @@ interface Usuario {
         <li class="nav-item">
           <button class="nav-link rounded-3" [class.active]="tab==='categorias'" [class.fw-bold]="tab==='categorias'" (click)="tab='categorias'">
             <i class="bi bi-tags me-1"></i>Categorías
+          </button>
+        </li>
+        <li class="nav-item">
+          <button class="nav-link rounded-3" [class.active]="tab==='chat'" [class.fw-bold]="tab==='chat'" (click)="tab='chat';cargarChat()">
+            <i class="bi bi-chat-dots me-1"></i>Chat {{ chatPendientes.length > 0 ? '('+chatPendientes.length+')' : '' }}
           </button>
         </li>
       </ul>
@@ -183,6 +189,118 @@ interface Usuario {
       }
     </div>
 
+      @if (tab === 'chat') {
+        <div class="row g-3">
+          <div class="col-md-5">
+            <div class="card border-0 shadow-sm rounded-4 mb-3">
+              <div class="card-body p-3">
+                <h6 class="fw-bold mb-3"><i class="bi bi-inbox" style="color:var(--rojo);"></i> Pendientes</h6>
+                @if (chatPendientes.length === 0) {
+                  <p class="text-muted small text-center py-3 mb-0">No hay conversaciones pendientes</p>
+                }
+                @for (c of chatPendientes; track c.id) {
+                  <div class="d-flex justify-content-between align-items-center p-2 rounded-3 mb-1" [class.bg-light]="chatSeleccionada?.id !== c.id" [class.bg-danger.bg-opacity-10]="chatSeleccionada?.id === c.id" style="cursor:pointer;" (click)="seleccionarChat(c)">
+                    <div class="small">
+                      <div class="fw-semibold">{{ c.nombre }}</div>
+                      <div class="text-muted" style="font-size:11px;">{{ c.created_at | date:'short' }}</div>
+                    </div>
+                    <button class="btn btn-sm btn-outline-danger rounded-3" (click)="$event.stopPropagation();tomarChat(c)" [disabled]="chatCargando">
+                      <i class="bi bi-hand-index"></i> Tomar
+                    </button>
+                  </div>
+                }
+              </div>
+            </div>
+            <div class="card border-0 shadow-sm rounded-4 mb-3">
+              <div class="card-body p-3">
+                <h6 class="fw-bold mb-3"><i class="bi bi-chat" style="color:var(--amarillo);"></i> Mis chats</h6>
+                @if (chatAsignadas.length === 0) {
+                  <p class="text-muted small text-center py-3 mb-0">No tienes chats activos</p>
+                }
+                @for (c of chatAsignadas; track c.id) {
+                  <div class="d-flex justify-content-between align-items-center p-2 rounded-3 mb-1" [class.bg-light]="chatSeleccionada?.id !== c.id" [class.bg-warning.bg-opacity-10]="chatSeleccionada?.id === c.id" style="cursor:pointer;" (click)="seleccionarChat(c)">
+                    <div class="small">
+                      <div class="fw-semibold">{{ c.nombre }}</div>
+                      <div class="text-muted" style="font-size:11px;">{{ c.created_at | date:'short' }}</div>
+                    </div>
+                    <span class="badge bg-warning text-dark rounded-pill">En curso</span>
+                  </div>
+                }
+              </div>
+            </div>
+            <div class="card border-0 shadow-sm rounded-4">
+              <div class="card-body p-3">
+                <h6 class="fw-bold mb-3"><i class="bi bi-clock-history" style="color:var(--rojo);"></i> Historial</h6>
+                @if (chatHistorial.length === 0) {
+                  <p class="text-muted small text-center py-3 mb-0">Sin historial</p>
+                }
+                @for (c of chatHistorial; track c.id) {
+                  <div class="d-flex justify-content-between align-items-center p-2 rounded-3 mb-1" style="cursor:pointer;" (click)="seleccionarChat(c)">
+                    <div class="small">
+                      <div class="fw-semibold">{{ c.nombre }}</div>
+                      <div class="text-muted" style="font-size:11px;">{{ c.created_at | date:'short' }}</div>
+                    </div>
+                    <span class="badge bg-secondary rounded-pill">Finalizado</span>
+                  </div>
+                }
+              </div>
+            </div>
+          </div>
+          <div class="col-md-7">
+            <div class="card border-0 shadow-sm rounded-4" style="height:500px;display:flex;flex-direction:column;">
+              @if (!chatSeleccionada) {
+                <div class="d-flex align-items-center justify-content-center flex-grow-1 text-muted">
+                  <div class="text-center">
+                    <i class="bi bi-chat-dots fs-1 d-block mb-2"></i>
+                    <p class="small">Selecciona una conversación</p>
+                  </div>
+                </div>
+              }
+              @if (chatSeleccionada) {
+                <div class="bg-light p-3 border-bottom d-flex justify-content-between align-items-center">
+                  <div>
+                    <div class="fw-bold small">{{ chatSeleccionada.nombre }}</div>
+                    <div class="text-muted" style="font-size:11px;">
+                      {{ chatSeleccionada.cedula ? 'CC '+chatSeleccionada.cedula : '' }}
+                      {{ chatSeleccionada.email ? '| '+chatSeleccionada.email : '' }}
+                    </div>
+                  </div>
+                  @if (chatSeleccionada.estado !== 'finalizado') {
+                    <button class="btn btn-sm btn-outline-secondary rounded-3" (click)="finalizarChat(chatSeleccionada.id)">
+                      <i class="bi bi-check-lg"></i> Finalizar
+                    </button>
+                  }
+                </div>
+                <div class="flex-grow-1 overflow-auto p-3 bg-light">
+                  @for (m of chatMensajes; track m.id) {
+                    <div class="d-flex mb-2" [class.justify-content-end]="!m.es_admin" [class.justify-content-start]="m.es_admin">
+                      <div class="rounded-3 px-3 py-2 small" style="max-width:80%;"
+                        [class.bg-danger.text-white]="!m.es_admin"
+                        [class.bg-white]="m.es_admin">
+                        <div>{{ m.mensaje }}</div>
+                        <div class="mt-1" [class.text-white-50]="!m.es_admin" [class.text-muted]="m.es_admin" style="font-size:10px;">
+                          {{ m.created_at | date:'short' }}
+                        </div>
+                      </div>
+                    </div>
+                  }
+                </div>
+                @if (chatSeleccionada.estado !== 'finalizado') {
+                  <div class="p-2 bg-white border-top">
+                    <div class="d-flex gap-2">
+                      <input class="form-control form-control-sm rounded-3" [(ngModel)]="chatRespuesta" (keydown.enter)="responderChat()" placeholder="Escribe tu respuesta..." />
+                      <button class="btn btn-danger btn-sm rounded-3" (click)="responderChat()" [disabled]="!chatRespuesta.trim() || chatCargando">
+                        <i class="bi bi-send"></i>
+                      </button>
+                    </div>
+                  </div>
+                }
+              }
+            </div>
+          </div>
+        </div>
+      }
+
     <!-- Modal crear usuario -->
     @if (crearModal) {
       <div class="modal d-block" tabindex="-1" style="background:rgba(0,0,0,0.6);">
@@ -310,6 +428,7 @@ interface Usuario {
 })
 export class Admin implements OnInit {
   private api = inject(ApiService);
+  private chatSvc = inject(ChatService);
   private cdr = inject(ChangeDetectorRef);
   auth = inject(AuthService);
 
@@ -328,6 +447,14 @@ export class Admin implements OnInit {
   perfilesDisponibles: { id: number; nombre: string }[] = [];
 
   perfiles: Record<number,string> = { 1:'Superadmin', 2:'Admin', 3:'Campesino', 4:'Consumidor', 5:'Bloqueado' };
+
+  chatPendientes: ChatConvMini[] = [];
+  chatAsignadas: ChatConvMini[] = [];
+  chatHistorial: ChatConvMini[] = [];
+  chatSeleccionada: ChatConvMini | null = null;
+  chatMensajes: ChatMsg[] = [];
+  chatRespuesta = '';
+  chatCargando = false;
 
   ngOnInit() {
     this.cargarUsuarios();
@@ -435,5 +562,47 @@ export class Admin implements OnInit {
 
   toggleCategoria(c: any) {
     this.api.put(`/categorias/${c.id}`, { activo: !c.activo }).subscribe({ next: () => this.cargarCategorias() });
+  }
+
+  cargarChat() {
+    this.chatSvc.pendientes().subscribe({ next: r => { this.chatPendientes = r; this.cdr.detectChanges(); } });
+    this.chatSvc.asignadas().subscribe({ next: r => { this.chatAsignadas = r; this.cdr.detectChanges(); } });
+    this.chatSvc.historial().subscribe({ next: r => { this.chatHistorial = r; this.cdr.detectChanges(); } });
+  }
+
+  seleccionarChat(c: ChatConvMini) {
+    this.chatSeleccionada = c;
+    this.chatSvc.obtenerConv(c.id, '').subscribe({
+      next: conv => { this.chatMensajes = conv.mensajes; this.cdr.detectChanges(); }
+    });
+  }
+
+  tomarChat(c: ChatConvMini) {
+    this.chatCargando = true;
+    this.chatSvc.tomar(c.id).subscribe({
+      next: () => { this.chatCargando = false; this.cargarChat(); this.seleccionarChat(c); },
+      error: () => this.chatCargando = false
+    });
+  }
+
+  responderChat() {
+    if (!this.chatRespuesta.trim() || !this.chatSeleccionada) return;
+    this.chatCargando = true;
+    this.chatSvc.responderAdmin(this.chatSeleccionada.id, this.chatRespuesta).subscribe({
+      next: msg => {
+        this.chatMensajes.push(msg);
+        this.chatRespuesta = '';
+        this.chatCargando = false;
+        this.cdr.detectChanges();
+      },
+      error: () => this.chatCargando = false
+    });
+  }
+
+  finalizarChat(id: number) {
+    if (!confirm('¿Finalizar esta conversación?')) return;
+    this.chatSvc.finalizar(id).subscribe({
+      next: () => { this.chatSeleccionada = null; this.cargarChat(); this.cdr.detectChanges(); }
+    });
   }
 }
