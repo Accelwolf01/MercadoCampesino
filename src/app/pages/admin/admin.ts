@@ -231,8 +231,12 @@ interface Usuario {
             <div class="card border-0 shadow-sm rounded-4">
               <div class="card-body p-3">
                 <h6 class="fw-bold mb-3"><i class="bi bi-clock-history" style="color:var(--rojo);"></i> Historial</h6>
+                <div class="d-flex gap-2 mb-2">
+                  <input class="form-control form-control-sm" [(ngModel)]="chatBusqueda" (keydown.enter)="buscarHistorial()" placeholder="Buscar por nombre, email o cédula..." />
+                  <button class="btn btn-sm btn-danger rounded-3" (click)="buscarHistorial()"><i class="bi bi-search"></i></button>
+                </div>
                 @if (chatHistorial.length === 0) {
-                  <p class="text-muted small text-center py-3 mb-0">Sin historial</p>
+                  <p class="text-muted small text-center py-3 mb-0">Usa el buscador para ver el historial</p>
                 }
                 @for (c of chatHistorial; track c.id) {
                   <div class="d-flex justify-content-between align-items-center p-2 rounded-3 mb-1" style="cursor:pointer;" (click)="seleccionarChat(c)">
@@ -455,6 +459,7 @@ export class Admin implements OnInit {
   chatMensajes: ChatMsg[] = [];
   chatRespuesta = '';
   chatCargando = false;
+  chatBusqueda = '';
 
   ngOnInit() {
     this.cargarUsuarios();
@@ -567,7 +572,8 @@ export class Admin implements OnInit {
   cargarChat() {
     this.chatSvc.pendientes().subscribe({ next: r => { this.chatPendientes = r; this.cdr.detectChanges(); } });
     this.chatSvc.asignadas().subscribe({ next: r => { this.chatAsignadas = r; this.cdr.detectChanges(); } });
-    this.chatSvc.historial().subscribe({ next: r => { this.chatHistorial = r; this.cdr.detectChanges(); } });
+    this.chatHistorial = [];
+    this.chatBusqueda = '';
   }
 
   seleccionarChat(c: ChatConvMini) {
@@ -596,6 +602,12 @@ export class Admin implements OnInit {
         this.cdr.detectChanges();
       },
       error: () => this.chatCargando = false
+    });
+  }
+
+  buscarHistorial() {
+    this.chatSvc.historial(this.chatBusqueda).subscribe({
+      next: r => { this.chatHistorial = r; this.cdr.detectChanges(); }
     });
   }
 

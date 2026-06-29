@@ -56,8 +56,8 @@ export class ChatService {
     return this.http.get<ChatConvMini[]>(`${environment.apiUrl}/chat/admin/asignadas`, { headers: this.headers() });
   }
 
-  historial() {
-    return this.http.get<ChatConvMini[]>(`${environment.apiUrl}/chat/admin/historial`, { headers: this.headers() });
+  historial(q: string = '') {
+    return this.http.get<ChatConvMini[]>(`${environment.apiUrl}/chat/admin/historial?q=${encodeURIComponent(q)}&limit=50`, { headers: this.headers() });
   }
 
   tomar(convId: number) {
