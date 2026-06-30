@@ -65,6 +65,46 @@ import { ApiService } from '../../services/api.service';
                   <i class="bi bi-check-lg me-1"></i>{{ cargando ? 'Guardando...' : 'Guardar cambios' }}
                 </button>
               </form>
+
+              <hr class="my-4" />
+              <div class="text-center mb-3">
+                <h5 class="fw-bold" style="color:var(--rojo);">Cambiar contraseña</h5>
+                <p class="text-muted small mb-0">Ingresa tu contraseña actual y la nueva</p>
+              </div>
+
+              @if (msgPass) {
+                <div class="alert alert-success py-2 small rounded-3"><i class="bi bi-check-circle me-1"></i>{{ msgPass }}</div>
+              }
+              @if (errPass) {
+                <div class="alert alert-danger py-2 small rounded-3"><i class="bi bi-exclamation-triangle me-1"></i>{{ errPass }}</div>
+              }
+
+              <form (ngSubmit)="cambiarPassword()">
+                <div class="mb-3">
+                  <label class="form-label fw-semibold small">Contraseña actual</label>
+                  <div class="input-group shadow-sm rounded-3">
+                    <span class="input-group-text bg-white border-0"><i class="bi bi-lock text-muted"></i></span>
+                    <input class="form-control border-0" [(ngModel)]="passData.password_actual" name="pass_actual" type="password" required />
+                  </div>
+                </div>
+                <div class="mb-3">
+                  <label class="form-label fw-semibold small">Nueva contraseña</label>
+                  <div class="input-group shadow-sm rounded-3">
+                    <span class="input-group-text bg-white border-0"><i class="bi bi-lock text-muted"></i></span>
+                    <input class="form-control border-0" [(ngModel)]="passData.password_nueva" name="pass_nueva" type="password" required minlength="6" />
+                  </div>
+                </div>
+                <div class="mb-3">
+                  <label class="form-label fw-semibold small">Confirmar nueva contraseña</label>
+                  <div class="input-group shadow-sm rounded-3">
+                    <span class="input-group-text bg-white border-0"><i class="bi bi-lock text-muted"></i></span>
+                    <input class="form-control border-0" [(ngModel)]="passData.password_confirm" name="pass_confirm" type="password" required minlength="6" />
+                  </div>
+                </div>
+                <button type="submit" class="btn btn-outline-danger w-100 fw-semibold py-2 rounded-3 shadow-sm" [disabled]="cargandoPass">
+                  <i class="bi bi-key me-1"></i>{{ cargandoPass ? 'Cambiando...' : 'Cambiar contraseña' }}
+                </button>
+              </form>
             </div>
           </div>
         </div>
@@ -81,6 +121,10 @@ export class Profile {
   mensaje = '';
   error = '';
   cargando = false;
+  passData = { password_actual: '', password_nueva: '', password_confirm: '' };
+  msgPass = '';
+  errPass = '';
+  cargandoPass = false;
 
   ngOnInit() {
     const u = this.auth.usuario();
@@ -106,6 +150,30 @@ export class Profile {
       error: e => {
         this.error = e.error?.detail || 'Error al actualizar perfil';
         this.cargando = false;
+      }
+    });
+  }
+
+  cambiarPassword() {
+    this.msgPass = '';
+    this.errPass = '';
+    if (this.passData.password_nueva !== this.passData.password_confirm) {
+      this.errPass = 'Las contraseñas nuevas no coinciden';
+      return;
+    }
+    this.cargandoPass = true;
+    this.api.put<any>('/auth/cambiar-password', {
+      password_actual: this.passData.password_actual,
+      password_nueva: this.passData.password_nueva
+    }).subscribe({
+      next: () => {
+        this.msgPass = 'Contraseña cambiada correctamente';
+        this.passData = { password_actual: '', password_nueva: '', password_confirm: '' };
+        this.cargandoPass = false;
+      },
+      error: e => {
+        this.errPass = e.error?.detail || 'Error al cambiar contraseña';
+        this.cargandoPass = false;
       }
     });
   }
