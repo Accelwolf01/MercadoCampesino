@@ -35,7 +35,10 @@ import { AuthService } from '../../services/auth.service';
                   <label class="form-label fw-semibold small">Contraseña</label>
                   <div class="input-group shadow-sm rounded-3">
                     <span class="input-group-text bg-white border-0"><i class="bi bi-lock text-muted"></i></span>
-                    <input class="form-control border-0" [(ngModel)]="password" name="password" type="password" placeholder="••••••••" required />
+                    <input class="form-control border-0" [(ngModel)]="password" name="password" [type]="showPassword ? 'text' : 'password'" placeholder="••••••••" required />
+                    <button type="button" class="input-group-text bg-white border-0" (click)="showPassword = !showPassword" style="cursor:pointer;">
+                      <i [class]="showPassword ? 'bi bi-eye-slash' : 'bi bi-eye'" class="text-muted"></i>
+                    </button>
                   </div>
                 </div>
                 <button type="submit" class="btn btn-danger w-100 fw-semibold py-2 rounded-3 shadow-sm" [disabled]="cargando">
@@ -57,6 +60,7 @@ export class Login {
   password = '';
   error = '';
   cargando = false;
+  showPassword = false;
 
   login() {
     this.cargando = true;
