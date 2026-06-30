@@ -38,6 +38,9 @@ import { AuthService } from '../../services/auth.service';
               <div class="text-center py-4 text-muted">
                 <i class="bi bi-person-circle fs-1 d-block mb-2"></i>
                 <p class="small">Hola! Si olvidaste tu contraseña o necesitas ayuda, inicia una conversación</p>
+                @if (errorChat) {
+                  <div class="alert alert-danger py-1 small mx-2 rounded-3"><i class="bi bi-exclamation-triangle me-1"></i>{{ errorChat }}</div>
+                }
                 <hr />
               </div>
             }
@@ -108,6 +111,7 @@ export class ChatWidget implements OnInit {
   nuevoMensaje = '';
   cargando = false;
   finalizada = false;
+  errorChat = '';
 
   ngOnInit() {
     const stored = localStorage.getItem('chat_conv');
@@ -160,6 +164,7 @@ export class ChatWidget implements OnInit {
     this.mensajes = [];
     this.nuevoMensaje = '';
     this.finalizada = false;
+    this.errorChat = '';
     localStorage.removeItem('chat_conv');
   }
 
@@ -175,6 +180,7 @@ export class ChatWidget implements OnInit {
       next: r => {
         this.convId = r.id;
         this.sessionToken = r.session_token;
+        this.errorChat = '';
         localStorage.setItem('chat_conv', JSON.stringify({
           convId: r.id, sessionToken: r.session_token,
           id_usuario: user?.id || null
@@ -184,10 +190,18 @@ export class ChatWidget implements OnInit {
             this.mensajes = [msg];
             this.cargando = false;
             this.cdr.detectChanges();
+          },
+          error: () => {
+            this.cargando = false;
+            this.cdr.detectChanges();
           }
         });
       },
-      error: () => this.cargando = false
+      error: e => {
+        this.errorChat = e.error?.detail || 'Error al iniciar conversación. Intenta de nuevo.';
+        this.cargando = false;
+        this.cdr.detectChanges();
+      }
     });
   }
 
