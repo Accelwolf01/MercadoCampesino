@@ -148,10 +148,18 @@ export class Profile {
         this.cargando = false;
       },
       error: e => {
-        this.error = e.error?.detail || 'Error al actualizar perfil';
+        this.error = this.extraerError(e);
         this.cargando = false;
       }
     });
+  }
+
+  private extraerError(e: any): string {
+    if (e.error?.detail) {
+      if (typeof e.error.detail === 'string') return e.error.detail;
+      if (Array.isArray(e.error.detail)) return e.error.detail[0]?.msg || 'Error de validación';
+    }
+    return 'Error inesperado, inténtalo de nuevo';
   }
 
   cambiarPassword() {
@@ -166,13 +174,13 @@ export class Profile {
       password_actual: this.passData.password_actual,
       password_nueva: this.passData.password_nueva
     }).subscribe({
-      next: () => {
-        this.msgPass = 'Contraseña cambiada correctamente';
+      next: (r: any) => {
+        this.msgPass = r?.mensaje || 'Contraseña cambiada correctamente';
         this.passData = { password_actual: '', password_nueva: '', password_confirm: '' };
         this.cargandoPass = false;
       },
       error: e => {
-        this.errPass = e.error?.detail || 'Error al cambiar contraseña';
+        this.errPass = this.extraerError(e);
         this.cargandoPass = false;
       }
     });
