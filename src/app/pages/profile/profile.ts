@@ -155,10 +155,12 @@ export class Profile {
   }
 
   private extraerError(e: any): string {
+    if (!e) return 'Error de conexión, inténtalo de nuevo';
     if (e.error?.detail) {
       if (typeof e.error.detail === 'string') return e.error.detail;
       if (Array.isArray(e.error.detail)) return e.error.detail[0]?.msg || 'Error de validación';
     }
+    if (e.status === 0) return 'No se pudo conectar con el servidor';
     return 'Error inesperado, inténtalo de nuevo';
   }
 
@@ -184,5 +186,11 @@ export class Profile {
         this.cargandoPass = false;
       }
     });
+    setTimeout(() => {
+      if (this.cargandoPass) {
+        this.errPass = 'El servidor está tardando mucho, inténtalo de nuevo';
+        this.cargandoPass = false;
+      }
+    }, 30000);
   }
 }

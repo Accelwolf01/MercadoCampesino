@@ -773,11 +773,6 @@
         <td>$0</td>
       </tr>
       <tr>
-        <td>Dominio</td>
-        <td>Nombre de dominio mercadocampesino.co - 1 a&ntilde;o</td>
-        <td>$80.000 COP</td>
-      </tr>
-      <tr>
         <td>Herramientas</td>
         <td>VS Code, Postman, Git, Figma - licencias gratuitas</td>
         <td>$0</td>
@@ -790,12 +785,12 @@
       <tr>
         <td>Imprevistos</td>
         <td>10 % del total</td>
-        <td>$28.000 COP</td>
+        <td>$20.000 COP</td>
       </tr>
       <tr>
         <td><strong>Total</strong></td>
         <td></td>
-        <td><strong>$308.000 COP</strong></td>
+        <td><strong>$220.000 COP</strong></td>
       </tr>
     </table>
     </div>
@@ -810,16 +805,39 @@
     <p>A continuaci&oacute;n se describe el desarrollo de cada una de las fases contempladas en la metodolog&iacute;a.</p>
 
     <h2>Fase 1: Diagn&oacute;stico y levantamiento de requisitos</h2>
-    <p>Entre el 15 y el 26 de junio de 2026, se realizaron visitas a las plazas 20 de Julio y Abastos en Bogot&aacute;. Se entrevist&oacute; a 23 campesinos y 40 consumidores, aplicando un cuestionario estructurado de forma presencial, y se realizaron entrevistas semiestructuradas a 5 campesinos para profundizar en sus experiencias. Los hallazgos principales fueron: el 73 % de los campesinos report&oacute; perder entre el 10 % y el 30 % de su producto al final de la jornada; el 87 % manifest&oacute; inter&eacute;s en usar una plataforma gratuita que le permita anunciar sus productos antes de llegar a la plaza; el 91 % de los consumidores indic&oacute; que le gustar&iacute;a saber con anticipaci&oacute;n qu&eacute; productos est&aacute;n disponibles. A partir de estos hallazgos se definieron los requisitos funcionales y no funcionales del sistema, priorizando que la plataforma sea gratuita para campesinos y consumidores, la facilidad de uso, la accesibilidad desde dispositivos de gama baja y la no gesti&oacute;n de pagos dentro de la plataforma.</p>
+    <p>Entre el 15 y el 26 de junio de 2026, se realizaron visitas a las plazas 20 de Julio y Abastos en Bogot&aacute;. Se entrevist&oacute; a 23 campesinos y 40 consumidores, aplicando un cuestionario estructurado de forma presencial, y se realizaron entrevistas semiestructuradas a 5 campesinos para profundizar en sus experiencias. Los hallazgos principales fueron: el 73 % de los campesinos report&oacute; perder entre el 10 % y el 30 % de su producto al final de la jornada; el 87 % manifest&oacute; inter&eacute;s en usar una plataforma gratuita que le permita anunciar sus productos antes de llegar a la plaza; el 91 % de los consumidores indic&oacute; que le gustar&iacute;a saber con anticipaci&oacute;n qu&eacute; productos est&aacute;n disponibles. A partir de estos hallazgos se definieron los requisitos funcionales y no funcionales del sistema. Tambi&eacute;n se identific&oacute; la necesidad de un canal de comunicaci&oacute;n directo con el administrador para resolver dudas y reportar problemas, dando origen al m&oacute;dulo de chat.</p>
 
     <h2>Fase 2: Dise&ntilde;o arquitect&oacute;nico y modelado</h2>
-    <p>Con base en los requisitos identificados, se dise&ntilde;&oacute; la arquitectura del sistema utilizando Angular 19 para el frontend, FastAPI con Python 3.14 para el backend y PostgreSQL como motor de base de datos. Se defini&oacute; un esquema de base de datos normalizado en tercera forma normal (3NF), con 14 modelos ORM que incluyen tablas para usuarios, perfiles, permisos, productos, categor&iacute;as, viajes, ubicaciones, ofertas flash, pre&oacute;rdenes, rese&ntilde;as, tickets de soporte y configuraci&oacute;n del sistema. Se dise&ntilde;&oacute; adem&aacute;s un sistema de permisos por perfil (superadmin, admin, campesino, consumidor, bloqueado) que permite un control granular de acceso a las funcionalidades.</p>
+    <p>Con base en los requisitos identificados, se dise&ntilde;&oacute; la arquitectura del sistema utilizando Angular 19 para el frontend, FastAPI con Python 3.14 para el backend y PostgreSQL como motor de base de datos. Se defini&oacute; un esquema de base de datos normalizado en tercera forma normal (3NF), con 14 modelos ORM que incluyen tablas para usuarios, perfiles, permisos, productos, categor&iacute;as, viajes, ubicaciones, ofertas flash, pre&oacute;rdenes, rese&ntilde;as, tickets de soporte, chat conversaciones, chat mensajes y configuraci&oacute;n del sistema. Se dise&ntilde;&oacute; adem&aacute;s un sistema de permisos por perfil (superadmin, admin, campesino, consumidor, bloqueado) que permite un control granular de acceso a las funcionalidades. Para el chat se defini&oacute; un esquema de sesi&oacute;n an&oacute;nima mediante <code>session_token</code> UUID, permitiendo que cualquier usuario inicie una conversaci&oacute;n sin necesidad de registrarse.</p>
 
     <h2>Fase 3: Implementaci&oacute;n y desarrollo</h2>
-    <p>El desarrollo se realizar&aacute; en ciclos iterativos de dos semanas cada uno. En el backend se implementar&aacute;n 13 routers con m&aacute;s de 63 endpoints que cubren autenticaci&oacute;n JWT, gesti&oacute;n de usuarios, productos, viajes, pre&oacute;rdenes, ofertas flash, mapa, rese&ntilde;as, perfiles, permisos, configuraci&oacute;n del sistema y soporte t&eacute;cnico. Se utilizar&aacute; bcrypt directamente (sin passlib) para el hash de contrase&ntilde;as, garantizando compatibilidad con Python 3.14. En el frontend se desarrollar&aacute;n 12 componentes de p&aacute;gina (home, login, register, pending, admin, superadmin, campesino, consumidor, mapa, viaje, perfil, soporte) utilizando componentes standalone de Angular 19 con sintaxis @if/@for y Bootstrap + Bootswatch Flatly para los estilos.</p>
+    <p>El desarrollo se realiz&oacute; en ciclos iterativos. En el backend se implementaron 14 routers con m&aacute;s de 70 endpoints que cubren autenticaci&oacute;n JWT, gesti&oacute;n de usuarios, productos, viajes, pre&oacute;rdenes, ofertas flash, mapa, rese&ntilde;as, perfiles, permisos, configuraci&oacute;n del sistema, soporte t&eacute;cnico y chat. Se utiliz&oacute; bcrypt directamente (sin passlib) para el hash de contrase&ntilde;as, garantizando compatibilidad con Python 3.14. En el frontend se desarrollaron 13 componentes de p&aacute;gina (home, login, register, pending, admin, superadmin, campesino, consumidor, mapa, viaje, perfil, soporte, chat-widget) utilizando componentes standalone de Angular 19 con sintaxis @if/@for y Bootstrap para los estilos.</p>
+
+    <h3>M&oacute;dulo de Chat</h3>
+    <p>Se implement&oacute; un sistema de chat que permite a cualquier usuario (incluso sin iniciar sesi&oacute;n) crear una conversaci&oacute;n con el equipo administrativo. El chat funciona con sesi&oacute;n an&oacute;nima identificada por un <code>session_token</code> UUID almacenado en localStorage. El backend expone los siguientes endpoints:</p>
+    <ul class="bullet-list">
+      <li><code>POST /chat/crear</code> &mdash; crea una conversaci&oacute;n con nombre de usuario opcional y retorna un session_token.</li>
+      <li><code>POST /chat/enviar</code> &mdash; env&iacute;a un mensaje del usuario a la conversaci&oacute;n.</li>
+      <li><code>GET /chat/mensajes?session_token=</code> &mdash; obtiene los mensajes de la conversaci&oacute;n del usuario.</li>
+      <li><code>GET /chat/admin/pendientes</code> &mdash; lista las conversaciones pendientes para el admin.</li>
+      <li><code>GET /chat/admin/conversaciones</code> &mdash; lista las conversaciones asignadas al admin.</li>
+      <li><code>POST /chat/admin/responder/{id}</code> &mdash; el admin responde una conversaci&oacute;n y pasa su estado a "respondido".</li>
+      <li><code>POST /chat/admin/finalizar/{id}</code> &mdash; finaliza una conversaci&oacute;n.</li>
+    </ul>
+    <p>Para la comunicaci&oacute;n en tiempo real se implement&oacute; un sistema de <strong>polling cada 4 segundos</strong> tanto en el widget del usuario como en el panel del administrador. El widget de chat flotante (esquina inferior derecha) se recarga autom&aacute;ticamente cada 4 segundos cuando est&aacute; abierto, mostrando los nuevos mensajes sin intervenci&oacute;n del usuario. El panel del administrador ejecuta polling global cada 4 segundos para actualizar el badge de conversaciones pendientes incluso cuando el admin est&aacute; en otra pesta&ntilde;a; los mensajes de la conversaci&oacute;n abierta se refrescan solo si el admin est&aacute; en la pesta&ntilde;a de Chat. Ambos paneles implementan <strong>auto-scroll</strong> al &uacute;ltimo mensaje al enviar, recargar o recibir por polling, utilizando <code>setTimeout(50ms)</code> para asegurar que el scroll se ejecute despu&eacute;s de que Angular renderice el nuevo mensaje.</p>
+    <p>El acceso del administrador al chat se controla mediante el permiso <code>gestionar_usuarios</code>, asignado a los perfiles superadmin y admin. En el backend se corrigieron errores cr&iacute;ticos: se cambi&oacute; <code>HTTPBearer</code> a <code>auto_error=False</code> para permitir peticiones sin token en el chat de usuario, se agreg&oacute; un <code>None check</code> en <code>get_current_user</code> para evitar errores 500 cuando no hay credenciales, y se elimin&oacute; la asignaci&oacute;n manual de <code>updated_at = None</code> que causaba violaci&oacute;n de la restricci&oacute;n NOT NULL (el modelo usa <code>onupdate=bogota_now</code> que actualiza autom&aacute;ticamente la columna).</p>
+
+    <h3>M&oacute;dulo de perfil y cambio de contrase&ntilde;a</h3>
+    <p>En la p&aacute;gina de perfil (<code>/perfil</code>) se agreg&oacute; una secci&oacute;n de "Cambiar contrase&ntilde;a" con tres campos: contrase&ntilde;a actual, nueva contrase&ntilde;a y confirmaci&oacute;n. El endpoint <code>PUT /auth/cambiar-password</code> verifica que la contrase&ntilde;a actual coincida con el hash almacenado usando bcrypt, valida que la nueva tenga al menos 6 caracteres y actualiza el hash. El frontend valida que las dos contrase&ntilde;as nuevas coincidan antes de enviar la petici&oacute;n. Se implement&oacute; una funci&oacute;n <code>extraerError()</code> que maneja correctamente los errores del backend tanto cuando <code>detail</code> es un string (errores 400/401/403) como cuando es un array de objetos con <code>msg</code> (errores 422 de validaci&oacute;n Pydantic), garantizando que el usuario siempre vea un mensaje legible.</p>
+
+    <h3>Mejoras de usabilidad en login</h3>
+    <p>En la p&aacute;gina de inicio de sesi&oacute;n se agreg&oacute; un bot&oacute;n con icono de ojo (<code>bi bi-eye</code> / <code>bi bi-eye-slash</code>) en el campo de contrase&ntilde;a que permite alternar entre mostrar y ocultar el texto, facilitando la verificaci&oacute;n de lo escrito por parte del usuario. Esta funcionalidad se implement&oacute; con una propiedad booleana <code>showPassword</code> que alterna el atributo <code>type</code> del input entre <code>password</code> y <code>text</code>.</p>
+
+    <h3>Disclaimer legal y t&eacute;rminos de uso</h3>
+    <p>Se incorpor&oacute; un disclaimer legal en el footer global de la aplicaci&oacute;n indicando que MercadoCampesino es una "plataforma gratuita de conexi&oacute;n, no realizamos transacciones, sin responsabilidad por p&eacute;rdidas, da&ntilde;os o incumplimientos entre las partes". En el formulario de registro se agreg&oacute; un checkbox obligatorio de "Acepto t&eacute;rminos y condiciones" con el texto expl&iacute;cito sobre el rol de la plataforma, y el bot&oacute;n de registro permanece deshabilitado hasta que el usuario marque la casilla.</p>
 
     <h2>Fase 4: Pruebas y validaci&oacute;n</h2>
-    <p>Se realizar&aacute;n pruebas unitarias y de integraci&oacute;n en cada m&oacute;dulo para garantizar el correcto funcionamiento de la plataforma. Se verificar&aacute; la autenticaci&oacute;n JWT, el registro de usuarios con foto de c&eacute;dula, la publicaci&oacute;n de viajes, la geolocalizaci&oacute;n en el mapa, la activaci&oacute;n de ofertas flash, el sistema de pre&oacute;rdenes y el m&oacute;dulo de soporte. Las pruebas se documentar&aacute;n y los errores encontrados se corregir&aacute;n antes de la entrega final.</p>
+    <p>Se realizaron pruebas unitarias y de integraci&oacute;n en cada m&oacute;dulo. Se verific&oacute; la autenticaci&oacute;n JWT, el bloqueo de usuarios (cambio a perfil bloqueado + desactivaci&oacute;n de viajes activos), el registro con foto de c&eacute;dula, la publicaci&oacute;n de viajes, la geolocalizaci&oacute;n en el mapa, la activaci&oacute;n de ofertas flash, el sistema de pre&oacute;rdenes, el m&oacute;dulo de chat con polling y el m&oacute;dulo de soporte. Se corrigieron errores 500 en el backend relacionados con el chat (columna <code>updated_at</code> con NOT NULL), errores 422 no manejados en el frontend del cambio de contrase&ntilde;a, y problemas de sesi&oacute;n an&oacute;nima para usuarios sin token. Se confirm&oacute; que el frontend compila correctamente con el build de producci&oacute;n de Angular.</p>
   </div>
 
   <!-- ============================================================ -->
@@ -1151,6 +1169,58 @@
       </div>
     </div>
 
+    <!-- CHAT -->
+    <div class="section">
+      <h1>Historias de usuario &mdash; Chat/Soporte</h1>
+
+      <div class="user-story">
+        <div class="id">HU-021</div>
+        <div class="rol">Cualquier usuario (sin login)</div>
+        <div class="texto">Como usuario de la plataforma, quiero <em>iniciar un chat con el administrador sin necesidad de registrarme</em> para hacer preguntas r&aacute;pidas o reportar problemas t&eacute;cnicos.</div>
+        <div class="criterios">
+          <p>Poder abrir el widget de chat desde cualquier p&aacute;gina de la plataforma.</p>
+          <p>Escribir mi nombre (opcional) y crear una conversaci&oacute;n al instante.</p>
+          <p>Recibir respuesta del administrador en el mismo chat.</p>
+        </div>
+        <div class="origen">&mdash; Necesidad detectada durante las entrevistas: los campesinos quer&iacute;an una forma r&aacute;pida de contactar al equipo sin tener que recordar credenciales.</div>
+      </div>
+
+      <div class="user-story">
+        <div class="id">HU-022</div>
+        <div class="rol">Administrador</div>
+        <div class="texto">Como administrador, quiero <em>ver un badge con el n&uacute;mero de chats pendientes en el panel</em> para saber si hay usuarios esperando respuesta sin tener que estar revisando constantemente.</div>
+        <div class="criterios">
+          <p>Badge visible en la pesta&ntilde;a Chat que muestra el n&uacute;mero de conversaciones sin respuesta.</p>
+          <p>El badge debe actualizarse autom&aacute;ticamente aunque est&eacute; en otra pesta&ntilde;a.</p>
+          <p>Al hacer clic en la pesta&ntilde;a Chat, mostrar las conversaciones pendientes y la &uacute;ltima conversaci&oacute;n abierta.</p>
+        </div>
+        <div class="origen">&mdash; Necesidad del equipo administrativo para priorizar atenci&oacute;n a usuarios.</div>
+      </div>
+
+      <div class="user-story">
+        <div class="id">HU-023</div>
+        <div class="rol">Usuario autenticado</div>
+        <div class="texto">Como usuario registrado, quiero <em>cambiar mi contrase&ntilde;a desde mi perfil</em> para mantener la seguridad de mi cuenta sin tener que contactar al administrador.</div>
+        <div class="criterios">
+          <p>Poder ingresar la contrase&ntilde;a actual, la nueva y confirmarla.</p>
+          <p>Validar que las dos contrase&ntilde;as nuevas coincidan antes de enviar.</p>
+          <p>Mostrar mensaje claro de &eacute;xito o error despu&eacute;s de la operaci&oacute;n.</p>
+        </div>
+        <div class="origen">&mdash; Necesidad de seguridad identificada durante el desarrollo.</div>
+      </div>
+
+      <div class="user-story">
+        <div class="id">HU-024</div>
+        <div class="rol">Usuario no autenticado</div>
+        <div class="texto">Como usuario en la pantalla de login, quiero <em>poder ver la contrase&ntilde;a que estoy escribiendo</em> para asegurarme de que no la estoy poniendo mal antes de iniciar sesi&oacute;n.</div>
+        <div class="criterios">
+          <p>Icono de ojo al lado del campo de contrase&ntilde;a.</p>
+          <p>Al hacer clic en el ojo, mostrar u ocultar el texto de la contrase&ntilde;a.</p>
+        </div>
+        <div class="origen">&mdash; Mejora de usabilidad sugerida durante las pruebas de la interfaz.</div>
+      </div>
+    </div>
+
     <h2>Resumen de historias de usuario</h2>
     <div class="table-wrap">
     <table>
@@ -1180,6 +1250,10 @@
       <tr><td>HU-018</td><td>Admin</td><td>Gestionar tickets de soporte</td><td>Media</td></tr>
       <tr><td>HU-019</td><td>Superadmin</td><td>Gestionar permisos por perfil</td><td>Alta</td></tr>
       <tr><td>HU-020</td><td>Superadmin</td><td>Configurar par&aacute;metros del sistema</td><td>Alta</td></tr>
+      <tr><td>HU-021</td><td>Cualquier usuario</td><td>Iniciar chat con admin sin registrarse</td><td>Alta</td></tr>
+      <tr><td>HU-022</td><td>Admin</td><td>Badge de chats pendientes con auto-actualizaci&oacute;n</td><td>Alta</td></tr>
+      <tr><td>HU-023</td><td>Usuario autenticado</td><td>Cambiar contrase&ntilde;a desde el perfil</td><td>Alta</td></tr>
+      <tr><td>HU-024</td><td>Usuario no autenticado</td><td>Mostrar/ocultar contrase&ntilde;a en login</td><td>Media</td></tr>
     </table>
     </div>
   </div>
