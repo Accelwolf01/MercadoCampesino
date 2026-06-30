@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ApiService } from '../../services/api.service';
@@ -593,7 +593,7 @@ interface Usuario {
     }
   `
 })
-export class Admin implements OnInit {
+export class Admin implements OnInit, OnDestroy {
   private api = inject(ApiService);
   private chatSvc = inject(ChatService);
   private cdr = inject(ChangeDetectorRef);
@@ -627,6 +627,7 @@ export class Admin implements OnInit {
   chatRespuesta = '';
   chatCargando = false;
   chatBusqueda = '';
+  private chatPolling: any = null;
 
   reseniasBajas: any[] = [];
   cargandoAlertas = false;
@@ -769,6 +770,39 @@ export class Admin implements OnInit {
     this.chatSvc.asignadas().subscribe({ next: r => { this.chatAsignadas = r; this.cdr.detectChanges(); } });
     this.chatHistorial = [];
     this.chatBusqueda = '';
+    this.iniciarChatPolling();
+  }
+
+  private iniciarChatPolling() {
+    this.detenerChatPolling();
+    this.chatPolling = setInterval(() => {
+      if (this.tab !== 'chat') { this.detenerChatPolling(); return; }
+      this.chatSvc.pendientes().subscribe({ next: r => { this.chatPendientes = r; } });
+      this.chatSvc.asignadas().subscribe({ next: r => { this.chatAsignadas = r; } });
+      if (this.chatSeleccionada) {
+        this.chatSvc.obtenerConv(this.chatSeleccionada.id, '').subscribe({
+          next: conv => {
+            this.chatMensajes = conv.mensajes;
+            if (conv.estado !== this.chatSeleccionada!.estado) {
+              this.chatSeleccionada = conv;
+              this.cargarChat();
+            }
+            this.cdr.detectChanges();
+          }
+        });
+      }
+    }, 4000);
+  }
+
+  private detenerChatPolling() {
+    if (this.chatPolling) {
+      clearInterval(this.chatPolling);
+      this.chatPolling = null;
+    }
+  }
+
+  ngOnDestroy() {
+    this.detenerChatPolling();
   }
 
   seleccionarChat(c: ChatConvMini) {
