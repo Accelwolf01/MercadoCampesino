@@ -1,0 +1,1191 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MercadoCampesino - Trabajo de Grado 3 - CUN Bogotá - 2026</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap');
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Inter', sans-serif;
+    background: #0f0f1a;
+    color: #e0e0e0;
+    padding: 40px 20px;
+  }
+  .container { max-width: 800px; margin: 0 auto; }
+
+  .header {
+    text-align: center;
+    margin-bottom: 40px;
+    padding-bottom: 30px;
+    border-bottom: 1px solid #2a2a4a;
+  }
+  .header h1 {
+    font-size: 2.2rem;
+    font-weight: 800;
+    background: linear-gradient(135deg, #fcc419, #ff922b);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    letter-spacing: -1px;
+  }
+  .header .sub {
+    color: #8888aa;
+    font-size: 1rem;
+    margin-top: 8px;
+  }
+
+  .section {
+    background: linear-gradient(145deg, #16162a, #1a1a30);
+    border-radius: 16px;
+    border: 1px solid #2a2a4a;
+    padding: 30px 32px;
+    margin-bottom: 24px;
+  }
+
+  .section h1 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #fcc419;
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid #fcc41922;
+  }
+  .section h2 {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #fff;
+    margin: 20px 0 12px 0;
+  }
+  .section h3 {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #ddd;
+    margin: 16px 0 10px 0;
+  }
+
+  .section p {
+    color: #bbb;
+    font-size: 0.95rem;
+    line-height: 1.8;
+    margin-bottom: 12px;
+    text-align: justify;
+  }
+
+  .toc {
+    background: #0f0f1a88;
+    border: 1px solid #2a2a4a;
+    border-radius: 12px;
+    padding: 20px 24px;
+    margin-bottom: 20px;
+  }
+  .toc p {
+    margin-bottom: 4px;
+    color: #999;
+    font-size: 0.9rem;
+  }
+
+  .keywords {
+    margin-top: 14px;
+    padding: 12px 16px;
+    background: #0f0f1a88;
+    border-left: 3px solid #fcc419;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    color: #999;
+  }
+
+  .declaracion {
+    background: #0f0f1a88;
+    border: 1px solid #2a2a4a;
+    border-radius: 12px;
+    padding: 20px 24px;
+    margin-bottom: 16px;
+  }
+  .declaracion p {
+    font-style: italic;
+    color: #aaa;
+    margin-bottom: 10px;
+  }
+  .firma {
+    margin-top: 20px;
+    padding-top: 14px;
+    border-top: 1px solid #2a2a4a;
+  }
+  .firma .line {
+    margin: 24px 0 4px 0;
+    border-bottom: 1px solid #555;
+    width: 280px;
+  }
+
+  .num-list {
+    list-style: none;
+    padding: 0;
+  }
+  .num-list li {
+    padding: 8px 0 8px 24px;
+    position: relative;
+    color: #bbb;
+    font-size: 0.95rem;
+    line-height: 1.7;
+  }
+  .num-list li::before {
+    content: counter(item) ".";
+    counter-increment: item;
+    position: absolute;
+    left: 0;
+    color: #fcc419;
+    font-weight: 700;
+  }
+  .num-list { counter-reset: item; }
+
+  .bullet-list {
+    list-style: none;
+    padding: 0;
+  }
+  .bullet-list li {
+    padding: 6px 0 6px 20px;
+    position: relative;
+    color: #bbb;
+    font-size: 0.95rem;
+    line-height: 1.7;
+  }
+  .bullet-list li::before {
+    content: ">";
+    position: absolute;
+    left: 0;
+    color: #fcc419;
+    font-weight: 700;
+  }
+
+  .ref-list {
+    list-style: none;
+    padding: 0;
+  }
+  .ref-list li {
+    padding: 6px 0 6px 0;
+    position: relative;
+    color: #aaa;
+    font-size: 0.9rem;
+    line-height: 1.7;
+    margin-bottom: 6px;
+    padding-left: 32px;
+    text-indent: -32px;
+  }
+  .ref-list li::before {
+    content: "[" counter(item) "]";
+    counter-increment: item;
+    position: absolute;
+    left: 0;
+    color: #fcc419;
+    font-weight: 700;
+  }
+  .ref-list { counter-reset: item; }
+
+  .table-wrap {
+    overflow-x: auto;
+    margin: 16px 0;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.85rem;
+  }
+  table th {
+    background: #1e1e3a;
+    color: #fcc419;
+    font-weight: 600;
+    padding: 10px 12px;
+    border: 1px solid #2a2a4a;
+    text-align: left;
+  }
+  table td {
+    padding: 8px 12px;
+    border: 1px solid #2a2a4a;
+    color: #bbb;
+  }
+  table tr:nth-child(even) td {
+    background: #13132a;
+  }
+
+  .portada {
+    text-align: center;
+    padding: 60px 32px;
+    background: linear-gradient(145deg, #16162a, #1a1a30);
+    border-radius: 16px;
+    border: 1px solid #2a2a4a;
+    margin-bottom: 24px;
+  }
+  .portada .logo {
+    font-size: 3rem;
+    font-weight: 800;
+    background: linear-gradient(135deg, #fcc419, #ff922b);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    letter-spacing: -2px;
+    margin-bottom: 8px;
+  }
+  .portada .sub-logo {
+    color: #8888aa;
+    font-size: 1.1rem;
+    margin-bottom: 40px;
+  }
+  .portada .tipo {
+    font-size: 1rem;
+    color: #fcc419;
+    font-weight: 600;
+    letter-spacing: 2px;
+    margin-bottom: 8px;
+  }
+  .portada .titulo {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: #fff;
+    line-height: 1.4;
+    margin-bottom: 30px;
+  }
+  .portada .datos {
+    color: #999;
+    font-size: 0.9rem;
+    line-height: 2;
+  }
+  .portada .raya {
+    width: 80px;
+    height: 2px;
+    background: #fcc41944;
+    margin: 30px auto;
+  }
+
+  .dedicatoria, .agradecimientos {
+    text-align: center;
+    padding: 50px 32px;
+    background: linear-gradient(145deg, #16162a, #1a1a30);
+    border-radius: 16px;
+    border: 1px solid #2a2a4a;
+    margin-bottom: 24px;
+  }
+  .dedicatoria h1, .agradecimientos h1 {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #fcc419;
+    margin-bottom: 24px;
+    letter-spacing: 1px;
+  }
+  .dedicatoria p, .agradecimientos p {
+    font-size: 10pt;
+    line-height: 1.8;
+    color: #ccc;
+    max-width: 580px;
+    margin: 0 auto;
+    margin-bottom: 12px;
+  }
+
+  .user-story {
+    background: #0f0f1a88;
+    border-left: 3px solid #fcc419;
+    border-radius: 8px;
+    padding: 16px 20px;
+    margin-bottom: 16px;
+  }
+  .user-story .id {
+    font-size: 0.75rem;
+    color: #777;
+    margin-bottom: 4px;
+  }
+  .user-story .rol {
+    font-size: 0.85rem;
+    color: #ff922b;
+    font-weight: 600;
+    margin-bottom: 6px;
+  }
+  .user-story .texto {
+    font-size: 0.92rem;
+    color: #ccc;
+    line-height: 1.7;
+    margin-bottom: 8px;
+  }
+  .user-story .texto em {
+    color: #fcc419;
+    font-style: italic;
+  }
+  .user-story .criterios {
+    margin-top: 8px;
+  }
+  .user-story .criterios p {
+    font-size: 0.83rem;
+    color: #999;
+    margin-bottom: 3px;
+  }
+  .user-story .criterios p::before {
+    content: "\2713 ";
+    color: #4caf50;
+  }
+  .user-story .origen {
+    font-size: 0.78rem;
+    color: #666;
+    margin-top: 8px;
+    border-top: 1px solid #2a2a4a;
+    padding-top: 8px;
+  }
+
+  .page-num {
+    text-align: right;
+    color: #555;
+    font-size: 0.8rem;
+    margin-top: 20px;
+    border-top: 1px solid #2a2a4a;
+    padding-top: 20px;
+  }
+
+  @media (max-width: 640px) {
+    .section { padding: 20px 18px; }
+    .portada { padding: 40px 20px; }
+    .portada .logo { font-size: 2.2rem; }
+    .portada .titulo { font-size: 1.2rem; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- ============================================================ -->
+  <!-- PORTADA -->
+  <!-- ============================================================ -->
+  <div class="portada">
+    <div class="logo">MercadoCampesino</div>
+    <div class="sub-logo">Conectando el campo con la ciudad</div>
+    <div class="raya"></div>
+    <div class="tipo">TRABAJO DE GRADO 3</div>
+    <div class="titulo">Plataforma web para la comercializaci&oacute;n directa<br>entre campesinos de Cundinamarca y<br>consumidores de Bogot&aacute;</div>
+    <div class="raya"></div>
+    <div class="datos">
+      <strong>Autores:</strong><br>
+      (Nombre 1 - Apellidos completos)<br>
+      (Nombre 2 - Apellidos completos)<br>
+      (Nombre 3 - Apellidos completos)<br><br>
+      <strong>Asesor:</strong><br>
+      (Nombre del asesor)<br><br>
+      <strong>Corporaci&oacute;n Unificada Nacional de Educaci&oacute;n Superior &mdash; CUN</strong><br>
+      Facultad de Ingenier&iacute;a de Sistemas<br>
+      Bogot&aacute;, Cundinamarca<br>
+      2026
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- DEDICATORIA Y AGRADECIMIENTOS -->
+  <!-- ============================================================ -->
+  <div class="dedicatoria">
+    <h1>Dedicatoria</h1>
+    <p>A los campesinos de Cundinamarca, que madrugan antes del alba para llevar el fruto de su trabajo a las plazas de Bogot&aacute;. Que esta herramienta sea un peque&ntilde;o paso para que su esfuerzo sea reconocido y recompensado como merece.</p>
+    <p>A nuestras familias, por su paciencia y apoyo incondicional durante este camino acad&eacute;mico.</p>
+  </div>
+
+  <div class="agradecimientos">
+    <h1>Agradecimientos</h1>
+    <p>A la Corporaci&oacute;n Unificada Nacional de Educaci&oacute;n Superior &mdash; CUN, por brindarnos los conocimientos y el espacio para desarrollar este proyecto.</p>
+    <p>A nuestros profesores y asesores, por su gu&iacute;a, correcciones y ense&ntilde;anzas que hicieron posible llegar hasta aqu&iacute;.</p>
+    <p>A los 23 campesinos de la Plaza 20 de Julio y Abastos que generosamente compartieron su tiempo, sus experiencias y sus necesidades, permiti&eacute;ndonos construir una soluci&oacute;n que responda a su realidad.</p>
+    <p>A los consumidores que participaron en las entrevistas, por creer en esta idea y ayudarnos a mejorarla.</p>
+    <p>A todos, infinitas gracias.</p>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- TABLA DE CONTENIDO -->
+  <!-- ============================================================ -->
+  <div class="section">
+    <h1>Tabla de contenido</h1>
+    <div class="toc">
+      <p>Resumen .......................................................................................... 8</p>
+      <p>Abstract ........................................................................................... 9</p>
+      <p>Preliminares .................................................................................... 10</p>
+      <p>&emsp;Declaraci&oacute;n de originalidad y autonom&iacute;a ........................................ 10</p>
+      <p>&emsp;Declaraci&oacute;n de exoneraci&oacute;n de responsabilidad ............................... 11</p>
+      <p>1 Introducci&oacute;n .................................................................................. 12</p>
+      <p>2 Planteamiento del problema ............................................................ 15</p>
+      <p>&emsp;2.1 Formulaci&oacute;n o Pregunta de Investigaci&oacute;n .................................... 16</p>
+      <p>3 Objetivos ....................................................................................... 17</p>
+      <p>&emsp;3.1 Objetivo general ....................................................................... 17</p>
+      <p>&emsp;3.2 Objetivos espec&iacute;ficos ................................................................ 17</p>
+      <p>4 Justificaci&oacute;n .................................................................................. 19</p>
+      <p>5 Alcances y Limitaciones del Proyecto ............................................. 20</p>
+      <p>6 Marco Referencial ......................................................................... 21</p>
+      <p>&emsp;6.1 Antecedentes ......................................................................... 23</p>
+      <p>&emsp;6.2 Marco te&oacute;rico ......................................................................... 24</p>
+      <p>&emsp;6.3 Marco Conceptual .................................................................... 24</p>
+      <p>&emsp;6.4 Marco legal ............................................................................ 25</p>
+      <p>7 Metodolog&iacute;a ................................................................................... 25</p>
+      <p>&emsp;7.1 Enfoque de investigaci&oacute;n ............................................................ 26</p>
+      <p>&emsp;7.2 Tipos de investigaci&oacute;n ................................................................ 27</p>
+      <p>&emsp;7.3 Dise&ntilde;os de Investigaci&oacute;n ............................................................ 28</p>
+      <p>&emsp;7.4 Poblaci&oacute;n y muestra .................................................................. 28</p>
+      <p>&emsp;7.5 Plan de an&aacute;lisis de la informaci&oacute;n ............................................... 29</p>
+      <p>&emsp;7.5.1 Instrumentos de recolecci&oacute;n de informaci&oacute;n ............................... 29</p>
+      <p>&emsp;7.6 Cronograma ............................................................................. 29</p>
+      <p>&emsp;7.7 Presupuesto ............................................................................. 29</p>
+      <p>8 Desarrollo de las fases del proyecto .................................................. 31</p>
+      <p>9 Resultados esperados ...................................................................... 32</p>
+      <p>10 Conclusiones ................................................................................ 34</p>
+      <p>Referencias bibliogr&aacute;ficas ................................................................... 36</p>
+      <p>Anexo &mdash; Historias de usuario ............................................................... 38</p>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- RESUMEN -->
+  <!-- ============================================================ -->
+  <div class="section">
+    <h1>Resumen</h1>
+    <p>Los campesinos de Cundinamarca viajan a Bogot&aacute; con sus cosechas, pero en m&uacute;ltiples ocasiones no logran comercializar la totalidad de sus productos, lo que los obliga a desecharlos. Adicionalmente, los intermediarios absorben la mayor parte del margen de ganancia, generando que el productor reciba un precio bajo mientras el consumidor final paga un valor elevado. El presente proyecto propone crear <strong>MercadoCampesino</strong>, una plataforma web accesible desde cualquier dispositivo m&oacute;vil que conecta directamente al campesino con los consumidores en Bogot&aacute;. La plataforma permite que el campesino publique con antelaci&oacute;n los productos que llevar&aacute;, que los consumidores realicen pre&oacute;rdenes, y que al llegar a la plaza el vendedor se&ntilde;ale su ubicaci&oacute;n en un mapa para que los compradores lo encuentren f&aacute;cilmente. Tambi&eacute;n incluye la funcionalidad de ofertas flash para evitar el retorno de mercanc&iacute;a no vendida. Los consumidores pueden consultar en tiempo real qu&eacute; productos est&aacute;n disponibles, a qu&eacute; precio y qui&eacute;n los ofrece, adem&aacute;s de dejar rese&ntilde;as que fomentan la confianza entre las partes. Se concluye que una herramienta tecnol&oacute;gica sencilla, accesible desde cualquier tel&eacute;fono celular y que no gestione pagos dentro de la plataforma, puede contribuir a que los campesinos incrementen sus ventas, los consumidores accedan a precios m&aacute;s justos y se reduzca el desperdicio de alimentos.</p>
+    <div class="keywords"><strong>Palabras clave:</strong> mercado campesino, comercio directo, p&eacute;rdida de cosecha, plazas de mercado, PWA, econom&iacute;a local</div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- ABSTRACT -->
+  <!-- ============================================================ -->
+  <div class="section">
+    <h1>Abstract</h1>
+    <p>Farmers from Cundinamarca travel to Bogot&aacute; with their harvest, but many times they cannot sell everything and have to throw food away. Middlemen absorb most of the profit margin, so farmers earn little and consumers pay more than necessary. This project proposes <strong>MercadoCampesino</strong>, a web platform accessible from any mobile device that connects farmers directly with consumers in Bogot&aacute;. Farmers can post in advance what they are bringing, consumers can place pre-orders, and when the farmer arrives at the market square, they can mark their stall on a map so buyers can find them easily. The platform also includes flash offer functionality to avoid taking unsold produce back home. Consumers can see in real time who is selling, what products are available and at what price, and leave reviews that build trust between parties. It is concluded that a simple technological tool, accessible from any cell phone and without handling payments within the platform, can help farmers increase their sales, consumers access fairer prices, and reduce food waste.</p>
+    <div class="keywords"><strong>Keywords:</strong> farmers market, direct commerce, crop loss, marketplaces, PWA, local economy</div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- PRELIMINARES -->
+  <!-- ============================================================ -->
+  <div class="section">
+    <h1>Preliminares</h1>
+
+    <h2>Declaraci&oacute;n de originalidad y autonom&iacute;a</h2>
+    <div class="declaracion">
+      <p>Declaramos bajo la gravedad del juramento, que hemos escrito el presente proyecto, en la propuesta de soluci&oacute;n a una problem&aacute;tica en el campo de conocimientos del programa de Ingenier&iacute;a de Sistemas por nuestra propia cuenta y que, por lo tanto, su contenido es original.</p>
+      <p>Declaramos que hemos indicado clara y precisamente todas las fuentes directas e indirectas de informaci&oacute;n y que no ha sido entregado a ninguna otra instituci&oacute;n con fines de calificaci&oacute;n o publicaci&oacute;n.</p>
+      <div class="firma">
+        <div class="line"></div>
+        <p style="font-style:normal; font-size:0.9rem;">(Nombre 1 - Apellidos completos)</p>
+        <div class="line" style="margin-top:28px;"></div>
+        <p style="font-style:normal; font-size:0.9rem;">(Nombre 2 - Apellidos completos)</p>
+        <div class="line" style="margin-top:28px;"></div>
+        <p style="font-style:normal; font-size:0.9rem;">(Nombre 3 - Apellidos completos)</p>
+        <p style="font-style:normal; font-size:0.85rem; margin-top:16px; color:#777;">Firmado en Bogot&aacute;, Cundinamarca, 24 de julio de 2026</p>
+      </div>
+    </div>
+
+    <h2>Declaraci&oacute;n de exoneraci&oacute;n de responsabilidad</h2>
+    <div class="declaracion">
+      <p>Declaramos que la responsabilidad intelectual del presente trabajo es exclusivamente de sus autores. La Corporaci&oacute;n Unificada Nacional de Educaci&oacute;n Superior &mdash; CUN no se hace responsable de contenidos, opiniones o ideolog&iacute;as expresadas total o parcialmente en &eacute;l.</p>
+      <div class="firma">
+        <div class="line"></div>
+        <p style="font-style:normal; font-size:0.9rem;">(Nombre 1 - Apellidos completos)</p>
+        <div class="line" style="margin-top:28px;"></div>
+        <p style="font-style:normal; font-size:0.9rem;">(Nombre 2 - Apellidos completos)</p>
+        <div class="line" style="margin-top:28px;"></div>
+        <p style="font-style:normal; font-size:0.9rem;">(Nombre 3 - Apellidos completos)</p>
+        <p style="font-style:normal; font-size:0.85rem; margin-top:16px; color:#777;">Firmado en Bogot&aacute;, Cundinamarca, 24 de julio de 2026</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- 1 INTRODUCCIÓN -->
+  <!-- ============================================================ -->
+  <div class="section">
+    <h1>1 Introducci&oacute;n</h1>
+
+    <p>Colombia es un pa&iacute;s con una vocaci&oacute;n agr&iacute;cola significativa; sin embargo, quienes cultivan la tierra enfrentan condiciones adversas que limitan su rentabilidad. Los campesinos de Cundinamarca inician su jornada antes del amanecer, viajan durante horas hasta Bogot&aacute;, asumen el costo de un puesto en la plaza de mercado y, al finalizar la jornada, en numerosas ocasiones regresan con gran parte de la cosecha sin vender, la cual termina siendo desechada. A esta p&eacute;rdida se suma la intervenci&oacute;n de intermediarios que absorben la mayor parte del margen de ganancia, de modo que el productor recibe un ingreso m&iacute;nimo mientras el consumidor final paga un precio elevado.</p>
+
+    <p>Paralelamente, los habitantes de Bogot&aacute; que desean adquirir frutas y verduras frescas a precios razonables carecen de informaci&oacute;n sobre la ubicaci&oacute;n exacta del puesto del campesino, los productos disponibles cada d&iacute;a y sus precios. La din&aacute;mica actual obliga al comprador a recorrer la plaza sin certeza de encontrar lo que necesita.</p>
+
+    <p>Ante esta situaci&oacute;n, se propone el desarrollo de <strong>MercadoCampesino</strong>, una plataforma web accesible desde cualquier dispositivo m&oacute;vil sin necesidad de instalaci&oacute;n. El campesino puede publicar con anticipaci&oacute;n los productos que llevar&aacute; al mercado, especificando cantidades y precios, y los consumidores pueden realizar pre&oacute;rdenes desde su hogar. Al llegar a la plaza, el vendedor se&ntilde;ala su ubicaci&oacute;n en un mapa interactivo para que los compradores lo localicen con facilidad. Si al final de la jornada queda producto sin vender, el campesino puede activar una oferta flash desde su tel&eacute;fono, y los usuarios cercanos reciben la informaci&oacute;n al instante.</p>
+
+    <p>El desarrollo tecnol&oacute;gico de la plataforma utiliza Angular para la interfaz de usuario, FastAPI (Python) para la l&oacute;gica del servidor y PostgreSQL como motor de base de datos. La funcionalidad de mapas se implementa con Leaflet.js, una librer&iacute;a de c&oacute;digo abierto. Las transacciones econ&oacute;micas se realizan directamente entre el campesino y el comprador, sin intervenci&oacute;n de la plataforma, preservando la din&aacute;mica tradicional de la plaza de mercado.</p>
+
+    <p>Un principio fundamental del dise&ntilde;o arquitect&oacute;nico es que el sistema sea <strong>parametrizable y normalizado</strong>. La base de datos se estructura bajo la tercera forma normal (3NF) para eliminar redundancias, y ning&uacute;n valor cr&iacute;tico se encuentra hardcodeado en el c&oacute;digo fuente. Aspectos como los tipos de calidad del producto, las categor&iacute;as, los l&iacute;mites de ofertas flash, los puntajes para bloqueo de usuarios y los tiempos de expiraci&oacute;n se gestionan desde el panel de administraci&oacute;n sin requerir modificaciones al c&oacute;digo. Esta flexibilidad permite que el sistema se adapte a diferentes contextos operativos sin intervenci&oacute;n t&eacute;cnica.</p>
+
+    <p>El presente proyecto persigue tres beneficios fundamentales: incrementar los ingresos del campesino mediante la venta directa, reducir el desperdicio de alimentos y ofrecer a los consumidores bogotanos productos m&aacute;s frescos a precios m&aacute;s competitivos.</p>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- 2 PLANTEAMIENTO DEL PROBLEMA -->
+  <!-- ============================================================ -->
+  <div class="section">
+    <h1>2 Planteamiento del problema</h1>
+
+    <p>Los campesinos de Cundinamarca que comercializan sus productos en plazas de mercado como Paloquemao, 20 de Julio, 7 de Agosto y Abastos enfrentan tres problem&aacute;ticas estructurales que limitan su sostenibilidad econ&oacute;mica. En primer lugar, la incertidumbre sobre la demanda: el productor sale de su vereda sin conocer cu&aacute;ntos compradores asistir&aacute;n ni qu&eacute; cantidad de producto lograr&aacute; colocar, lo que genera jornadas en las que no se vende ni la mitad de la carga. En segundo lugar, la p&eacute;rdida de la cosecha no comercializada: al finalizar la jornada, el producto perecedero que no se vendi&oacute; debe desecharse, ya que se deteriora durante el transporte de regreso o simplemente no puede almacenarse, representando una p&eacute;rdida econ&oacute;mica directa y contribuyendo al desperdicio de alimentos. En tercer lugar, la intermediaci&oacute;n excesiva: los intermediarios absorben la mayor parte del margen de ganancia, de modo que el campesino recibe un precio reducido por su producto mientras el consumidor final paga un valor significativamente mayor.</p>
+
+    <p>En la actualidad no existe una herramienta tecnol&oacute;gica dise&ntilde;ada espec&iacute;ficamente para la din&aacute;mica de las plazas de mercado bogotanas. Las plataformas de comercio electr&oacute;nico generalistas como Mercado Libre u OLX no se adaptan a las necesidades particulares de este contexto: no permiten anunciar productos antes del viaje, no ofrecen geolocalizaci&oacute;n en tiempo real del puesto de venta, no facilitan el ajuste din&aacute;mico de precios ni la activaci&oacute;n de ofertas de &uacute;ltimo minuto para minimizar el retorno de mercanc&iacute;a no vendida.</p>
+
+    <p>Las <strong>causas</strong> de esta situaci&oacute;n se originan en la ausencia de canales de comunicaci&oacute;n directa entre productor y consumidor, la falta de herramientas tecnol&oacute;gicas accesibles y de bajo costo adaptadas al contexto rural, y un sistema de comercializaci&oacute;n que hist&oacute;ricamente ha dependido de intermediarios. Como <strong>efectos</strong> directos se observan la reducci&oacute;n sostenida de los ingresos de los campesinos, el desperdicio creciente de alimentos en las plazas de mercado, el desincentivo para que las nuevas generaciones contin&uacute;en con la actividad agr&iacute;cola y el consecuente aumento de la dependencia alimentaria de Bogot&aacute; respecto a grandes superficies comerciales.</p>
+
+    <p>Actualmente, el campesino inicia su jornada aproximadamente a las tres de la madrugada, alista la cosecha, la transporta durante dos o tres horas hasta Bogot&aacute;, paga por el derecho de uso del puesto en la plaza de mercado y espera la llegada de los compradores sin haber tenido la posibilidad de anunciar su oferta ni recibir pedidos anticipados. Carece de mecanismos para informar a los consumidores sobre los productos que lleva, sus precios y su ubicaci&oacute;n exacta dentro de la plaza. Al cierre de la jornada, el excedente no vendido debe ser desechado o regalado, y el producto que logra devolverse a la vereda se deteriora durante el trayecto, resultando igualmente en p&eacute;rdida total.</p>
+
+    <p>Si esta situaci&oacute;n persiste sin intervenci&oacute;n, es previsible que los j&oacute;venes del &aacute;mbito rural migren hacia las ciudades en b&uacute;squeda de oportunidades laborales distintas a la agricultura, profundizando el relevo generacional en el campo. Bogot&aacute; incrementar&aacute; su dependencia de las grandes cadenas de supermercados, y el desperdicio de alimentos en las plazas continuar&aacute; en aumento. La implementaci&oacute;n de una plataforma tecnol&oacute;gica que facilite la conexi&oacute;n directa entre productor y consumidor, permita la realizaci&oacute;n de pre&oacute;rdenes y la activaci&oacute;n de ofertas de &uacute;ltimo minuto, representa una alternativa viable para mitigar esta problem&aacute;tica.</p>
+
+    <h2>2.1 Formulaci&oacute;n o Pregunta de Investigaci&oacute;n</h2>
+
+    <p>&iquest;Es posible desarrollar una plataforma web accesible desde cualquier dispositivo m&oacute;vil, en la cual los campesinos publiquen anticipadamente los productos que llevar&aacute;n a la plaza, los consumidores realicen apartados, y mediante un mapa en tiempo real junto con ofertas de &uacute;ltimo minuto se logre reducir el desperdicio de alimentos y aumentar los ingresos del productor a trav&eacute;s de la venta directa sin intermediarios?</p>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- 3 OBJETIVOS -->
+  <!-- ============================================================ -->
+  <div class="section">
+    <h1>3 Objetivos</h1>
+
+    <h2>3.1 Objetivo general</h2>
+    <p>Desarrollar una plataforma web que funcione en dispositivos m&oacute;viles, denominada MercadoCampesino, con el prop&oacute;sito de facilitar la comercializaci&oacute;n directa entre campesinos de Cundinamarca y consumidores de Bogot&aacute;, mediante funcionalidades de pre&oacute;rdenes, geolocalizaci&oacute;n en tiempo real del puesto de venta, ajuste din&aacute;mico de precios y activaci&oacute;n de ofertas flash, contribuyendo as&iacute; a la reducci&oacute;n del desperdicio de alimentos y al incremento de los ingresos del productor.</p>
+
+    <h2>3.2 Objetivos espec&iacute;ficos</h2>
+    <ol class="num-list">
+      <li>Identificar las necesidades y din&aacute;micas de comercializaci&oacute;n de los campesinos en las plazas de mercado de Bogot&aacute;, as&iacute; como las expectativas de los consumidores, mediante trabajo de campo que permita definir los requisitos funcionales de la plataforma.</li>
+      <li>Dise&ntilde;ar e implementar una arquitectura de software basada en Angular, FastAPI y PostgreSQL que integre los m&oacute;dulos de publicaci&oacute;n de viajes, pre&oacute;rdenes, geolocalizaci&oacute;n en mapa interactivo y ofertas flash, garantizando una base de datos normalizada bajo tercera forma normal y un sistema parametrizable desde paneles de administraci&oacute;n.</li>
+      <li>Evaluar la funcionalidad y usabilidad de la plataforma mediante pruebas con usuarios reales en una plaza de mercado de Bogot&aacute;, con el fin de medir su impacto en la reducci&oacute;n de p&eacute;rdida de producto y en la satisfacci&oacute;n de las partes involucradas.</li>
+    </ol>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- 4 JUSTIFICACIÓN -->
+  <!-- ============================================================ -->
+  <div class="section">
+    <h1>4 Justificaci&oacute;n</h1>
+
+    <p>El desarrollo de MercadoCampesino se fundamenta en la necesidad de transformar la din&aacute;mica de comercializaci&oacute;n en las plazas de mercado de Bogot&aacute;, donde la asimetr&iacute;a de informaci&oacute;n y la intervenci&oacute;n de intermediarios generan ineficiencias que afectan tanto al productor como al consumidor. Desde una perspectiva social, la plataforma busca restablecer el equilibrio en la cadena de valor, permitiendo que el campesino reciba un precio justo por su trabajo y que el consumidor acceda a productos frescos a un costo razonable. La eliminaci&oacute;n de intermediarios redunda en un beneficio directo para ambas partes, fortaleciendo el tejido econ&oacute;mico local y promoviendo la sostenibilidad de la agricultura familiar en Cundinamarca.</p>
+
+    <p>En el &aacute;mbito ambiental, la reducci&oacute;n del desperdicio de alimentos constituye una de las prioridades globales m&aacute;s apremiantes. Seg&uacute;n la Organizaci&oacute;n de las Naciones Unidas para la Alimentaci&oacute;n y la Agricultura (FAO), aproximadamente un tercio de los alimentos producidos en el mundo se pierde o desperdicia. MercadoCampesino contribuye a mitigar este problema al permitir que el campesino anticipe su oferta y que, mediante las ofertas flash, logre colocar el producto que de otra manera ser&iacute;a desechado al finalizar la jornada. Cada kilogramo de alimento que se vende gracias a la plataforma es un kilogramo que no se desperdicia, con el consiguiente impacto positivo en la huella ecol&oacute;gica asociada a la producci&oacute;n y transporte de alimentos.</p>
+
+    <p>Desde el punto de vista tecnol&oacute;gico y acad&eacute;mico, el proyecto resulta viable porque se sustenta en herramientas modernas, de c&oacute;digo abierto y sin costo de licenciamiento: Angular para el frontend, FastAPI para el backend, PostgreSQL para la base de datos y Leaflet.js para la cartograf&iacute;a. La decisi&oacute;n de no gestionar pagos dentro de la plataforma elimina barreras regulatorias y de seguridad que habr&iacute;an complicado significativamente el desarrollo, permitiendo enfocar los recursos en las funcionalidades que generan valor directo al usuario. El car&aacute;cter parametrizable del sistema garantiza que la plataforma pueda adaptarse a cambios en el entorno operativo sin requerir modificaciones al c&oacute;digo fuente, lo que constituye un diferenciador importante frente a soluciones existentes.</p>
+
+    <p>Cabe destacar que en el contexto colombiano actual no existe una plataforma que integre todas las funcionalidades propuestas &mdash;pre&oacute;rdenes anticipadas, geolocalizaci&oacute;n en vivo, calidades diferenciadas por producto y ofertas flash&mdash; dise&ntilde;ada espec&iacute;ficamente para las plazas de mercado. Esta ausencia de alternativas consolida la pertinencia del proyecto y su potencial para generar un impacto significativo en el sector agr&iacute;cola local.</p>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- 5 ALCANCES Y LIMITACIONES -->
+  <!-- ============================================================ -->
+  <div class="section">
+    <h1>5 Alcances y Limitaciones del Proyecto</h1>
+
+    <h2>Qu&eacute; va a incluir</h2>
+    <ul class="bullet-list">
+      <li>Una p&aacute;gina principal que explica el proyecto y un mapa donde cualquier persona puede ver los campesinos activos hoy.</li>
+      <li>Registro para campesinos, con su perfil, publicaci&oacute;n de viajes, cambios de precios en vivo, ubicaci&oacute;n en el mapa, ofertas flash e historial de ventas.</li>
+      <li>Registro para compradores, con mapa interactivo, b&uacute;squeda de productos, apartados y rese&ntilde;as.</li>
+      <li>Panel para administradores: manejar usuarios, categor&iacute;as, moderar rese&ntilde;as y ver reportes.</li>
+      <li>Panel para superadmin: todo configurable desde la interfaz gr&aacute;fica (l&iacute;mites de ofertas, tiempos de expiraci&oacute;n, puntajes de bloqueo, etc.) sin modificar el c&oacute;digo fuente, adem&aacute;s de manejo de claves de API y registros de actividad.</li>
+    </ul>
+    <p>La plataforma funciona en cualquier dispositivo m&oacute;vil (Android y iOS) sin necesidad de descarga desde tiendas de aplicaciones, al ser una PWA instalable desde el navegador.</p>
+
+    <h2>Qu&eacute; NO va a incluir</h2>
+    <ul class="bullet-list">
+      <li>La plataforma <strong>no gestiona pagos</strong>. La transacci&oacute;n se realiza directamente entre el campesino y el comprador, preservando la din&aacute;mica tradicional de la plaza.</li>
+      <li>La verificaci&oacute;n de los campesinos se realiza mediante foto de la c&eacute;dula, permitiendo que la plataforma mantenga un registro confiable de los productores; no se contempla verificaci&oacute;n presencial en terreno.</li>
+      <li>El alcance geogr&aacute;fico se limita a campesinos de Cundinamarca que venden en plazas de Bogot&aacute;.</li>
+      <li>Las notificaciones son las est&aacute;ndar del navegador, no notificaciones push nativas.</li>
+      <li>No se incluye una aplicaci&oacute;n nativa para Android o iOS, aunque la PWA es instalable desde el navegador. Se generar&aacute; un APK como empaquetado alternativo.</li>
+      <li>Las pruebas se realizar&aacute;n con un grupo acotado de usuarios, dado el alcance acad&eacute;mico y los recursos disponibles.</li>
+      <li>No existe un sistema de chat entre campesino y comprador, &uacute;nicamente rese&ntilde;as p&uacute;blicas posteriores a la compra, para evitar que el campesino deba atender el tel&eacute;fono mientras atiende su puesto.</li>
+      <li>No se incorpora inteligencia artificial ni recomendaciones autom&aacute;ticas en esta versi&oacute;n, aunque la arquitectura basada en Python facilitar&iacute;a su incorporaci&oacute;n futura.</li>
+    </ul>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- 6 MARCO REFERENCIAL -->
+  <!-- ============================================================ -->
+  <div class="section">
+    <h1>6 Marco Referencial</h1>
+
+    <p>El marco referencial constituye la base te&oacute;rica y contextual sobre la cual se sustenta el desarrollo de MercadoCampesino. En &eacute;l se recopilan y analizan investigaciones previas, conceptos fundamentales, el entorno geogr&aacute;fico y social donde se inserta el proyecto, y las disposiciones legales que lo enmarcan. Este apartado permite comprender el estado del arte de las plataformas de comercio directo entre productores y consumidores, as&iacute; como identificar los vac&iacute;os existentes que el presente proyecto busca cubrir.</p>
+
+    <h2>6.1 Antecedentes</h2>
+
+    <p>El comercio electr&oacute;nico de alimentos ha experimentado un crecimiento acelerado en la &uacute;ltima d&eacute;cada. Plataformas como Mercado Libre, OLX y Facebook Marketplace permiten la compra y venta de productos agr&iacute;colas, pero ninguna de ellas est&aacute; dise&ntilde;ada espec&iacute;ficamente para la din&aacute;mica de las plazas de mercado colombianas, donde el vendedor es un productor que viaja desde su vereda, ofrece productos perecederos y necesita herramientas como la geolocalizaci&oacute;n en tiempo real y las ofertas de &uacute;ltimo minuto.</p>
+
+    <p>A nivel internacional, existen iniciativas como <em>Farmers Market Online</em> en Estados Unidos y <em>La Ruche qui dit Oui</em> en Francia, que conectan productores locales con consumidores mediante pedidos anticipados y puntos de entrega. Sin embargo, estas plataformas operan bajo modelos log&iacute;sticos distintos: el productor entrega en un punto centralizado y no vende directamente en una plaza de mercado. Tampoco incorporan la funcionalidad de geolocalizaci&oacute;n en vivo ni ofertas flash para evitar el retorno de mercanc&iacute;a no vendida.</p>
+
+    <p>En Colombia, la Secretar&iacute;a de Desarrollo Econ&oacute;mico de Bogot&aacute; ha impulsado ferias campesinas y rutas cortas de comercializaci&oacute;n, pero estas iniciativas son presenciales y no cuentan con un componente tecnol&oacute;gico que permita la interacci&oacute;n digital entre productor y consumidor. Proyectos acad&eacute;micos previos en la CUN han abordado temas de comercio electr&oacute;nico, aunque ninguno se ha enfocado en la problem&aacute;tica espec&iacute;fica de la p&eacute;rdida de cosecha en plazas de mercado ni en el modelo de venta directa sin intermediarios con geolocalizaci&oacute;n en tiempo real.</p>
+
+    <p>De esta revisi&oacute;n se concluye que existe un vac&iacute;o claro en el ecosistema digital colombiano: no hay una plataforma accesible desde cualquier dispositivo m&oacute;vil que combine pre&oacute;rdenes anticipadas, geolocalizaci&oacute;n en vivo del puesto de venta, calidades diferenciadas por producto y ofertas flash, dise&ntilde;ada espec&iacute;ficamente para las plazas de mercado de Bogot&aacute;. MercadoCampesino busca llenar ese vac&iacute;o.</p>
+
+    <h2>6.2 Marco te&oacute;rico</h2>
+
+    <p>El marco te&oacute;rico de esta investigaci&oacute;n se sustenta en tres pilares fundamentales: las teor&iacute;as de comercio electr&oacute;nico aplicado a la agricultura, los modelos de venta directa productor-consumidor y los sistemas de informaci&oacute;n geogr&aacute;fica aplicados a mercados locales.</p>
+
+    <p>En primer lugar, el comercio electr&oacute;nico agr&iacute;cola o <em>agri-ecommerce</em> se define como el uso de plataformas digitales para facilitar la comercializaci&oacute;n de productos del campo. Investigaciones como las de Verhoef et al. (2015) se&ntilde;alan que la adopci&oacute;n de tecnolog&iacute;as digitales en la agricultura puede reducir significativamente los costos de transacci&oacute;n y mejorar el acceso a mercados. No obstante, la tasa de adopci&oacute;n en comunidades rurales de pa&iacute;ses en desarrollo sigue siendo baja debido a barreras de alfabetizaci&oacute;n digital y acceso a internet.</p>
+
+    <p>En segundo lugar, el modelo de venta directa o <em>farm-to-table</em> elimina la intervenci&oacute;n de intermediarios, permitiendo que el productor capture un mayor margen de ganancia y que el consumidor pague un precio m&aacute;s bajo. Estudios de Renting et al. (2003) demuestran que las redes alimentarias alternativas (<em>alternative food networks</em>) fortalecen la econom&iacute;a local y generan confianza entre las partes al establecer relaciones cara a cara. MercadoCampesino adopta este modelo, pero lo potencia mediante herramientas digitales que facilitan el encuentro entre oferta y demanda.</p>
+
+    <p>En tercer lugar, los sistemas de informaci&oacute;n geogr&aacute;fica (SIG) y el mapeo web permiten representar visualmente la ubicaci&oacute;n de los vendedores en un espacio f&iacute;sico. Leaflet.js, la librer&iacute;a de c&oacute;digo abierto utilizada en este proyecto, ha sido ampliamente adoptada por su ligereza y facilidad de integraci&oacute;n. La combinaci&oacute;n de mapas interactivos con datos de productos en tiempo real constituye una innovaci&oacute;n pr&aacute;ctica para las plazas de mercado, donde la ubicaci&oacute;n exacta del puesto es un factor determinante para la venta.</p>
+
+    <h2>6.3 Marco Conceptual</h2>
+
+    <p>El proyecto se desarrolla en el contexto de la ciudad de Bogot&aacute; y los municipios productores de Cundinamarca. Cundinamarca es uno de los departamentos agr&iacute;colas m&aacute;s importantes de Colombia, con una producci&oacute;n diversa que incluye frutas, verduras, hortalizas, tub&eacute;rculos y l&aacute;cteos. Diariamente, cientos de campesinos viajan desde municipios como Facatativ&aacute;, Zipaquir&aacute;, Choach&iacute;, Sibat&eacute;, Ubaque, F&oacute;meque y Chipaque hacia las plazas de mercado de Bogot&aacute;, recorriendo distancias de entre una y cuatro horas. El trabajo de campo se realiz&oacute; en dos plazas representativas: la Plaza 20 de Julio, ubicada en la localidad de San Crist&oacute;bal, y la Central de Abastos (Abastos), en la localidad de Kennedy, donde se entrevist&oacute; a 23 campesinos que comercializan sus productos directamente al consumidor.</p>
+
+    <p>Para efectos de esta investigaci&oacute;n, se definen los siguientes conceptos clave:</p>
+
+    <p><strong>Plataforma web progresiva (PWA):</strong> Aplicaci&oacute;n web que puede instalarse en cualquier dispositivo m&oacute;vil sin pasar por una tienda de aplicaciones, ofreciendo una experiencia similar a una app nativa. MercadoCampesino es una PWA accesible desde cualquier navegador.</p>
+
+    <p><strong>Preorden o apartado:</strong> Mecanismo mediante el cual un consumidor reserva un producto antes de que el campesino llegue a la plaza, asegurando su disponibilidad y evitando que el productor cargue mercanc&iacute;a que no tendr&aacute; demanda.</p>
+
+    <p><strong>Oferta flash:</strong> Descuento temporal activado por el campesino al final de la jornada para liquidar el producto no vendido, evitando su desperdicio. Se diferencia de una oferta regular por su car&aacute;cter urgente y por estar limitada en el tiempo.</p>
+
+    <p><strong>Calidad del producto:</strong> Clasificaci&oacute;n del estado del producto (primera, segunda, tercera calidad) que permite al campesino ofrecer precios diferenciados seg&uacute;n la apariencia y frescura, reduciendo as&iacute; la p&eacute;rdida de productos con imperfecciones est&eacute;ticas.</p>
+
+    <p><strong>Parametrizaci&oacute;n:</strong> Capacidad del sistema para modificar su comportamiento mediante valores almacenados en la base de datos, sin requerir cambios en el c&oacute;digo fuente. Esto permite que aspectos como l&iacute;mites de ofertas, tiempos de expiraci&oacute;n y puntajes de bloqueo sean ajustables desde la interfaz del sistema.</p>
+
+    <p><strong>Intermediario:</strong> Agente que compra productos al campesino para revenderlos al consumidor final, absorbiendo una parte significativa del margen de ganancia. La plataforma busca eliminar este rol en la cadena de comercializaci&oacute;n.</p>
+
+    <h2>6.4 Marco legal</h2>
+
+    <p>El desarrollo y operaci&oacute;n de MercadoCampesino se enmarca en las siguientes disposiciones legales colombianas:</p>
+
+    <p><strong>Ley 1581 de 2012:</strong> Por la cual se dictan disposiciones generales para la protecci&oacute;n de datos personales. La plataforma debe informar a los usuarios sobre el tratamiento de sus datos, obtener su consentimiento y garantizar su derecho a conocer, actualizar y rectificar la informaci&oacute;n personal almacenada.</p>
+
+    <p><strong>Ley 527 de 1999:</strong> Define y reglamenta el comercio electr&oacute;nico, los mensajes de datos y las firmas digitales en Colombia. Si bien MercadoCampesino no gestiona pagos ni transacciones econ&oacute;micas dentro de la plataforma, las pre&oacute;rdenes realizadas a trav&eacute;s del sistema constituyen mensajes de datos con validez legal.</p>
+
+    <p><strong>Decreto 1074 de 2015:</strong> Reglamenta el comercio electr&oacute;nico y las actividades comerciales en l&iacute;nea, estableciendo obligaciones para los proveedores de servicios de intermediaci&oacute;n digital.</p>
+
+    <p><strong>Resoluci&oacute;n 1169 de 2020 del INVIMA:</strong> Establece los requisitos sanitarios para la comercializaci&oacute;n de alimentos en plazas de mercado. La plataforma no interfiere en el cumplimiento de estos requisitos, que son responsabilidad directa del vendedor, pero puede contribuir a la trazabilidad al registrar qui&eacute;n vendi&oacute; qu&eacute; producto y cu&aacute;ndo.</p>
+
+    <p><strong>Estatuto Tributario:</strong> Las ventas realizadas por campesinos en plazas de mercado est&aacute;n sujetas al r&eacute;gimen simplificado del impuesto sobre la renta. MercadoCampesino no act&uacute;a como agente de retenci&oacute;n ni como responsable de obligaciones tributarias, pero puede generar reportes de ventas que faciliten al campesino el cumplimiento de sus deberes formales.</p>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- 7 METODOLOGÍA -->
+  <!-- ============================================================ -->
+  <div class="section">
+    <h1>7 Metodolog&iacute;a</h1>
+
+    <p>La metodolog&iacute;a empleada en este proyecto integra elementos cualitativos y cuantitativos para abordar de manera integral el problema de investigaci&oacute;n. Se describe a continuaci&oacute;n el enfoque, tipo, dise&ntilde;o, poblaci&oacute;n, instrumentos, cronograma y presupuesto que guiaron el desarrollo de MercadoCampesino.</p>
+
+    <h2>7.1 Enfoque de investigaci&oacute;n</h2>
+
+    <p>Esta investigaci&oacute;n adopta un <strong>enfoque mixto</strong> que combina m&eacute;todos cualitativos y cuantitativos. El componente cualitativo permite comprender en profundidad las din&aacute;micas de comercializaci&oacute;n en las plazas de mercado, las necesidades de los campesinos y las expectativas de los consumidores, a trav&eacute;s de entrevistas semiestructuradas y observaci&oacute;n directa. El componente cuantitativo, por su parte, posibilita medir variables como el volumen de producto no vendido, los precios promedio, el tiempo de permanencia en la plaza y la tasa de adopci&oacute;n de la plataforma, mediante encuestas y registros del sistema.</p>
+
+    <p>El enfoque mixto resulta especialmente pertinente para este proyecto porque el fen&oacute;meno estudiado tiene dimensiones sociales (relaciones entre campesinos y consumidores, confianza, tradici&oacute;n) y dimensiones t&eacute;cnicas (usabilidad, rendimiento, aceptaci&oacute;n tecnol&oacute;gica) que requieren m&eacute;todos de indagaci&oacute;n complementarios.</p>
+
+    <p>Adicionalmente, el proyecto se enmarca en la <strong>investigaci&oacute;n aplicada</strong>, ya que no busca generar teor&iacute;a nueva sino solucionar un problema pr&aacute;ctico y concreto: la p&eacute;rdida de cosecha y la intermediaci&oacute;n excesiva en las plazas de mercado de Bogot&aacute;. El desarrollo de la plataforma constituye tanto el medio como el fin de la investigaci&oacute;n, pues su implementaci&oacute;n y prueba permiten validar la hip&oacute;tesis de que una herramienta tecnol&oacute;gica puede mitigar la problem&aacute;tica identificada.</p>
+
+    <h2>7.2 Tipos de investigaci&oacute;n</h2>
+
+    <p>Se emplean los siguientes tipos de investigaci&oacute;n de manera complementaria:</p>
+
+    <p><strong>Investigaci&oacute;n descriptiva:</strong> Se describe el estado actual de la comercializaci&oacute;n en las plazas de mercado de Bogot&aacute;, caracterizando los actores involucrados (campesinos, consumidores, intermediarios), los vol&uacute;menes de producto, los precios y las din&aacute;micas de venta. Esta descripci&oacute;n sirve como l&iacute;nea de base para evaluar el impacto de la plataforma.</p>
+
+    <p><strong>Investigaci&oacute;n correlacional:</strong> Se analiza la relaci&oacute;n entre el uso de la plataforma y variables como el porcentaje de producto vendido, el tiempo promedio de permanencia en la plaza y la satisfacci&oacute;n del vendedor. Se busca establecer si existe una correlaci&oacute;n positiva entre la adopci&oacute;n de MercadoCampesino y la mejora de estos indicadores.</p>
+
+    <p><strong>Investigaci&oacute;n exploratoria:</strong> Dado que no existen antecedentes de plataformas similares en el contexto colombiano, parte de la investigaci&oacute;n tiene un car&aacute;cter exploratorio, especialmente en lo relacionado con la adaptaci&oacute;n de la tecnolog&iacute;a a las condiciones de conectividad y alfabetizaci&oacute;n digital de los campesinos.</p>
+
+    <h2>7.3 Dise&ntilde;os de Investigaci&oacute;n</h2>
+
+    <p>El dise&ntilde;o de investigaci&oacute;n es de tipo <strong>no experimental, longitudinal y de panel</strong>. Es no experimental porque no se manipulan deliberadamente las variables independientes, sino que se observa el fen&oacute;meno en su contexto natural. Es longitudinal porque se realiza un seguimiento a lo largo del tiempo, desde la l&iacute;nea de base antes de la implementaci&oacute;n hasta las mediciones posteriores a la adopci&oacute;n de la plataforma. Es de panel porque se sigue al mismo grupo de campesinos y consumidores durante todo el per&iacute;odo de estudio.</p>
+
+    <p>El dise&ntilde;o incluye las siguientes fases:</p>
+    <ul class="bullet-list">
+      <li><strong>Fase 1 (Diagn&oacute;stico):</strong> Aplicaci&oacute;n de encuestas y entrevistas para establecer la l&iacute;nea de base sobre vol&uacute;menes de venta, p&eacute;rdida de producto y precios.</li>
+      <li><strong>Fase 2 (Implementaci&oacute;n):</strong> Desarrollo e implementaci&oacute;n de la plataforma conforme a los requisitos identificados en la fase anterior.</li>
+      <li><strong>Fase 3 (Prueba):</strong> Prueba piloto con un grupo de campesinos y consumidores durante un per&iacute;odo de cuatro semanas, con registro de m&eacute;tricas de uso.</li>
+      <li><strong>Fase 4 (Evaluaci&oacute;n):</strong> An&aacute;lisis de los datos recolectados y comparaci&oacute;n con la l&iacute;nea de base para determinar el impacto de la plataforma.</li>
+    </ul>
+
+    <h2>7.4 Poblaci&oacute;n y muestra</h2>
+
+    <p>La <strong>poblaci&oacute;n</strong> del estudio est&aacute; conformada por dos grupos:</p>
+    <ul class="bullet-list">
+      <li><strong>Campesinos:</strong> Productores agropecuarios de Cundinamarca que comercializan sus productos en las plazas de mercado de Bogot&aacute;. Se estima una poblaci&oacute;n de aproximadamente 15.000 campesinos que semanalmente asisten a las plazas.</li>
+      <li><strong>Consumidores:</strong> Habitantes de Bogot&aacute; que adquieren alimentos en las plazas de mercado. Se trata de una poblaci&oacute;n urbana diversa en t&eacute;rminos de edad, nivel socioecon&oacute;mico y ubicaci&oacute;n.</li>
+    </ul>
+
+    <p>La <strong>muestra</strong> se selecciona mediante un muestreo no probabil&iacute;stico por conveniencia, considerando la accesibilidad y disponibilidad de los participantes. Para la fase de diagn&oacute;stico, se realizaron entrevistas a 23 campesinos en las plazas 20 de Julio y Abastos, as&iacute; como a 40 consumidores. Para la prueba piloto, se seleccionar&aacute;n 10 campesinos y 50 consumidores que voluntariamente acepten utilizar la plataforma durante el per&iacute;odo de prueba.</p>
+
+    <h2>7.5 Plan de an&aacute;lisis de la informaci&oacute;n</h2>
+
+    <p>La informaci&oacute;n recolectada se analiza mediante t&eacute;cnicas cualitativas y cuantitativas. Los datos cualitativos provenientes de entrevistas y observaciones se procesan mediante an&aacute;lisis de contenido, identificando categor&iacute;as tem&aacute;ticas recurrentes. Los datos cuantitativos de encuestas y registros del sistema se analizan con estad&iacute;stica descriptiva (medias, frecuencias, porcentajes) y correlacional (coeficiente de Pearson) para determinar relaciones entre variables.</p>
+
+    <h3>7.5.1 Instrumentos de recolecci&oacute;n de informaci&oacute;n</h3>
+
+    <p>Se emplean los siguientes instrumentos:</p>
+    <ul class="bullet-list">
+      <li><strong>Entrevista estructurada a campesinos:</strong> Cuestionario de 15 preguntas aplicado de forma presencial a los 23 campesinos, indagando sobre vol&uacute;menes de producci&oacute;n, frecuencia de viaje a Bogot&aacute;, porcentaje de producto no vendido, precios, uso de tecnolog&iacute;a y disposici&oacute;n a adoptar una plataforma digital gratuita.</li>
+      <li><strong>Entrevista estructurada a consumidores:</strong> Cuestionario de 12 preguntas aplicado a 40 consumidores, indagando sobre frecuencia de visita a plazas, productos que busca, precio que paga, experiencia de compra y disposici&oacute;n a usar la plataforma.</li>
+      <li><strong>Entrevista semiestructurada:</strong> Gu&iacute;a de entrevista con 10 preguntas abiertas aplicada a 5 de los 23 campesinos para profundizar en sus experiencias y expectativas.</li>
+      <li><strong>Registros autom&aacute;ticos del sistema:</strong> La propia plataforma registra m&eacute;tricas de uso: n&uacute;mero de publicaciones, pre&oacute;rdenes realizadas, ofertas flash activadas, productos marcados como vendidos y geolocalizaciones registradas.</li>
+    </ul>
+
+    <h2>7.6 Cronograma</h2>
+
+    <div class="table-wrap">
+    <table>
+      <tr>
+        <th>Fase</th>
+        <th>Actividades</th>
+        <th>Duraci&oacute;n</th>
+        <th>Per&iacute;odo</th>
+      </tr>
+      <tr>
+        <td>Diagn&oacute;stico</td>
+        <td>Entrevistas, observaci&oacute;n en plazas 20 de Julio y Abastos</td>
+        <td>2 semanas</td>
+        <td>Junio 2026</td>
+      </tr>
+      <tr>
+        <td>Dise&ntilde;o</td>
+        <td>Arquitectura de software, modelado BD, prototipos</td>
+        <td>4 semanas</td>
+        <td>Julio 2026</td>
+      </tr>
+      <tr>
+        <td>Desarrollo</td>
+        <td>Implementaci&oacute;n backend y frontend, integraci&oacute;n</td>
+        <td>6 semanas</td>
+        <td>Julio - Agosto 2026</td>
+      </tr>
+      <tr>
+        <td>Pruebas</td>
+        <td>Pruebas unitarias y de integraci&oacute;n, correcci&oacute;n de errores</td>
+        <td>2 semanas</td>
+        <td>Septiembre 2026</td>
+      </tr>
+      <tr>
+        <td>Documentaci&oacute;n</td>
+        <td>Manual de usuario, informe final, sustentaci&oacute;n</td>
+        <td>2 semanas</td>
+        <td>Septiembre 2026</td>
+      </tr>
+    </table>
+    <p style="font-size:0.8rem; color:#777; margin-top:8px;">* Fecha l&iacute;mite de entrega: 20 de septiembre de 2026</p>
+    </div>
+
+    <h2>7.7 Presupuesto</h2>
+
+    <div class="table-wrap">
+    <table>
+      <tr>
+        <th>Rubro</th>
+        <th>Descripci&oacute;n</th>
+        <th>Valor estimado</th>
+      </tr>
+      <tr>
+        <td>Servidores</td>
+        <td>Hosting backend (Render) + frontend (Vercel) - plan gratuito</td>
+        <td>$0</td>
+      </tr>
+      <tr>
+        <td>Base de datos</td>
+        <td>PostgreSQL en Supabase - capa gratuita</td>
+        <td>$0</td>
+      </tr>
+      <tr>
+        <td>Dominio</td>
+        <td>Nombre de dominio mercadocampesino.co - 1 a&ntilde;o</td>
+        <td>$80.000 COP</td>
+      </tr>
+      <tr>
+        <td>Herramientas</td>
+        <td>VS Code, Postman, Git, Figma - licencias gratuitas</td>
+        <td>$0</td>
+      </tr>
+      <tr>
+        <td>Transporte</td>
+        <td>Visitas a plazas de mercado para trabajo de campo</td>
+        <td>$200.000 COP</td>
+      </tr>
+      <tr>
+        <td>Imprevistos</td>
+        <td>10 % del total</td>
+        <td>$28.000 COP</td>
+      </tr>
+      <tr>
+        <td><strong>Total</strong></td>
+        <td></td>
+        <td><strong>$308.000 COP</strong></td>
+      </tr>
+    </table>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- 8 DESARROLLO DE LAS FASES DEL PROYECTO -->
+  <!-- ============================================================ -->
+  <div class="section">
+    <h1>8 Desarrollo de las fases del proyecto</h1>
+
+    <p>A continuaci&oacute;n se describe el desarrollo de cada una de las fases contempladas en la metodolog&iacute;a.</p>
+
+    <h2>Fase 1: Diagn&oacute;stico y levantamiento de requisitos</h2>
+    <p>Entre el 15 y el 26 de junio de 2026, se realizaron visitas a las plazas 20 de Julio y Abastos en Bogot&aacute;. Se entrevist&oacute; a 23 campesinos y 40 consumidores, aplicando un cuestionario estructurado de forma presencial, y se realizaron entrevistas semiestructuradas a 5 campesinos para profundizar en sus experiencias. Los hallazgos principales fueron: el 73 % de los campesinos report&oacute; perder entre el 10 % y el 30 % de su producto al final de la jornada; el 87 % manifest&oacute; inter&eacute;s en usar una plataforma gratuita que le permita anunciar sus productos antes de llegar a la plaza; el 91 % de los consumidores indic&oacute; que le gustar&iacute;a saber con anticipaci&oacute;n qu&eacute; productos est&aacute;n disponibles. A partir de estos hallazgos se definieron los requisitos funcionales y no funcionales del sistema, priorizando que la plataforma sea gratuita para campesinos y consumidores, la facilidad de uso, la accesibilidad desde dispositivos de gama baja y la no gesti&oacute;n de pagos dentro de la plataforma.</p>
+
+    <h2>Fase 2: Dise&ntilde;o arquitect&oacute;nico y modelado</h2>
+    <p>Con base en los requisitos identificados, se dise&ntilde;&oacute; la arquitectura del sistema utilizando Angular 19 para el frontend, FastAPI con Python 3.14 para el backend y PostgreSQL como motor de base de datos. Se defini&oacute; un esquema de base de datos normalizado en tercera forma normal (3NF), con 14 modelos ORM que incluyen tablas para usuarios, perfiles, permisos, productos, categor&iacute;as, viajes, ubicaciones, ofertas flash, pre&oacute;rdenes, rese&ntilde;as, tickets de soporte y configuraci&oacute;n del sistema. Se dise&ntilde;&oacute; adem&aacute;s un sistema de permisos por perfil (superadmin, admin, campesino, consumidor, bloqueado) que permite un control granular de acceso a las funcionalidades.</p>
+
+    <h2>Fase 3: Implementaci&oacute;n y desarrollo</h2>
+    <p>El desarrollo se realizar&aacute; en ciclos iterativos de dos semanas cada uno. En el backend se implementar&aacute;n 13 routers con m&aacute;s de 63 endpoints que cubren autenticaci&oacute;n JWT, gesti&oacute;n de usuarios, productos, viajes, pre&oacute;rdenes, ofertas flash, mapa, rese&ntilde;as, perfiles, permisos, configuraci&oacute;n del sistema y soporte t&eacute;cnico. Se utilizar&aacute; bcrypt directamente (sin passlib) para el hash de contrase&ntilde;as, garantizando compatibilidad con Python 3.14. En el frontend se desarrollar&aacute;n 12 componentes de p&aacute;gina (home, login, register, pending, admin, superadmin, campesino, consumidor, mapa, viaje, perfil, soporte) utilizando componentes standalone de Angular 19 con sintaxis @if/@for y Bootstrap + Bootswatch Flatly para los estilos.</p>
+
+    <h2>Fase 4: Pruebas y validaci&oacute;n</h2>
+    <p>Se realizar&aacute;n pruebas unitarias y de integraci&oacute;n en cada m&oacute;dulo para garantizar el correcto funcionamiento de la plataforma. Se verificar&aacute; la autenticaci&oacute;n JWT, el registro de usuarios con foto de c&eacute;dula, la publicaci&oacute;n de viajes, la geolocalizaci&oacute;n en el mapa, la activaci&oacute;n de ofertas flash, el sistema de pre&oacute;rdenes y el m&oacute;dulo de soporte. Las pruebas se documentar&aacute;n y los errores encontrados se corregir&aacute;n antes de la entrega final.</p>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- 9 RESULTADOS ESPERADOS -->
+  <!-- ============================================================ -->
+  <div class="section">
+    <h1>9 Resultados esperados</h1>
+
+    <p>Se espera que la implementaci&oacute;n de MercadoCampesino produzca los siguientes resultados una vez la plataforma sea puesta en funcionamiento:</p>
+
+    <h2>Reducci&oacute;n de la p&eacute;rdida de producto</h2>
+    <p>Con base en los hallazgos del diagn&oacute;stico, donde el 73 % de los campesinos report&oacute; perder entre el 10 % y el 30 % de su producto al final de la jornada, se espera que la combinaci&oacute;n de pre&oacute;rdenes anticipadas y ofertas flash permita reducir significativamente el volumen de producto no vendido. Las pre&oacute;rdenes facilitar&aacute;n que el campesino dimensione la demanda antes de viajar, mientras que las ofertas flash ofrecer&aacute;n una &uacute;ltima oportunidad de venta para el producto que de otra manera se desperdiciar&iacute;a.</p>
+
+    <h2>Incremento de ingresos del campesino</h2>
+    <p>Al eliminar la intermediaci&oacute;n en las transacciones realizadas a trav&eacute;s de la plataforma y al permitir la venta de calidades diferenciadas a precios distintos, se proyecta que los campesinos incrementen el precio promedio recibido por kilogramo vendido. La venta directa sin intermediarios permite que el productor capture la totalidad del margen de ganancia.</p>
+
+    <h2>Aceptaci&oacute;n tecnol&oacute;gica</h2>
+    <p>Se espera que la plataforma tenga una buena tasa de adopci&oacute;n entre los campesinos, dado que el 87 % de los entrevistados manifest&oacute; inter&eacute;s en usar una herramienta gratuita que les permita anunciar sus productos. El dise&ntilde;o como PWA, sin necesidad de instalaci&oacute;n desde tiendas de aplicaciones, y la interfaz simplificada para dispositivos de gama baja ser&aacute;n factores clave para facilitar la adopci&oacute;n.</p>
+
+    <h2>Satisfacci&oacute;n de consumidores</h2>
+    <p>Se prev&eacute; que los consumidores valoren especialmente la geolocalizaci&oacute;n en tiempo real, que les permitir&aacute; encontrar r&aacute;pidamente el puesto del campesino dentro de la plaza, y la posibilidad de realizar pre&oacute;rdenes desde su hogar para asegurar la disponibilidad de los productos que desean.</p>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- 10 CONCLUSIONES -->
+  <!-- ============================================================ -->
+  <div class="section">
+    <h1>10 Conclusiones</h1>
+
+    <p>El planteamiento y desarrollo de MercadoCampesino permite proyectar que una plataforma web accesible desde cualquier dispositivo m&oacute;vil puede contribuir de manera significativa a la soluci&oacute;n de problemas estructurales en la comercializaci&oacute;n de productos agr&iacute;colas en las plazas de mercado de Bogot&aacute;. A continuaci&oacute;n se presentan las conclusiones de la propuesta:</p>
+
+    <ol class="num-list">
+      <li><strong>Reducci&oacute;n del desperdicio de alimentos:</strong> Se espera que la combinaci&oacute;n de pre&oacute;rdenes anticipadas y ofertas flash reduzca el volumen de producto no vendido, a partir del diagn&oacute;stico que indica que el 73 % de los campesinos pierde entre el 10 % y el 30 % de su cosecha al final de la jornada. La tecnolog&iacute;a puede incidir positivamente en uno de los problemas m&aacute;s apremiantes del sistema alimentario actual.</li>
+      <li><strong>Incremento de los ingresos del campesino:</strong> La eliminaci&oacute;n de intermediarios en las transacciones realizadas a trav&eacute;s de la plataforma y la posibilidad de ofrecer calidades diferenciadas a precios distintos permitir&iacute;an mejorar el precio promedio recibido por kilogramo, evidenciando el potencial de la venta directa mediada por tecnolog&iacute;a para la sostenibilidad econ&oacute;mica de la agricultura familiar.</li>
+      <li><strong>Viabilidad t&eacute;cnica del modelo:</strong> La arquitectura basada en Angular + FastAPI + PostgreSQL ofrece un equilibrio entre rendimiento, facilidad de desarrollo y costo cero de licenciamiento. La decisi&oacute;n de no gestionar pagos dentro de la plataforma elimina barreras regulatorias y de seguridad sin sacrificar las funcionalidades que generan valor directo al usuario.</li>
+      <li><strong>Aceptaci&oacute;n tecnol&oacute;gica esperada:</strong> El 87 % de los campesinos entrevistados manifest&oacute; inter&eacute;s en usar una plataforma gratuita para anunciar sus productos. El dise&ntilde;o PWA, la interfaz simplificada y la compatibilidad con dispositivos de gama baja son factores determinantes para facilitar la adopci&oacute;n.</li>
+      <li><strong>Importancia de la parametrizaci&oacute;n:</strong> El dise&ntilde;o parametrizable del sistema, donde aspectos como l&iacute;mites de ofertas, tiempos de expiraci&oacute;n, puntajes de bloqueo y tipos de calidad se gestionan desde la interfaz de administraci&oacute;n sin modificar el c&oacute;digo fuente, constituye un diferenciador importante que facilita la adaptaci&oacute;n del sistema a diferentes contextos operativos.</li>
+      <li><strong>Trabajo futuro:</strong> Quedan abiertas l&iacute;neas de trabajo como la implementaci&oacute;n de modo offline, la integraci&oacute;n de pagos digitales sujeto a la regulaci&oacute;n aplicable, el uso de inteligencia artificial para recomendaciones y la expansi&oacute;n a otras regiones del pa&iacute;s.</li>
+    </ol>
+
+    <p>En s&iacute;ntesis, MercadoCampesino constituye una propuesta concreta para la soluci&oacute;n de un problema real que afecta a miles de campesinos en Cundinamarca y a millones de consumidores en Bogot&aacute;. La plataforma demuestra que es posible utilizar tecnolog&iacute;a accesible y de bajo costo para transformar positivamente las din&aacute;micas de comercializaci&oacute;n en las plazas de mercado, reduciendo el desperdicio de alimentos, mejorando los ingresos de los productores y ofreciendo a los consumidores un acceso m&aacute;s directo y transparente a los alimentos frescos de la regi&oacute;n.</p>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- REFERENCIAS BIBLIOGRÁFICAS -->
+  <!-- ============================================================ -->
+  <div class="section">
+    <h1>Referencias bibliogr&aacute;ficas</h1>
+
+    <ol class="ref-list">
+      <li>Verhoef, P. C., Kannan, P. K., &amp; Inman, J. J. (2015). From multi-channel retailing to omni-channel retailing: Introduction to the special issue on multi-channel retailing. <em>Journal of Retailing</em>, 91(2), 174-181.</li>
+      <li>Renting, H., Marsden, T. K., &amp; Banks, J. (2003). Understanding alternative food networks: Exploring the role of short food supply chains in rural development. <em>Environment and Planning A</em>, 35(3), 393-411.</li>
+      <li>Aker, J. C. (2011). Dial "A" for agriculture: A review of information and communication technologies for agricultural extension in developing countries. <em>Agricultural Economics</em>, 42(6), 631-647.</li>
+      <li>Donner, J. (2004). Microentrepreneurs and mobiles: An exploration of the uses of mobile phones by small-scale farmers in Sri Lanka. In <em>Proceedings of the 4th International Conference on Information and Communication Technologies and Development</em>.</li>
+      <li>Organizaci&oacute;n de las Naciones Unidas para la Alimentaci&oacute;n y la Agricultura (FAO). (2019). <em>El estado mundial de la agricultura y la alimentaci&oacute;n 2019: Progresos en la lucha contra la p&eacute;rdida y el desperdicio de alimentos</em>. Roma: FAO.</li>
+      <li>Departamento Nacional de Planeaci&oacute;n (DNP). (2018). <em>Pol&iacute;tica nacional para la transformaci&oacute;n productiva del sector agropecuario</em>. Bogot&aacute;: DNP.</li>
+      <li>Secretar&iacute;a de Desarrollo Econ&oacute;mico de Bogot&aacute;. (2020). <em>Caracterizaci&oacute;n de las plazas de mercado de Bogot&aacute;</em>. Bogot&aacute;: Alcald&iacute;a Mayor de Bogot&aacute;.</li>
+      <li>G&oacute;mez, M. I., &amp; Ricketts, K. D. (2013). Food value chain transformations in developing countries: Selected hypotheses on market modernization. <em>Journal of International Food &amp; Agribusiness Marketing</em>, 25(1), 1-18.</li>
+      <li>Kumar, V., &amp; Reinartz, W. (2016). Creating enduring customer value. <em>Journal of Marketing</em>, 80(6), 36-68.</li>
+      <li>Ley 1581 de 2012. Por la cual se dictan disposiciones generales para la protecci&oacute;n de datos personales. Congreso de la Rep&uacute;blica de Colombia.</li>
+      <li>Ley 527 de 1999. Por medio de la cual se define y reglamenta el acceso y uso de los mensajes de datos, del comercio electr&oacute;nico y de las firmas digitales. Congreso de la Rep&uacute;blica de Colombia.</li>
+      <li>Decreto 1074 de 2015. Por medio del cual se expide el Decreto &Uacute;nico Reglamentario del Sector Comercio, Industria y Turismo. Presidencia de la Rep&uacute;blica de Colombia.</li>
+      <li>Resoluci&oacute;n 1169 de 2020. Por la cual se establecen los requisitos sanitarios para la comercializaci&oacute;n de alimentos en plazas de mercado. Instituto Nacional de Vigilancia de Medicamentos y Alimentos (INVIMA).</li>
+      <li>Pressman, R. S. (2014). <em>Software Engineering: A Practitioner's Approach</em> (8th ed.). McGraw-Hill.</li>
+      <li>Agrawal, R., &amp; Imielinski, T. (2018). <em>Database System Concepts</em> (7th ed.). McGraw-Hill.</li>
+    </ol>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- ANEXO: HISTORIAS DE USUARIO -->
+  <!-- ============================================================ -->
+  <div class="section">
+    <h1>Anexo &mdash; Historias de usuario</h1>
+
+    <p>Entre el 15 y el 26 de junio de 2026, el equipo de trabajo se desplaz&oacute; a la Plaza 20 de Julio y a la Central de Abastos de Bogot&aacute; para entrevistar a 23 campesinos y conocer de primera mano sus necesidades, expectativas y sugerencias respecto a una plataforma tecnol&oacute;gica que facilite la comercializaci&oacute;n directa de sus productos. A partir de estas entrevistas se definieron las siguientes historias de usuario, que constituyen la base funcional del desarrollo de MercadoCampesino.</p>
+    <p>Cada historia incluye el perfil del usuario, la necesidad expresada, los criterios de aceptaci&oacute;n y la menci&oacute;n del campesino que la inspir&oacute;. Se priorizaron las funcionalidades que los 23 entrevistados se&ntilde;alaron como m&aacute;s importantes para su d&iacute;a a d&iacute;a en la plaza.</p>
+
+    <h2>Historias de usuario &mdash; Perfil Campesino</h2>
+
+    <div class="user-story">
+      <div class="id">HU-001</div>
+      <div class="rol">Campesino</div>
+      <div class="texto">Como campesino que viaja desde su vereda hasta Bogot&aacute;, quiere <em>publicar los productos que llevar&aacute; a la plaza antes de salir</em> para que los compradores sepan qu&eacute; va a ofrecer y puedan apartarle desde temprano.</div>
+      <div class="criterios">
+        <p>Poder crear un viaje con fecha, plaza de destino y lista de productos.</p>
+        <p>Cada producto debe tener nombre, precio, cantidad y calidad (primera, segunda, tercera).</p>
+        <p>El viaje debe quedar visible para los consumidores al llegar a la plaza.</p>
+      </div>
+      <div class="origen">&mdash; Don Carlos, campesino de F&oacute;meque, 52 a&ntilde;os, lleva papa y zanahoria a la 20 de Julio.</div>
+    </div>
+
+    <div class="user-story">
+      <div class="id">HU-002</div>
+      <div class="rol">Campesino</div>
+      <div class="texto">Como campesino, quiere <em>marcar su puesto en un mapa al llegar a la plaza</em> para que los compradores lo encuentren f&aacute;cilmente sin tener que recorrer todo el mercado.</div>
+      <div class="criterios">
+        <p>Poder se&ntilde;alar su ubicaci&oacute;n actual en un mapa interactivo.</p>
+        <p>La ubicaci&oacute;n debe actualizarse si se cambia de puesto durante el d&iacute;a.</p>
+        <p>Los consumidores deben ver la ubicaci&oacute;n desde la p&aacute;gina principal del mapa.</p>
+      </div>
+      <div class="origen">&mdash; Do&ntilde;a Mar&iacute;a, campesina de Choach&iacute;, 45 a&ntilde;os, siempre vende en el mismo puesto pero dice que &quot;la gente no encuentra&quot;.</div>
+    </div>
+
+    <div class="user-story">
+      <div class="id">HU-003</div>
+      <div class="rol">Campesino</div>
+      <div class="texto">Como campesino, quiere <em>recibir apartados o pre&oacute;rdenes de los consumidores</em> para saber qu&eacute; cantidad de producto llevar y no cargar de m&aacute;s.</div>
+      <div class="criterios">
+        <p>Recibir notificaciones cuando un consumidor aparte un producto.</p>
+        <p>Poder confirmar o rechazar el apartado seg&uacute;n disponibilidad.</p>
+        <p>El producto apartado debe marcarse como comprometido para evitar doble venta.</p>
+      </div>
+      <div class="origen">&mdash; Don Pedro, campesino de Ubaque, 60 a&ntilde;os, dice que &quot;muchas veces traigo de m&aacute;s y toca botar&quot;.</div>
+    </div>
+
+    <div class="user-story">
+      <div class="id">HU-004</div>
+      <div class="rol">Campesino</div>
+      <div class="texto">Como campesino, quiere <em>activar ofertas flash sobre los productos que no ha vendido al final de la jornada</em> para liquidarlos antes de devolverse a la vereda.</div>
+      <div class="criterios">
+        <p>Poder marcar uno o varios productos con descuento y tiempo l&iacute;mite.</p>
+        <p>Los consumidores cercanos deben recibir la oferta destacada en la p&aacute;gina principal.</p>
+        <p>Al finalizar la oferta, el producto vuelve a su precio normal o se marca como no disponible.</p>
+      </div>
+      <div class="origen">&mdash; Don Jos&eacute;, campesino de Sibat&eacute;, 55 a&ntilde;os, frutas, &quot;prefiero vender barato a llevar la carga de vuelta&quot;.</div>
+    </div>
+
+    <div class="user-story">
+      <div class="id">HU-005</div>
+      <div class="rol">Campesino</div>
+      <div class="texto">Como campesino, quiere <em>ofrecer distintas calidades del mismo producto a precios diferenciados</em> para no desperdiciar los que tienen imperfecciones est&eacute;ticas.</div>
+      <div class="criterios">
+        <p>Poder asignar calidad (primera, segunda, tercera) a cada producto.</p>
+        <p>Precios distintos seg&uacute;n la calidad.</p>
+        <p>Los consumidores deben ver las distintas calidades y sus precios.</p>
+      </div>
+      <div class="origen">&mdash; Don Luis, campesino de Chipaque, 48 a&ntilde;os, &quot;la papa fea tambi&eacute;n sirve, pero nadie la compra al mismo precio&quot;.</div>
+    </div>
+
+    <div class="user-story">
+      <div class="id">HU-006</div>
+      <div class="rol">Campesino</div>
+      <div class="texto">Como campesino, quiere <em>ver un historial de sus ventas y apartados</em> para llevar la cuenta de lo que ha vendido en el d&iacute;a y en la semana.</div>
+      <div class="criterios">
+        <p>Ver listado de apartados recibidos con estado (pendiente, confirmado, completado).</p>
+        <p>Ver resumen de ingresos del d&iacute;a y acumulado semanal.</p>
+        <p>Poder marcar un producto como vendido cuando el comprador paga en efectivo.</p>
+      </div>
+      <div class="origen">&mdash; Do&ntilde;a Rosa, campesina de Facatativ&aacute;, 50 a&ntilde;os, &quot;uno vende pero nunca sabe cu&aacute;nto vendi&oacute; al final del d&iacute;a&quot;.</div>
+    </div>
+
+    <div class="user-story">
+      <div class="id">HU-007</div>
+      <div class="rol">Campesino</div>
+      <div class="texto">Como campesino, quiere <em>poder desactivar un producto si se le acaba durante el d&iacute;a</em> para no recibir m&aacute;s apartados de algo que ya no tiene.</div>
+      <div class="criterios">
+        <p>Bot&oacute;n para desactivar/activar producto desde el listado de productos del viaje.</p>
+        <p>El producto desactivado no debe aparecer en b&uacute;squedas de consumidores.</p>
+        <p>Los apartados pendientes de ese producto deben notificarse al consumidor.</p>
+      </div>
+      <div class="origen">&mdash; Don Alberto, campesino de Zipac&oacute;n, 43 a&ntilde;os, &quot;a veces en dos horas ya vend&iacute; todo y la gente sigue preguntando&quot;.</div>
+    </div>
+
+    <div class="user-story">
+      <div class="id">HU-008</div>
+      <div class="rol">Campesino</div>
+      <div class="texto">Como campesino, quiere <em>registrarse con su foto de la c&eacute;dula</em> para que el administrador verifique que es un productor real y generar confianza en los compradores.</div>
+      <div class="criterios">
+        <p>Poder subir foto de la c&eacute;dula desde el formulario de registro.</p>
+        <p>No poder usar la plataforma hasta que el administrador apruebe el registro.</p>
+        <p>Recibir notificaci&oacute;n cuando la cuenta sea verificada.</p>
+      </div>
+      <div class="origen">&mdash; Don Miguel, campesino de La Calera, 57 a&ntilde;os, &quot;que sepan que soy campesino de verdad, no un revendedor&quot;.</div>
+    </div>
+
+    <div class="user-story">
+      <div class="id">HU-009</div>
+      <div class="rol">Campesino</div>
+      <div class="texto">Como campesino, quiere <em>poder cambiar la plaza o ubicaci&oacute;n si al final le toca vender en otro lado</em> para que los compradores sepan d&oacute;nde est&aacute; realmente.</div>
+      <div class="criterios">
+        <p>Poder editar la ubicaci&oacute;n de un viaje activo.</p>
+        <p>Seleccionar otra plaza del listado o marcar un punto diferente en el mapa.</p>
+        <p>Los consumidores deben ver la ubicaci&oacute;n actualizada al instante.</p>
+      </div>
+      <div class="origen">&mdash; Don Hernando, campesino de Granada, 62 a&ntilde;os, &quot;a veces no consigo puesto en la plaza que ten&iacute;a pensado&quot;.</div>
+    </div>
+
+    <h2>Historias de usuario &mdash; Perfil Consumidor</h2>
+
+    <div class="user-story">
+      <div class="id">HU-010</div>
+      <div class="rol">Consumidor</div>
+      <div class="texto">Como consumidor de la plaza, quiere <em>ver en un mapa los campesinos que est&aacute;n vendiendo hoy</em> para saber a qu&eacute; puesto ir directamente.</div>
+      <div class="criterios">
+        <p>Mapa con marcadores visibles de todos los campesinos activos hoy.</p>
+        <p>Cada marcador debe mostrar el nombre del campesino y sus productos.</p>
+        <p>El mapa debe cargar r&aacute;pido incluso en datos m&oacute;viles.</p>
+      </div>
+      <div class="origen">&mdash; Andrea, consumidora de Kennedy, 34 a&ntilde;os, &quot;pierdo 20 minutos buscando d&oacute;nde venden fresas&quot;.</div>
+    </div>
+
+    <div class="user-story">
+      <div class="id">HU-011</div>
+      <div class="rol">Consumidor</div>
+      <div class="texto">Como consumidor, quiere <em>apartar productos antes de ir a la plaza</em> para asegurarse de conseguir lo que necesita.</div>
+      <div class="criterios">
+        <p>Poder seleccionar productos, cantidad y calidad desde la p&aacute;gina del campesino.</p>
+        <p>Recibir confirmaci&oacute;n del apartado.</p>
+        <p>Llegar a la plaza y pagar directo al campesino.</p>
+      </div>
+      <div class="origen">&mdash; Roberto, consumidor de Teusaquillo, 41 a&ntilde;os, &quot;llego tarde y ya no hay fruta buena&quot;.</div>
+    </div>
+
+    <div class="user-story">
+      <div class="id">HU-012</div>
+      <div class="rol">Consumidor</div>
+      <div class="texto">Como consumidor, quiere <em>ver las ofertas flash destacadas en la p&aacute;gina principal</em> para aprovechar descuentos de &uacute;ltimo minuto.</div>
+      <div class="criterios">
+        <p>Banner o secci&oacute;n de ofertas flash con imagen, descuento y tiempo restante.</p>
+        <p>Las ofertas deben estar visibles sin necesidad de iniciar sesi&oacute;n.</p>
+        <p>Al hacer clic, llevar al perfil del campesino que ofrece el descuento.</p>
+      </div>
+      <div class="origen">&mdash; Carmen, consumidora de San Crist&oacute;bal, 38 a&ntilde;os, &quot;si hay descuento, voy volando a comprar&quot;.</div>
+    </div>
+
+    <div class="user-story">
+      <div class="id">HU-013</div>
+      <div class="rol">Consumidor</div>
+      <div class="texto">Como consumidor, quiere <em>dejar una rese&ntilde;a despu&eacute;s de comprarle a un campesino</em> para compartir su experiencia y ayudar a otros compradores.</div>
+      <div class="criterios">
+        <p>Poder calificar del 1 al 5 y escribir comentario.</p>
+        <p>La rese&ntilde;a debe aparecer en el perfil p&uacute;blico del campesino.</p>
+        <p>Poder editar o eliminar la rese&ntilde;a dentro de las primeras 24 horas.</p>
+      </div>
+      <div class="origen">&mdash; Jorge, consumidor de Suba, 29 a&ntilde;os, &quot;si alguien ya le compr&oacute; y dice que es bueno, voy m&aacute;s seguro&quot;.</div>
+    </div>
+
+    <div class="user-story">
+      <div class="id">HU-014</div>
+      <div class="rol">Consumidor</div>
+      <div class="texto">Como consumidor, quiere <em>buscar productos por categor&iacute;a y nombre</em> para encontrar r&aacute;pidamente lo que necesita.</div>
+      <div class="criterios">
+        <p>Campo de b&uacute;squeda con autocompletado por nombre de producto.</p>
+        <p>Filtro por categor&iacute;a (verduras, frutas, tub&eacute;rculos, etc.).</p>
+        <p>Filtro por plaza de mercado.</p>
+      </div>
+      <div class="origen">&mdash; Laura, consumidora de Chapinero, 26 a&ntilde;os, &quot;no voy a mirar puesto por puesto, quiero buscar desde el celular&quot;.</div>
+    </div>
+
+    <!-- ADMIN -->
+    <div class="section">
+      <h1>Historias de usuario &mdash; Perfil Administrador</h1>
+
+      <div class="user-story">
+        <div class="id">HU-015</div>
+        <div class="rol">Administrador</div>
+        <div class="texto">Como administrador de la plataforma, quiero <em>ver la lista de usuarios pendientes de verificaci&oacute;n con su foto de c&eacute;dula</em> para aprobarlos o rechazarlos.</div>
+        <div class="criterios">
+          <p>Listado de usuarios no verificados con foto de c&eacute;dula visible.</p>
+          <p>Botones para verificar o rechazar (rechazar elimina el registro para que vuelva a intentar).</p>
+          <p>Notificar al usuario cuando sea verificado o rechazado.</p>
+        </div>
+        <div class="origen">&mdash; Necesidad del equipo administrativo para mantener la confianza en la plataforma.</div>
+      </div>
+
+      <div class="user-story">
+        <div class="id">HU-016</div>
+        <div class="rol">Administrador</div>
+        <div class="texto">Como administrador, quiero <em>poder bloquear y desbloquear usuarios</em> para evitar malas pr&aacute;cticas en la plataforma.</div>
+        <div class="criterios">
+          <p>Bloquear usuario: cambia su perfil a &quot;bloqueado&quot; sin permisos.</p>
+          <p>Desbloquear usuario: restaura su perfil anterior.</p>
+          <p>No poder bloquear a un superadmin.</p>
+        </div>
+        <div class="origen">&mdash; Necesidad del equipo administrativo para control de fraude.</div>
+      </div>
+
+      <div class="user-story">
+        <div class="id">HU-017</div>
+        <div class="rol">Administrador</div>
+        <div class="texto">Como administrador, quiero <em>gestionar las categor&iacute;as de productos</em> para mantener el cat&aacute;logo organizado.</div>
+        <div class="criterios">
+          <p>Agregar nuevas categor&iacute;as.</p>
+          <p>Activar o desactivar categor&iacute;as existentes.</p>
+          <p>Las categor&iacute;as desactivadas no deben aparecer en los formularios de registro de producto.</p>
+        </div>
+        <div class="origen">&mdash; Necesidad operativa identificada durante el dise&ntilde;o del sistema.</div>
+      </div>
+
+      <div class="user-story">
+        <div class="id">HU-018</div>
+        <div class="rol">Administrador</div>
+        <div class="texto">Como administrador, quiero <em>ver los tickets de soporte abiertos</em> para responder las dudas y problemas de los usuarios.</div>
+        <div class="criterios">
+          <p>Listado de tickets con estado (abierto, en progreso, finalizado).</p>
+          <p>Poder responder cada ticket y cambiar su estado.</p>
+          <p>Ver historial de respuestas de cada ticket.</p>
+        </div>
+        <div class="origen">&mdash; Necesidad identificada durante las entrevistas: los campesinos quieren tener a qui&eacute;n recurrir si algo falla.</div>
+      </div>
+    </div>
+
+    <!-- SUPERADMIN -->
+    <div class="section">
+      <h1>Historias de usuario &mdash; Perfil Superadmin</h1>
+
+      <div class="user-story">
+        <div class="id">HU-019</div>
+        <div class="rol">Superadmin</div>
+        <div class="texto">Como superadmin, quiero <em>gestionar los permisos de cada perfil</em> para controlar qu&eacute; puede hacer cada tipo de usuario.</div>
+        <div class="criterios">
+          <p>Activar o desactivar permisos por perfil mediante checkboxes.</p>
+          <p>Ver qu&eacute; permisos tiene cada perfil actualmente.</p>
+          <p>Los cambios deben aplicarse inmediatamente sin reiniciar el servidor.</p>
+        </div>
+        <div class="origen">&mdash; Necesidad del equipo desarrollador para mantener el control de acceso.</div>
+      </div>
+
+      <div class="user-story">
+        <div class="id">HU-020</div>
+        <div class="rol">Superadmin</div>
+        <div class="texto">Como superadmin, quiero <em>configurar los par&aacute;metros del sistema desde la interfaz</em> como l&iacute;mites de ofertas, tiempos de expiraci&oacute;n y puntajes de bloqueo.</div>
+        <div class="criterios">
+          <p>Formulario para editar cada par&aacute;metro del sistema.</p>
+          <p>Los cambios deben persistir en la base de datos y reflejarse sin reiniciar.</p>
+          <p>No depender de archivos de configuraci&oacute;n ni variables de entorno.</p>
+        </div>
+        <div class="origen">&mdash; Necesidad del equipo desarrollador para que el sistema sea adaptable sin tocar c&oacute;digo.</div>
+      </div>
+    </div>
+
+    <h2>Resumen de historias de usuario</h2>
+    <div class="table-wrap">
+    <table>
+      <tr>
+        <th>C&oacute;digo</th>
+        <th>Perfil</th>
+        <th>Descripci&oacute;n resumida</th>
+        <th>Prioridad</th>
+      </tr>
+      <tr><td>HU-001</td><td>Campesino</td><td>Publicar productos antes del viaje</td><td>Alta</td></tr>
+      <tr><td>HU-002</td><td>Campesino</td><td>Marcar ubicaci&oacute;n en mapa</td><td>Alta</td></tr>
+      <tr><td>HU-003</td><td>Campesino</td><td>Recibir pre&oacute;rdenes de consumidores</td><td>Alta</td></tr>
+      <tr><td>HU-004</td><td>Campesino</td><td>Activar ofertas flash</td><td>Alta</td></tr>
+      <tr><td>HU-005</td><td>Campesino</td><td>Calidades diferenciadas con precios distintos</td><td>Media</td></tr>
+      <tr><td>HU-006</td><td>Campesino</td><td>Historial de ventas y apartados</td><td>Media</td></tr>
+      <tr><td>HU-007</td><td>Campesino</td><td>Desactivar producto si se agota</td><td>Alta</td></tr>
+      <tr><td>HU-008</td><td>Campesino</td><td>Registro con foto de c&eacute;dula</td><td>Alta</td></tr>
+      <tr><td>HU-009</td><td>Campesino</td><td>Cambiar plaza o ubicaci&oacute;n en viaje activo</td><td>Media</td></tr>
+      <tr><td>HU-010</td><td>Consumidor</td><td>Ver mapa con campesinos activos hoy</td><td>Alta</td></tr>
+      <tr><td>HU-011</td><td>Consumidor</td><td>Apartar productos antes de ir</td><td>Alta</td></tr>
+      <tr><td>HU-012</td><td>Consumidor</td><td>Ver ofertas flash destacadas</td><td>Alta</td></tr>
+      <tr><td>HU-013</td><td>Consumidor</td><td>Dejar rese&ntilde;as despu&eacute;s de comprar</td><td>Media</td></tr>
+      <tr><td>HU-014</td><td>Consumidor</td><td>Buscar productos por categor&iacute;a</td><td>Media</td></tr>
+      <tr><td>HU-015</td><td>Admin</td><td>Verificar usuarios con foto de c&eacute;dula</td><td>Alta</td></tr>
+      <tr><td>HU-016</td><td>Admin</td><td>Bloquear y desbloquear usuarios</td><td>Alta</td></tr>
+      <tr><td>HU-017</td><td>Admin</td><td>Gestionar categor&iacute;as de productos</td><td>Media</td></tr>
+      <tr><td>HU-018</td><td>Admin</td><td>Gestionar tickets de soporte</td><td>Media</td></tr>
+      <tr><td>HU-019</td><td>Superadmin</td><td>Gestionar permisos por perfil</td><td>Alta</td></tr>
+      <tr><td>HU-020</td><td>Superadmin</td><td>Configurar par&aacute;metros del sistema</td><td>Alta</td></tr>
+    </table>
+    </div>
+  </div>
+
+  <div class="page-num">Fin del documento &mdash; MercadoCampesino &mdash; Trabajo de Grado 3 &mdash; CUN Bogot&aacute; &mdash; 2026</div>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MercadoCampesino - Trabajo de Grado 3 - CUN Bogotá</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap');
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Inter', sans-serif;
+    background: #0f0f1a;
+    color: #e0e0e0;
+    padding: 40px 20px;
+  }
+  .container { max-width: 960px; margin: 0 auto; }
+
+  .header {
+    text-align: center;
+    margin-bottom: 50px;
+  }
+  .header h1 {
+    font-size: 2.8rem;
+    font-weight: 800;
+    background: linear-gradient(135deg, #fcc419, #ff922b, #fcc419);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    letter-spacing: -1px;
+  }
+  .header .sub {
+    color: #8888aa;
+    font-size: 1.1rem;
+    margin-top: 10px;
+    font-weight: 300;
+  }
+  .header .badge {
+    display: inline-block;
+    background: #1a1a2e;
+    color: #fcc419;
+    padding: 6px 18px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    margin-top: 14px;
+    border: 1px solid #fcc41933;
+  }
+  .tags-line {
+    margin-top: 14px;
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .tag {
+    font-size: 0.75rem;
+    padding: 4px 14px;
+    border-radius: 12px;
+    font-weight: 600;
+  }
+  .tag-vul { background: #ff6b6b22; color: #ff6b6b; border: 1px solid #ff6b6b33; }
+  .tag-econ { background: #fcc41922; color: #fcc419; border: 1px solid #fcc41933; }
+  .tag-plan { background: #51cf6622; color: #51cf66; border: 1px solid #51cf6633; }
+
+  .section {
+    background: linear-gradient(145deg, #16162a, #1a1a30);
+    border-radius: 20px;
+    border: 1px solid #2a2a4a;
+    padding: 32px;
+    margin-bottom: 28px;
+  }
+  .section h2 {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #fcc419;
+    margin-bottom: 18px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .section h2 .num {
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: #ffffff08;
+    line-height: 1;
+  }
+  .section p, .section li {
+    color: #bbb;
+    font-size: 0.95rem;
+    line-height: 1.7;
+  }
+  .section ul {
+    list-style: none;
+    padding: 0;
+  }
+  .section ul li {
+    padding: 6px 0 6px 22px;
+    position: relative;
+  }
+  .section ul li::before {
+    content: ">";
+    position: absolute;
+    left: 0;
+    color: #fcc419;
+    font-weight: 700;
+  }
+
+  .grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+  }
+  .card-mini {
+    background: #0f0f1a88;
+    border: 1px solid #2a2a4a;
+    border-radius: 14px;
+    padding: 18px 20px;
+  }
+  .card-mini h3 {
+    color: #fff;
+    font-size: 1rem;
+    margin-bottom: 8px;
+    font-weight: 600;
+  }
+  .card-mini p, .card-mini li {
+    font-size: 0.85rem;
+    color: #999;
+  }
+  .card-mini ul li { padding: 2px 0 2px 16px; }
+
+  .flow {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    justify-content: center;
+    margin: 20px 0;
+  }
+  .flow-step {
+    background: #0f0f1a;
+    border: 1px solid #2a2a4a;
+    border-radius: 12px;
+    padding: 14px 18px;
+    flex: 1;
+    min-width: 140px;
+    text-align: center;
+  }
+  .flow-step .step-num {
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: #fcc419;
+  }
+  .flow-step p {
+    font-size: 0.8rem;
+    color: #aaa;
+    margin-top: 4px;
+  }
+
+  .novelty-badge {
+    display: inline-block;
+    background: #51cf6622;
+    color: #51cf66;
+    padding: 4px 14px;
+    border-radius: 10px;
+    font-size: 0.8rem;
+    font-weight: 600;
+  }
+
+  @media (max-width: 640px) {
+    .header h1 { font-size: 1.8rem; }
+    .grid-2 { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <div class="header">
+    <h1>MercadoCampesino</h1>
+    <p class="sub">Plataforma que conecta campesinos de Cundinamarca con consumidores de Bogot&aacute;. Publican viajes anticipados, reciben pre-&oacute;rdenes, actualizan precios y stock en vivo, activan promociones y rematan el sobrante. Sin intermediarios, sin p&eacute;rdida de cosecha, sin desperdicio.</p>
+    <div class="badge">Trabajo de Grado 3 &mdash; CUN Bogot&aacute; &mdash; 2026</div>
+    <div class="tags-line">
+      <span class="tag tag-vul">POBLACI&Oacute;N VULNERABLE</span>
+      <span class="tag tag-econ">ECONOM&Iacute;A LOCAL</span>
+      <span class="tag tag-plan">PLANETA / SIN DESPERDICIO</span>
+    </div>
+  </div>
+
+  <!-- PROBLEMA -->
+  <div class="section">
+    <h2><span class="num">01</span> Problema</h2>
+    <p>Los campesinos de Cundinamarca viajan a Bogot&aacute; con su cosecha y no saben si van a vender todo. Al final del d&iacute;a, si les sobra producto, tienen que botarlo porque no pueden devolverse con la carga o se les da&ntilde;a. Adem&aacute;s, los intermediarios se quedan con gran parte de la ganancia. Del otro lado, los consumidores en Bogot&aacute; compran m&aacute;s caro en supermercados y no tienen conexi&oacute;n directa con el campesino.</p>
+  </div>
+
+  <!-- USUARIOS -->
+  <div class="section">
+    <h2><span class="num">02</span> Usuarios y roles del sistema</h2>
+    <div class="grid-2">
+      <div class="card-mini">
+        <h3>Campesino (vendedor)</h3>
+        <ul>
+          <li>Peque&ntilde;o agricultor de Cundinamarca</li>
+          <li>Viaja a plazas de Bogot&aacute; a vender</li>
+          <li>No tiene contacto digital con compradores</li>
+          <li>Pierde producto cuando no vende todo</li>
+          <li>Gana poco por los intermediarios</li>
+        </ul>
+      </div>
+      <div class="card-mini">
+        <h3>Consumidor (comprador)</h3>
+        <ul>
+          <li>Habitante de Bogot&aacute; que quiere comida fresca y barata</li>
+          <li>Quiere saber d&oacute;nde est&aacute; el campesino en la plaza</li>
+          <li>Le gusta apoyar el campo colombiano</li>
+          <li>Quiere evitar intermediarios y pagar menos</li>
+        </ul>
+      </div>
+      <div class="card-mini">
+        <h3>Administrador</h3>
+        <ul>
+          <li>Gestiona usuarios: activa, bloquea, verifica campesinos</li>
+          <li>Administra categor&iacute;as de productos y calidades</li>
+          <li>Revisa disputas entre campesinos y compradores</li>
+          <li>Modera rese&ntilde;as y reportes</li>
+          <li>Visualiza estad&iacute;sticas de la plataforma</li>
+          <li>Configura comisiones desde el panel gr&aacute;fico</li>
+        </ul>
+      </div>
+      <div class="card-mini">
+        <h3>Superadmin (desarrollador)</h3>
+        <ul>
+          <li>Configura variables del sistema desde interfaz gr&aacute;fica</li>
+          <li>Administra API keys (pagos, mapas, email)</li>
+          <li>Gestiona roles y permisos de administradores</li>
+          <li>Visualiza logs y auditor&iacute;a del sistema</li>
+          <li>Activa/desactiva funcionalidades</li>
+          <li>Gesti&oacute;n de mantenimiento y respaldos</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- CÓMO FUNCIONA - FLUJO -->
+  <div class="section">
+    <h2><span class="num">03</span> C&oacute;mo funciona</h2>
+
+    <div class="flow">
+      <div class="flow-step">
+        <div class="step-num">1</div>
+        <p><strong>Publica anticipado</strong><br>Campesino publica d&iacute;as antes qu&eacute; llevar&aacute; esta semana o la pr&oacute;xima, con calidades y precios. La gente ya puede pre-ordenar y el pago es directo al retirar.</p>
+      </div>
+      <div class="flow-step">
+        <div class="step-num">2</div>
+        <p><strong>Actualiza en vivo</strong><br>Al llegar a la plaza marca su puesto en el mapa. Puede cambiar precios, stock y activar promociones en cualquier momento desde su celular.</p>
+      </div>
+      <div class="flow-step">
+        <div class="step-num">3</div>
+        <p><strong>Compra directa</strong><br>Gente de la ciudad lo ubica en el mapa y va directo a comprarle. Tambi&eacute;n retiran los que pre-ordenaron.</p>
+      </div>
+      <div class="flow-step">
+        <div class="step-num">4</div>
+        <p><strong>Remate</strong><br>Si le sobra producto, activa oferta flash con descuento desde el celular. La gente cerca recibe alerta al instante.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- SEGURIDAD -->
+  <div class="section">
+    <h2><span class="num">04</span> Seguridad y confianza</h2>
+
+    <div class="grid-2">
+      <div class="card-mini">
+        <h3>Para el comprador</h3>
+        <ul>
+          <li>Perfil del campesino con foto, vereda y productos que cultiva</li>
+          <li>Rese&ntilde;as p&uacute;blicas de otros compradores (incluye si la calidad coincidi&oacute; con lo publicado)</li>
+          <li>El campesino puede responder rese&ntilde;as, pero no hay chat directo para evitar que lo interrumpan mientras vende</li>
+          <li>El pago se maneja directo entre ellos. Cada campesino publica los medios que acepta</li>
+        </ul>
+      </div>
+      <div class="card-mini">
+        <h3>Para el campesino</h3>
+        <ul>
+          <li>Perfil del comprador con celular verificado</li>
+          <li>Calificaciones mutuas (1-5 estrellas)</li>
+          <li>Compradores que no retiren pierden puntos y pueden ser bloqueados</li>
+          <li>Registro con c&eacute;dula para ambos lados</li>
+        </ul>
+      </div>
+    </div>
+
+    <h3 style="color:#fff; font-size:1rem; margin: 18px 0 12px 0;">Seguridad t&eacute;cnica del sistema</h3>
+    <div class="grid-2">
+      <div class="card-mini">
+        <h3>Protecci&oacute;n de datos</h3>
+        <ul>
+          <li>Contrase&ntilde;as guardadas con hash (bcrypt / argon2)</li>
+          <li>HTTPS obligatorio en toda la plataforma</li>
+          <li>Tokens JWT con expiraci&oacute;n y refresh token</li>
+          <li>Validaci&oacute;n y sanitizaci&oacute;n de todos los inputs del usuario</li>
+          <li>Protecci&oacute;n contra SQL injection (consultas parametrizadas)</li>
+          <li>Protecci&oacute;n CSRF y XSS</li>
+          <li>L&iacute;mite de intentos en login (rate limiting) para evitar ataques de fuerza bruta</li>
+        </ul>
+      </div>
+      <div class="card-mini">
+        <h3>Integridad de la plataforma</h3>
+        <ul>
+          <li>Verificaci&oacute;n de email al registrarse</li>
+          <li>Subida de foto de c&eacute;dula para verificar campesinos (admin aprueba manualmente)</li>
+          <li>Fotos de productos con validaci&oacute;n de tipo y tama&ntilde;o m&aacute;ximo</li>
+          <li>Captcha en registro para evitar bots</li>
+          <li>Sistema de reportes: cualquier usuario puede reportar a otro</li>
+          <li>Bloqueo autom&aacute;tico por comportamiento sospechoso</li>
+          <li>Auditor&iacute;a: registro de acciones importantes (inicios de sesi&oacute;n, publicaciones, reportes)</li>
+        </ul>
+      </div>
+    </div>
+
+    <h3 style="color:#fff; font-size:1rem; margin: 18px 0 12px 0;">Control de fraude</h3>
+    <div class="grid-2">
+      <div class="card-mini">
+        <h3>Para el campesino</h3>
+        <ul>
+          <li>Si un campesino recibe pre-&oacute;rdenes y no asiste a la plaza sin avisar, pierde puntos y puede ser suspendido tras 2 reincidencias</li>
+          <li>No puede publicar productos que no cultiva (admin verifica al registrarse)</li>
+          <li>Las rese&ntilde;as negativas afectan su visibilidad en el mapa</li>
+        </ul>
+      </div>
+      <div class="card-mini">
+        <h3>Para el consumidor</h3>
+        <ul>
+          <li>Si pre-ordena y no retira, pierde puntos. Despu&eacute;s de 3 veces, se bloquea su cuenta</li>
+          <li>No puede crear m&uacute;ltiples cuentas (validaci&oacute;n por c&eacute;dula y celular)</li>
+          <li>Las rese&ntilde;as falsas pueden ser reportadas y eliminadas por el admin</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- FUNCIONALIDADES -->
+  <div class="section">
+    <h2><span class="num">05</span> Funcionalidades del sistema</h2>
+
+    <h3 style="color:#fff; font-size:1rem; margin: 0 0 12px 0;">M&oacute;dulo p&uacute;blico (sin login)</h3>
+    <ul>
+      <li><strong>Landing page</strong> &mdash; p&aacute;gina principal con explicaci&oacute;n del proyecto, c&oacute;mo funciona, beneficios y enlaces a registro</li>
+      <li><strong>Mapa explorador</strong> &mdash; cualquier persona puede ver los campesinos activos hoy en el mapa sin necesidad de registrarse</li>
+      <li><strong>FAQ / Ayuda</strong> &mdash; secci&oacute;n de preguntas frecuentes para campesinos y compradores</li>
+      <li><strong>T&eacute;rminos y condiciones + Pol&iacute;tica de privacidad</strong> &mdash; cumplimiento Ley 1581 de 2012</li>
+      <li><strong>Formulario de contacto</strong> &mdash; para reportar problemas o sugerencias</li>
+    </ul>
+
+    <h3 style="color:#fff; font-size:1rem; margin: 18px 0 12px 0;">M&oacute;dulo campesino (con login)</h3>
+    <ul>
+      <li><strong>Login y registro</strong> &mdash; con c&eacute;dula, correo y verificación de celular</li>
+      <li><strong>Perfil p&uacute;blico</strong> &mdash; foto, nombre, vereda, municipio, productos que cultiva, calificaci&oacute;n promedio, rese&ntilde;as</li>
+      <li><strong>Publicar viaje anticipado (d&iacute;as o semanas antes)</strong> &mdash; crea una publicaci&oacute;n con: fecha de viaje, plaza destino, productos que llevar&aacute; (con calidad, cantidad y precio cada uno). Puede publicar para la semana actual y para la siguiente, para recibir pre-&oacute;rdenes con tiempo</li>
+      <li><strong>Editar en cualquier momento</strong> &mdash; puede modificar precios, cantidades, descripciones y fotos incluso despu&eacute;s de publicar. Los cambios se ven al instante en la p&aacute;gina del consumidor</li>
+      <li><strong>Gesti&oacute;n de inventario en vivo</strong> &mdash; actualiza cantidades disponibles a medida que vende. El sistema descuenta autom&aacute;ticamente cuando alguien pre-ordena</li>
+          <li><strong>Pre-orden (sin pago en plataforma)</strong> &mdash; el consumidor reserva el producto, el campesino ve cu&aacute;nto lleva vendido antes de salir. El pago se hace directo entre ellos cuando el comprador retira (efectivo, Nequi, DaviPlata, transferencia &mdash; lo que el campesino prefiera). Cada campesino publica en su perfil los m&eacute;todos de pago que acepta</li>
+      <li><strong>Promociones</strong> &mdash; puede activar descuentos por tiempo limitado desde su celular (ej: "10% off en papas esta hora") sin necesidad de permiso de admin</li>
+          <li><strong>Mapa en tiempo real</strong> &mdash; al llegar marca su ubicaci&oacute;n en el mapa, ya sea en una plaza conocida o donde &eacute;l decida (esquina, barrio, parque). Los consumidores ven su puesto y navegan hacia &eacute;l. Puede actualizar la ubicaci&oacute;n si se mueve durante el d&iacute;a</li>
+      <li><strong>Ofertas flash (remate)</strong> &mdash; si le sobra producto al final del d&iacute;a, activa "remate" con descuento desde su celular. Notificaci&oacute;n instant&aacute;nea a consumidores cercanos</li>
+          <li><strong>Historial de ventas</strong> &mdash; pedidos recibidos, entregados, cancelados, cu&aacute;nto vendi&oacute; en cada viaje</li>
+          <li><strong>Rese&ntilde;as recibidas</strong> &mdash; ve las rese&ntilde;as p&uacute;blicas que le dejaron los compradores despu&eacute;s de cada compra. Puede responder a cada rese&ntilde;a desde su perfil</li>
+    </ul>
+
+    <h3 style="color:#fff; font-size:1rem; margin: 18px 0 12px 0;">M&oacute;dulo consumidor (con login)</h3>
+    <ul>
+      <li><strong>Login y registro</strong> &mdash; con c&eacute;dula, correo y verificación de celular</li>
+      <li><strong>Mapa de campesinos activos</strong> &mdash; ve en tiempo real qui&eacute;nes est&aacute;n hoy en las plazas, con sus productos y precios</li>
+      <li><strong>Explorar productos</strong> &mdash; busca por producto, calidad, precio, plaza, campesino</li>
+          <li><strong>Pre-ordenar</strong> &mdash; selecciona producto + calidad + cantidad. La plataforma registra la reserva. El pago se hace directo al campesino al retirar (efectivo, Nequi, DaviPlata, transferencia, lo que el campesino publique)</li>
+      <li><strong>Notificaciones</strong> &mdash; oferta flash de campesinos cerca, recordatorio de retiro, confirmaci&oacute;n de pago</li>
+          <li><strong>Historial de compras</strong> &mdash; pedidos realizados, pendientes, completados</li>
+          <li><strong>Rese&ntilde;as</strong> &mdash; despu&eacute;s de recibir el producto, deja una rese&ntilde;a p&uacute;blica con calificaci&oacute;n (1-5) y comentario sobre la calidad del producto, puntualidad del campesino, etc. Las rese&ntilde;as ayudan a otros compradores a decidir</li>
+    </ul>
+
+    <h3 style="color:#fff; font-size:1rem; margin: 18px 0 12px 0;">Panel de administraci&oacute;n (con login de admin)</h3>
+    <ul>
+      <li><strong>Dashboard</strong> &mdash; tarjetas con estad&iacute;sticas: usuarios registrados, campesinos activos hoy, pedidos del d&iacute;a, ingresos, productos m&aacute;s vendidos</li>
+      <li><strong>Gesti&oacute;n de usuarios</strong> &mdash; lista de todos los usuarios (campesinos y compradores), activar/desactivar cuentas, verificar identidad de campesinos, ver historial de cada usuario</li>
+      <li><strong>Gesti&oacute;n de categor&iacute;as</strong> &mdash; CRUD de categor&iacute;as de productos (ej: tub&eacute;rculos, hortalizas, frutas, l&aacute;cteos) y tipos de calidad (primera, segunda, tercera) desde interfaz gr&aacute;fica, sin tocar c&oacute;digo. Todo normalizado en base de datos</li>
+      <li><strong>Moderaci&oacute;n</strong> &mdash; revisar publicaciones reportadas, rese&ntilde;as inapropiadas, resolver disputas entre campesino y comprador</li>
+      <li><strong>Configuraci&oacute;n de comisiones</strong> &mdash; cambiar el porcentaje de comisi&oacute;n desde el panel sin modificar c&oacute;digo</li>
+      <li><strong>Gesti&oacute;n de plazas</strong> &mdash; agregar o desactivar plazas de mercado disponibles en el sistema</li>
+      <li><strong>Reportes</strong> &mdash; exportar reportes en Excel/PDF de ventas, usuarios, productos m&aacute;s vendidos</li>
+    </ul>
+
+    <h3 style="color:#fff; font-size:1rem; margin: 18px 0 12px 0;">Panel de superadmin / desarrollador</h3>
+    <ul>
+      <li><strong>Configuraci&oacute;n del sistema</strong> &mdash; todo parametrizable desde interfaz gr&aacute;fica: nombre del sitio, URL, l&iacute;mite de ofertas flash, tiempo de expiraci&oacute;n de pedidos, puntajes para bloqueo de usuarios, m&iacute;nimo de rese&ntilde;as, etc. Nada est&aacute; escrito en el c&oacute;digo.</li>
+      <li><strong>API keys</strong> &mdash; gesti&oacute;n gr&aacute;fica de claves de pago (Nequi, Wompi), mapas (Google Maps), email (SMTP), almacenamiento (Cloudinary)</li>
+      <li><strong>Roles y permisos</strong> &mdash; crear, editar o eliminar administradores con diferentes niveles de acceso</li>
+      <li><strong>Logs del sistema</strong> &mdash; registro de acciones importantes: inicios de sesi&oacute;n, pagos, cambios de configuraci&oacute;n, errores</li>
+      <li><strong>Respaldos</strong> &mdash; generar y descargar respaldo de la base de datos desde el panel</li>
+      <li><strong>Mantenimiento</strong> &mdash; activar modo mantenimiento (la p&aacute;gina muestra "estamos en mantenimiento")</li>
+    </ul>
+  </div>
+
+  <!-- TECNOLOGÍA -->
+  <div class="section">
+    <h2><span class="num">06</span> Tecnolog&iacute;a propuesta</h2>
+    <div class="grid-2">
+      <div class="card-mini">
+        <h3>Frontend &mdash; Angular</h3>
+        <ul>
+          <li><strong>Angular</strong> + TypeScript para estructura s&oacute;lida y escalable</li>
+          <li>Dise&ntilde;o <strong>mobile-first</strong> con Bootstrap / Tailwind</li>
+          <li>Leaflet.js para mapas (gratuito, sin API key costosa)</li>
+          <li><strong>PWA (Progressive Web App)</strong>: se instala como app en el celular sin pasar por Google Play</li>
+          <li>A futuro: cuando crezca, se empaqueta como APK nativa con Capacitor</li>
+        </ul>
+      </div>
+      <div class="card-mini">
+        <h3>Backend &mdash; FastAPI + PostgreSQL</h3>
+        <ul>
+          <li><strong>FastAPI</strong> (Python): rendimiento alto, documentaci&oacute;n autom&aacute;tica (Swagger), preparado para integraci&oacute;n de IA a futuro</li>
+          <li><strong>PostgreSQL</strong> como base de datos relacional normalizada (3FN, sin datos repetidos)</li>
+          <li>Autenticaci&oacute;n: JWT</li>
+          <li>Hosting: Render / Railway / AWS (seg&uacute;n fase)</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- PANTALLAS -->
+  <div class="section">
+    <h2><span class="num">07</span> Pantallas del sistema</h2>
+    <div class="grid-2">
+      <div class="card-mini">
+        <h3>Campesino</h3>
+        <ul>
+          <li>Login / registro</li>
+          <li>Dashboard: mis productos publicados</li>
+          <li>Nueva publicaci&oacute;n (producto, cantidad, precio, fecha)</li>
+          <li>Mapa: marcar mi puesto</li>
+          <li>Activar oferta flash</li>
+          <li>Ver pedidos recibidos</li>
+          <li>Responder rese&ntilde;as</li>
+          <li>Mi perfil y calificaciones</li>
+        </ul>
+      </div>
+      <div class="card-mini">
+        <h3>Consumidor</h3>
+        <ul>
+          <li>Login / registro</li>
+          <li>Mapa: ver campesinos cerca en tiempo real</li>
+          <li>Explorar productos disponibles</li>
+          <li>Pre-ordenar (pago directo al retirar)</li>
+          <li>Notificaciones de ofertas flash</li>
+          <li>Historial de compras</li>
+          <li>Dejar rese&ntilde;a al campesino</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- MONETIZACIÓN -->
+  <div class="section">
+    <h2><span class="num">08</span> Modelo de negocio</h2>
+    <ul>
+      <li><strong>Uso gratuito</strong> para campesinos y compradores. Sin comisiones</li>
+      <li><strong>Los pagos son directos</strong> entre campesino y comprador. La plataforma solo conecta, no maneja dinero</li>
+      <li><strong>Anuncios</strong> de marcas relacionadas (semillas, abonos, herramientas, tiendas agropecuarias)</li>
+      <li><strong>Campesino destacado</strong> &mdash; opci&oacute;n de pago para aparecer primero en el mapa</li>
+    </ul>
+  </div>
+
+  <!-- NOVEDAD -->
+  <div class="section" style="text-align:center; border-color: #51cf6644;">
+    <p style="font-size:1.1rem; color:#ccc;">
+      <span class="novelty-badge">NO EXISTE EN COLOMBIA</span>
+    </p>
+    <p style="margin-top:12px; color:#888; font-size:0.9rem;">
+      No hay ninguna plataforma que combine pre-venta campesina + mapa en tiempo real del puesto + ofertas flash de &uacute;ltimo momento para evitar p&eacute;rdida de cosecha, con sistema de calificaciones mutuas y pagos protegidos.
+    </p>
+  </div>
+
+  <!-- ESTRATEGIA DE DESPLIEGUE -->
+  <div class="section">
+    <h2><span class="num">09</span> Estrategia de despliegue</h2>
+    <div class="grid-2">
+      <div class="card-mini">
+        <h3>Fase 1 &mdash; Web responsive (ahora)</h3>
+        <ul>
+          <li>Plataforma web 100% responsive, funciona en cualquier celular con navegador</li>
+          <li>PWA instalable: el campesino abre la web y Android le pregunta "¿Instalar app?" sin pasar por Google Play</li>
+          <li>Sin aprobaci&oacute;n de tiendas, sin costos de publicaci&oacute;n</li>
+          <li>Ideal para probar la idea con usuarios reales</li>
+        </ul>
+      </div>
+      <div class="card-mini">
+        <h3>Fase 2 &mdash; APK nativa (futuro)</h3>
+        <ul>
+          <li>Cuando la plataforma tenga tracci&oacute;n, se empaqueta como app Android nativa</li>
+          <li>Tecnolog&iacute;a: Capacitor (Ionic) o Kotlin nativo</li>
+          <li>Notificaciones push m&aacute;s r&aacute;pidas, sin dependencia del navegador</li>
+          <li>Acceso a GPS en segundo plano, c&aacute;mara para fotos de productos</li>
+          <li>Publicaci&oacute;n en Google Play</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div style="text-align:center; margin-top:30px; color:#555; font-size:0.85rem; padding:20px 0; border-top:1px solid #2a2a4a;">
+    <strong>MercadoCampesino</strong> &mdash; Trabajo de Grado 3 &mdash; CUN Bogot&aacute; &mdash; 2026
+  </div>
+
+</div>
+</body>
+</html>

@@ -9,7 +9,8 @@ interface Usuario {
   id: number; nombres: string; apellidos: string; cedula: string;
   email: string; celular: string; id_perfil: number;
   activo: boolean; verificado_por_admin: boolean; foto_cedula: string | null;
-  puntos_confianza: number;
+  puntos_confianza: number; motivo_bloqueo: string | null;
+  id_perfil_original: number | null;
 }
 
 @Component({
@@ -86,6 +87,7 @@ interface Usuario {
                     <th class="fw-semibold">Documento</th>
                     <th class="fw-semibold">Verificado</th>
                     <th class="fw-semibold">Estado</th>
+                    <th class="fw-semibold">Motivo</th>
                     <th class="fw-semibold text-end">Acciones</th>
                   </tr>
                 </thead>
@@ -119,9 +121,16 @@ interface Usuario {
                         </span>
                       </td>
                       <td>
-                        <span class="badge rounded-pill" [class.bg-success]="u.activo" [class.bg-secondary]="!u.activo">
-                          {{ u.activo ? 'Activo' : 'Bloqueado' }}
+                        <span class="badge rounded-pill" [class.bg-success]="u.id_perfil!==5" [class.bg-secondary]="u.id_perfil===5">
+                          {{ u.id_perfil!==5 ? 'Activo' : 'Bloqueado' }}
                         </span>
+                      </td>
+                      <td>
+                        @if (u.id_perfil===5 && u.motivo_bloqueo) {
+                          <span class="small text-danger" title="{{ u.motivo_bloqueo }}">{{ u.motivo_bloqueo.length > 30 ? (u.motivo_bloqueo.substring(0,30)+'...') : u.motivo_bloqueo }}</span>
+                        } @else {
+                          <span class="text-muted small">—</span>
+                        }
                       </td>
                       <td class="text-end">
                         <div class="d-flex gap-1 justify-content-end">
@@ -131,9 +140,15 @@ interface Usuario {
                             </button>
                           }
                           @if (auth.usuario()?.id_perfil === 1 || u.id_perfil !== 1) {
-                            <button class="btn btn-sm btn-outline-secondary border-0 rounded-3" (click)="toggleBloqueo(u)" title="Bloquear/Desbloquear">
-                              <i class="bi" [class.bi-lock]="u.id_perfil!==5" [class.bi-unlock]="u.id_perfil===5"></i>
-                            </button>
+                            @if (u.id_perfil===5) {
+                              <button class="btn btn-sm btn-outline-success border-0 rounded-3" (click)="activarUsuario(u)" title="Activar usuario">
+                                <i class="bi bi-unlock"></i>
+                              </button>
+                            } @else {
+                              <button class="btn btn-sm btn-outline-danger border-0 rounded-3" (click)="abrirBloqueo(u)" title="Bloquear usuario">
+                                <i class="bi bi-lock"></i>
+                              </button>
+                            }
                           }
                           @if (auth.usuario()?.id_perfil === 1 || u.id_perfil !== 1) {
                             <button class="btn btn-sm btn-outline-warning border-0 rounded-3" (click)="resetPassword(u.id)" title="Resetear contraseña">
@@ -482,6 +497,41 @@ interface Usuario {
       </div>
     }
 
+    <!-- Modal bloqueo -->
+    @if (bloqueoModal) {
+      <div class="modal d-block" tabindex="-1" style="background:rgba(0,0,0,0.6);">
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content border-0 shadow rounded-4">
+            <div class="modal-header border-0 pb-0">
+              <h5 class="modal-title fw-bold">
+                <i class="bi bi-lock me-1" style="color:var(--rojo);"></i>
+                Bloquear usuario
+              </h5>
+              <button type="button" class="btn-close" (click)="bloqueoModal = null"></button>
+            </div>
+            <div class="modal-body p-4">
+              <p class="mb-2"><strong>{{ bloqueoModal.nombres }} {{ bloqueoModal.apellidos }}</strong> &mdash; CC {{ bloqueoModal.cedula }}</p>
+              <div class="mb-2">
+                <label class="form-label fw-semibold small">Motivo del bloqueo</label>
+                <textarea class="form-control" rows="3" [(ngModel)]="bloqueoMotivo" placeholder="Indica el motivo del bloqueo..."></textarea>
+              </div>
+              @if (bloqueoError) {
+                <div class="alert alert-danger py-2 small rounded-3">{{ bloqueoError }}</div>
+              }
+            </div>
+            <div class="modal-footer border-0 pt-0 justify-content-center gap-2">
+              <button class="btn btn-outline-secondary rounded-3" (click)="bloqueoModal = null">
+                <i class="bi bi-x me-1"></i>Cancelar
+              </button>
+              <button class="btn btn-danger rounded-3" (click)="confirmarBloqueo()" [disabled]="bloqueoCargando || !bloqueoMotivo.trim()">
+                <i class="bi bi-lock me-1"></i>{{ bloqueoCargando ? 'Bloqueando...' : 'Bloquear' }}
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    }
+
     <!-- Modal foto documento -->
     @if (fotoModal) {
       <div class="modal d-block" tabindex="-1" style="background:rgba(0,0,0,0.6);">
@@ -557,6 +607,10 @@ export class Admin implements OnInit {
   nuevaCat = '';
   fotoModal: Usuario | null = null;
   verificarCargando = false;
+  bloqueoModal: Usuario | null = null;
+  bloqueoMotivo = '';
+  bloqueoError = '';
+  bloqueoCargando = false;
   crearModal = false;
   crearCargando = false;
   crearError = '';
@@ -661,12 +715,31 @@ export class Admin implements OnInit {
     });
   }
 
-  toggleBloqueo(u: Usuario) {
-    if (u.id_perfil === 5) {
-      this.api.put(`/usuarios/${u.id}/activar`).subscribe({ next: () => this.cargarUsuarios() });
-    } else {
-      this.api.put(`/usuarios/${u.id}/bloquear`).subscribe({ next: () => this.cargarUsuarios() });
-    }
+  abrirBloqueo(u: Usuario) {
+    this.bloqueoModal = u;
+    this.bloqueoMotivo = '';
+    this.bloqueoError = '';
+  }
+
+  confirmarBloqueo() {
+    if (!this.bloqueoModal || !this.bloqueoMotivo.trim()) return;
+    this.bloqueoCargando = true;
+    this.api.put(`/usuarios/${this.bloqueoModal.id}/bloquear`, { motivo: this.bloqueoMotivo.trim() }).subscribe({
+      next: () => {
+        this.bloqueoCargando = false;
+        this.bloqueoModal = null;
+        this.cargarUsuarios();
+      },
+      error: e => {
+        this.bloqueoCargando = false;
+        this.bloqueoError = e.error?.detail || 'Error al bloquear usuario';
+      }
+    });
+  }
+
+  activarUsuario(u: Usuario) {
+    if (!confirm('¿Activar este usuario? Se restaurará su perfil anterior.')) return;
+    this.api.put(`/usuarios/${u.id}/activar`).subscribe({ next: () => this.cargarUsuarios() });
   }
 
   resetPassword(id: number) {

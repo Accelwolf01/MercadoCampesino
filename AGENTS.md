@@ -1,0 +1,89 @@
+# Normas para el agente
+
+- **Idioma**: Siempre debes hablar en español con el usuario. Piensa y razona en español antes de responder o ejecutar cualquier acción.
+- **Propósito**: Este proyecto es MercadoCampesino, una plataforma web (Angular + FastAPI + PostgreSQL) para conectar campesinos de Cundinamarca con consumidores de Bogotá.
+
+## Goal
+- Desarrollar **MercadoCampesino**, plataforma web (Angular + FastAPI + PostgreSQL) que conecta campesinos de Cundinamarca con consumidores de Bogotá, con preórdenes, mapa en tiempo real, ofertas flash y reseñas mutuas — proyecto de grado "Trabajo de Grado 3" CUN Bogotá
+
+## Constraints & Preferences
+- **Pagos NO en plataforma** — directo entre campesino y consumidor
+- **Sin chat** — solo reseñas públicas
+- **Seguridad**: bcrypt directo (sin passlib 1.7.4), JWT, permisos por perfil
+- **Control de fraude**: penalización por no-retiro, verificación admin con foto de cédula
+- **Parametrizable**: configuración del sistema desde GUI admin/superadmin
+- **Base normalizada**: 3NF, sin triggers
+- **Ubicación flexible**: campesino marca punto en mapa, puede actualizar durante el día
+- **Registro requiere verificación admin** — todos los usuarios nuevos inactivos hasta aprobación
+- **Idioma**: todo en español (incluido AGENTS.md)
+- **Sin variables de entorno**: todas las credenciales van hardcodeadas como defaults en `config.py` (Supabase: `aws-1-us-west-2.pooler.supabase.com`, user: `postgres.bfpxpvophaixbvvluxaq`, pass: `bXo76SLW1sozXDmY`). El `.env` es solo para desarrollo local y está en `.gitignore`.
+
+## Progress
+### Done
+- **Backend**: 14 modelos ORM, 13 routers con 63+ endpoints, auth JWT + bcrypt directo, sistema de permisos
+- **SQL**: schema completo con `producto_fotos`, `foto_url` en `viaje_ubicaciones`, hash bcrypt correcto
+- **Frontend Angular**: todos los componentes de página creados (campesino, home, login, register, pending, admin, consumidor, superadmin, mapa, viaje)
+- **Campesino**: pestaña "Mis productos" con CRUD (agregar/eliminar), selector de categorías, foto base64 via file input, vista en grid
+- **Home**: banner de ofertas flash con tarjetas (imagen, descuento, precios, ubicación), mensaje "No hay ofertas activas" cuando vacío
+- **Login**: formulario con redirección por perfil
+- **Register**: formulario con selección campesino/consumidor, redirección a pending
+- **Admin**: pestañas Usuarios (buscar, verificar, bloquear, reset pass) y Categorías (agregar, activar/desactivar)
+- **Superadmin**: pestaña Perfiles y permisos con checkboxes para toggle permisos por perfil
+- **Mapa**: Leaflet con marcadores personalizados 🌽, popups con productos/precios/fotos
+- **Navbar**: gradiente rojo, texto amarillo, enlaces según perfil (superadmin ve todos)
+- **Estilos globales**: paleta rojo+amarillo, CSS variables, diseño responsivo
+- **Productos con dueño**: modelo Producto ahora tiene `id_creador` nullable FK a usuarios — admin crea productos globales (sin creador), campesinos crean sus propios productos (con su id como creador)
+- **Permisos por perfil**: endpoints `POST /perfiles/{id}/permisos` y `DELETE /perfiles/{id}/permisos/{permiso_id}` para toggle desde superadmin
+- **Compilación**: frontend build exitoso, backend routers verificados sintácticamente
+
+### In Progress
+- (ninguno)
+
+### Blocked
+- (ninguno)
+
+## Key Decisions
+- **bcrypt directo** en lugar de passlib (passlib 1.7.4 incompatible con bcrypt 4.1.3 en Python 3.14)
+- **Todos los usuarios requieren verificación admin** — `activo=false` + `verificado_por_admin=false` al registrar
+- **Usuarios bloqueados pueden login pero tienen cero permisos** (perfil "bloqueado" sin permisos)
+- **Componentes Angular standalone** sin NgModules, sintaxis `@if`/`@for` (Angular 19+)
+- **API directa** (`http://localhost:8000`) sin proxy config
+- **Paleta rojo+amarillo** — rojo (#c62828), amarillo (#fdd835), crema (#fff8e1)
+- **Fotos como base64 en DB** en lugar de URLs — campesinos no saben manejar URLs
+- **Productos con dueño** (`id_creador`) — campesinos gestionan su propio catálogo
+- **Admin resuelve problemas** — gestiona usuarios, categorías, moderación, reportes
+- **Superadmin desarrollador** — acceso total, permisos, perfiles, config del sistema
+- **Login con cédula** en lugar de correo — los campesinos no manejan email pero todos tienen cédula
+- **Email opcional** en registro — se permite duplicado o vacío, sin unique constraint en DB
+
+## Next Steps
+1. Enriquecer componente Consumidor (ver productos, dejar reseñas, preórdenes)
+2. Enriquecer componente Campesino (viajes, ofertas flash)
+3. Probar flujo completo: registro → verificación admin → login → crear producto → crear viaje
+4. Sembrar datos de prueba con ofertas para ver banner funcionando
+5. Probar backend corriendo con `uvicorn app.main:app`
+
+## Critical Context
+- Backend: `http://localhost:8000` (Swagger en `/docs`)
+- Frontend: `http://localhost:4200`
+- DB: host=localhost, db=MercadoCampesino, user=postgres, password=*
+- Superadmin: `superadmin@mercadocampesino.co` / `SuperAdmin2026!`
+- Python 3.14, bcrypt 4.1.3, pydantic 2.13.4
+- Angular 19+ standalone, Leaflet, FormsModule
+- Perfiles: 1=superadmin, 2=admin, 3=campesino, 4=consumidor, 5=bloqueado
+- IDs de permisos: `verificar_usuarios`=1, `gestionar_categorias`=2, `gestionar_perfiles`=3, `gestionar_permisos`=4, `ver_reportes`=5, `gestionar_config`=6
+
+## Relevant Files
+- `backend/app/models.py` — ORM models
+- `backend/app/schemas.py` — Pydantic schemas
+- `backend/app/routers/productos.py` — productos router (mis-productos, POST, PUT, DELETE)
+- `backend/app/routers/perfiles.py` — perfiles router (incluye POST/DELETE permisos)
+- `backend/bd/init.sql` — schema DDL con datos de prueba (campesino, consumidor, productos, viaje, ofertas)
+- `frontend/src/app/pages/campesino/campesino.ts` — campesino con pestaña Mis productos
+- `frontend/src/app/pages/home/home.ts` — home con banner de ofertas flash
+- `frontend/src/app/pages/admin/admin.ts` — admin con usuarios y categorías
+- `frontend/src/app/pages/superadmin/superadmin.ts` — superadmin con toggle permisos
+- `frontend/src/app/pages/mapa/mapa.ts` — mapa Leaflet con marcadores personalizados
+- `frontend/src/app/components/navbar/navbar.ts` — navbar con navegación por perfil
+- `frontend/src/styles.css` — variables globales rojo/amarillo
+- `frontend/src/index.html` — lang="es", charset="utf-8"

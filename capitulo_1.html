@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MercadoCampesino - Capítulo 1 - Trabajo de Grado 3 - CUN Bogotá</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap');
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Inter', sans-serif;
+    background: #0f0f1a;
+    color: #e0e0e0;
+    padding: 40px 20px;
+  }
+  .container { max-width: 800px; margin: 0 auto; }
+
+  .header {
+    text-align: center;
+    margin-bottom: 40px;
+    padding-bottom: 30px;
+    border-bottom: 1px solid #2a2a4a;
+  }
+  .header h1 {
+    font-size: 2.2rem;
+    font-weight: 800;
+    background: linear-gradient(135deg, #fcc419, #ff922b);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    letter-spacing: -1px;
+  }
+  .header .sub {
+    color: #8888aa;
+    font-size: 1rem;
+    margin-top: 8px;
+  }
+
+  .section {
+    background: linear-gradient(145deg, #16162a, #1a1a30);
+    border-radius: 16px;
+    border: 1px solid #2a2a4a;
+    padding: 30px 32px;
+    margin-bottom: 24px;
+  }
+
+  .section h1 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #fcc419;
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid #fcc41922;
+  }
+  .section h2 {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #fff;
+    margin: 20px 0 12px 0;
+  }
+  .section h3 {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #ddd;
+    margin: 16px 0 10px 0;
+  }
+
+  .section p {
+    color: #bbb;
+    font-size: 0.95rem;
+    line-height: 1.8;
+    margin-bottom: 12px;
+    text-align: justify;
+  }
+
+  .toc {
+    background: #0f0f1a88;
+    border: 1px solid #2a2a4a;
+    border-radius: 12px;
+    padding: 20px 24px;
+    margin-bottom: 20px;
+  }
+  .toc p {
+    margin-bottom: 4px;
+    color: #999;
+    font-size: 0.9rem;
+  }
+
+  .keywords {
+    margin-top: 14px;
+    padding: 12px 16px;
+    background: #0f0f1a88;
+    border-left: 3px solid #fcc419;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    color: #999;
+  }
+
+  .declaracion {
+    background: #0f0f1a88;
+    border: 1px solid #2a2a4a;
+    border-radius: 12px;
+    padding: 20px 24px;
+    margin-bottom: 16px;
+  }
+  .declaracion p {
+    font-style: italic;
+    color: #aaa;
+    margin-bottom: 10px;
+  }
+  .firma {
+    margin-top: 20px;
+    padding-top: 14px;
+    border-top: 1px solid #2a2a4a;
+  }
+  .firma .line {
+    margin: 24px 0 4px 0;
+    border-bottom: 1px solid #555;
+    width: 280px;
+  }
+
+  .num-list {
+    list-style: none;
+    padding: 0;
+  }
+  .num-list li {
+    padding: 8px 0 8px 24px;
+    position: relative;
+    color: #bbb;
+    font-size: 0.95rem;
+    line-height: 1.7;
+  }
+  .num-list li::before {
+    content: counter(item) ".";
+    counter-increment: item;
+    position: absolute;
+    left: 0;
+    color: #fcc419;
+    font-weight: 700;
+  }
+  .num-list { counter-reset: item; }
+
+  .bullet-list {
+    list-style: none;
+    padding: 0;
+  }
+  .bullet-list li {
+    padding: 6px 0 6px 20px;
+    position: relative;
+    color: #bbb;
+    font-size: 0.95rem;
+    line-height: 1.7;
+  }
+  .bullet-list li::before {
+    content: ">";
+    position: absolute;
+    left: 0;
+    color: #fcc419;
+    font-weight: 700;
+  }
+
+  .page-num {
+    text-align: right;
+    color: #555;
+    font-size: 0.8rem;
+    margin-top: 20px;
+    border-top: 1px solid #2a2a4a;
+    padding-top: 20px;
+  }
+
+  @media (max-width: 640px) {
+    .header h1 { font-size: 1.5rem; }
+    .section { padding: 20px 18px; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <div class="header">
+    <h1>MercadoCampesino</h1>
+    <p class="sub">Capítulo 1 &mdash; Trabajo de Grado 3 &mdash; CUN Bogotá &mdash; 2026</p>
+  </div>
+
+  <!-- TDC -->
+  <div class="section">
+    <h1>Tabla de contenido</h1>
+    <div class="toc">
+      <p>Resumen .......................................................................................... 8</p>
+      <p>Abstract ........................................................................................... 9</p>
+      <p>Preliminares .................................................................................... 10</p>
+      <p>&emsp;Declaración de originalidad y autonomía ........................................ 10</p>
+      <p>&emsp;Declaración de exoneración de responsabilidad ............................... 11</p>
+      <p>1 Introducción .................................................................................. 12</p>
+      <p>2 Planteamiento del problema ............................................................ 15</p>
+      <p>&emsp;2.1 Formulación o Pregunta de Investigación .................................... 16</p>
+      <p>3 Objetivos ....................................................................................... 17</p>
+      <p>&emsp;3.1 Objetivo general ....................................................................... 17</p>
+      <p>&emsp;3.2 Objetivos específicos ................................................................ 17</p>
+      <p>4 Justificación .................................................................................. 19</p>
+      <p>5 Alcances y Limitaciones del Proyecto ............................................. 20</p>
+    </div>
+  </div>
+
+  <!-- RESUMEN -->
+  <div class="section">
+    <h1>Resumen</h1>
+    <p>Los campesinos de Cundinamarca viajan a Bogotá con sus cosechas, pero en múltiples ocasiones no logran comercializar la totalidad de sus productos, lo que los obliga a desecharlos. Adicionalmente, los intermediarios absorben la mayor parte del margen de ganancia, generando que el productor reciba un precio bajo mientras el consumidor final paga un valor elevado. El presente proyecto propone crear <strong>MercadoCampesino</strong>, una plataforma web accesible desde cualquier dispositivo móvil que conecta directamente al campesino con los consumidores en Bogotá. La plataforma permite que el campesino publique con antelación los productos que llevará, que los consumidores realicen preórdenes, y que al llegar a la plaza el vendedor señale su ubicación en un mapa para que los compradores lo encuentren fácilmente. También incluye la funcionalidad de ofertas flash para evitar el retorno de mercancía no vendida. Los consumidores pueden consultar en tiempo real qué productos están disponibles, a qué precio y quién los ofrece, además de dejar reseñas que fomentan la confianza entre las partes. Se concluye que una herramienta tecnológica sencilla, accesible desde cualquier teléfono celular y que no gestione pagos dentro de la plataforma, puede contribuir a que los campesinos incrementen sus ventas, los consumidores accedan a precios más justos y se reduzca el desperdicio de alimentos.</p>
+    <div class="keywords"><strong>Palabras clave:</strong> mercado campesino, comercio directo, pérdida de cosecha, plazas de mercado, PWA, economía local</div>
+  </div>
+
+  <!-- ABSTRACT -->
+  <div class="section">
+    <h1>Abstract</h1>
+    <p>Farmers from Cundinamarca travel to Bogotá with their harvest, but many times they cannot sell everything and have to throw food away. Middlemen absorb most of the profit margin, so farmers earn little and consumers pay more than necessary. This project proposes <strong>MercadoCampesino</strong>, a web platform accessible from any mobile device that connects farmers directly with consumers in Bogotá. Farmers can post in advance what they are bringing, consumers can place pre-orders, and when the farmer arrives at the market square, they can mark their stall on a map so buyers can find them easily. The platform also includes flash offer functionality to avoid taking unsold produce back home. Consumers can see in real time who is selling, what products are available and at what price, and leave reviews that build trust between parties. It is concluded that a simple technological tool, accessible from any cell phone and without handling payments within the platform, can help farmers increase their sales, consumers access fairer prices, and reduce food waste.</p>
+    <div class="keywords"><strong>Keywords:</strong> farmers market, direct commerce, crop loss, marketplaces, PWA, local economy</div>
+  </div>
+
+  <!-- PRELIMINARES -->
+  <div class="section">
+    <h1>Preliminares</h1>
+
+    <h2>Declaración de originalidad y autonomía</h2>
+    <div class="declaracion">
+      <p>Declaramos bajo la gravedad del juramento, que hemos escrito el presente proyecto, en la propuesta de solución a una problemática en el campo de conocimientos del programa de Ingeniería de Sistemas por nuestra propia cuenta y que, por lo tanto, su contenido es original.</p>
+      <p>Declaramos que hemos indicado clara y precisamente todas las fuentes directas e indirectas de información y que no ha sido entregado a ninguna otra institución con fines de calificación o publicación.</p>
+      <div class="firma">
+        <div class="line"></div>
+        <p style="font-style:normal; font-size:0.9rem;">(Nombre 1 - Apellidos completos)</p>
+        <div class="line" style="margin-top:28px;"></div>
+        <p style="font-style:normal; font-size:0.9rem;">(Nombre 2 - Apellidos completos)</p>
+        <div class="line" style="margin-top:28px;"></div>
+        <p style="font-style:normal; font-size:0.9rem;">(Nombre 3 - Apellidos completos)</p>
+        <p style="font-style:normal; font-size:0.85rem; margin-top:16px; color:#777;">Firmado en Bogotá, Cundinamarca, 24 de julio de 2026</p>
+      </div>
+    </div>
+
+    <h2>Declaración de exoneración de responsabilidad</h2>
+    <div class="declaracion">
+      <p>Declaramos que la responsabilidad intelectual del presente trabajo es exclusivamente de sus autores. La Corporación Unificada Nacional de Educación Superior &mdash; CUN no se hace responsable de contenidos, opiniones o ideologías expresadas total o parcialmente en él.</p>
+      <div class="firma">
+        <div class="line"></div>
+        <p style="font-style:normal; font-size:0.9rem;">(Nombre 1 - Apellidos completos)</p>
+        <div class="line" style="margin-top:28px;"></div>
+        <p style="font-style:normal; font-size:0.9rem;">(Nombre 2 - Apellidos completos)</p>
+        <div class="line" style="margin-top:28px;"></div>
+        <p style="font-style:normal; font-size:0.9rem;">(Nombre 3 - Apellidos completos)</p>
+        <p style="font-style:normal; font-size:0.85rem; margin-top:16px; color:#777;">Firmado en Bogotá, Cundinamarca, 24 de julio de 2026</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 1 INTRODUCCIÓN -->
+  <div class="section">
+    <h1>1 Introducción</h1>
+
+    <p>Colombia es un país con una vocación agrícola significativa; sin embargo, quienes cultivan la tierra enfrentan condiciones adversas que limitan su rentabilidad. Los campesinos de Cundinamarca inician su jornada antes del amanecer, viajan durante horas hasta Bogotá, asumen el costo de un puesto en la plaza de mercado y, al finalizar la jornada, en numerosas ocasiones regresan con gran parte de la cosecha sin vender, la cual termina siendo desechada. A esta pérdida se suma la intervención de intermediarios que absorben la mayor parte del margen de ganancia, de modo que el productor recibe un ingreso mínimo mientras el consumidor final paga un precio elevado.</p>
+
+    <p>Paralelamente, los habitantes de Bogotá que desean adquirir frutas y verduras frescas a precios razonables carecen de información sobre la ubicación exacta del puesto del campesino, los productos disponibles cada día y sus precios. La dinámica actual obliga al comprador a recorrer la plaza sin certeza de encontrar lo que necesita.</p>
+
+    <p>Ante esta situación, se propone el desarrollo de <strong>MercadoCampesino</strong>, una plataforma web accesible desde cualquier dispositivo móvil sin necesidad de instalación. El campesino puede publicar con anticipación los productos que llevará al mercado, especificando cantidades y precios, y los consumidores pueden realizar preórdenes desde su hogar. Al llegar a la plaza, el vendedor señala su ubicación en un mapa interactivo para que los compradores lo localicen con facilidad. Si al final de la jornada queda producto sin vender, el campesino puede activar una oferta flash desde su teléfono, y los usuarios cercanos reciben la información al instante.</p>
+
+    <p>El desarrollo tecnológico de la plataforma utiliza Angular para la interfaz de usuario, FastAPI (Python) para la lógica del servidor y PostgreSQL como motor de base de datos. La funcionalidad de mapas se implementa con Leaflet.js, una librería de código abierto. Las transacciones económicas se realizan directamente entre el campesino y el comprador, sin intervención de la plataforma, preservando la dinámica tradicional de la plaza de mercado.</p>
+
+    <p>Un principio fundamental del diseño arquitectónico es que el sistema sea <strong>parametrizable y normalizado</strong>. La base de datos se estructura bajo la tercera forma normal (3NF) para eliminar redundancias, y ningún valor crítico se encuentra hardcodeado en el código fuente. Aspectos como los tipos de calidad del producto, las categorías, los límites de ofertas flash, los puntajes para bloqueo de usuarios y los tiempos de expiración se gestionan desde el panel de administración sin requerir modificaciones al código. Esta flexibilidad permite que el sistema se adapte a diferentes contextos operativos sin intervención técnica.</p>
+
+    <p>El presente proyecto persigue tres beneficios fundamentales: incrementar los ingresos del campesino mediante la venta directa, reducir el desperdicio de alimentos y ofrecer a los consumidores bogotanos productos más frescos a precios más competitivos.</p>
+  </div>
+
+  <!-- 2 PLANTEAMIENTO DEL PROBLEMA -->
+  <div class="section">
+    <h1>2 Planteamiento del problema</h1>
+
+    <p>Los campesinos de Cundinamarca que comercializan sus productos en plazas de mercado como Paloquemao, 20 de Julio, 7 de Agosto y Abastos enfrentan tres problemáticas estructurales que limitan su sostenibilidad económica. En primer lugar, la incertidumbre sobre la demanda: el productor sale de su vereda sin conocer cuántos compradores asistirán ni qué cantidad de producto logrará colocar, lo que genera jornadas en las que no se vende ni la mitad de la carga. En segundo lugar, la pérdida de la cosecha no comercializada: al finalizar la jornada, el producto perecedero que no se vendió debe desecharse, ya que se deteriora durante el transporte de regreso o simplemente no puede almacenarse, representando una pérdida económica directa y contribuyendo al desperdicio de alimentos. En tercer lugar, la intermediación excesiva: los intermediarios absorben la mayor parte del margen de ganancia, de modo que el campesino recibe un precio reducido por su producto mientras el consumidor final paga un valor significativamente mayor.</p>
+
+    <p>En la actualidad no existe una herramienta tecnológica diseñada específicamente para la dinámica de las plazas de mercado bogotanas. Las plataformas de comercio electrónico generalistas como Mercado Libre u OLX no se adaptan a las necesidades particulares de este contexto: no permiten anunciar productos antes del viaje, no ofrecen geolocalización en tiempo real del puesto de venta, no facilitan el ajuste dinámico de precios ni la activación de ofertas de último minuto para minimizar el retorno de mercancía no vendida.</p>
+
+    <p>Las <strong>causas</strong> de esta situación se originan en la ausencia de canales de comunicación directa entre productor y consumidor, la falta de herramientas tecnológicas accesibles y de bajo costo adaptadas al contexto rural, y un sistema de comercialización que históricamente ha dependido de intermediarios. Como <strong>efectos</strong> directos se observan la reducción sostenida de los ingresos de los campesinos, el desperdicio creciente de alimentos en las plazas de mercado, el desincentivo para que las nuevas generaciones continúen con la actividad agrícola y el consecuente aumento de la dependencia alimentaria de Bogotá respecto a grandes superficies comerciales.</p>
+
+    <p>Actualmente, el campesino inicia su jornada aproximadamente a las tres de la madrugada, alista la cosecha, la transporta durante dos o tres horas hasta Bogotá, paga por el derecho de uso del puesto en la plaza de mercado y espera la llegada de los compradores sin haber tenido la posibilidad de anunciar su oferta ni recibir pedidos anticipados. Carece de mecanismos para informar a los consumidores sobre los productos que lleva, sus precios y su ubicación exacta dentro de la plaza. Al cierre de la jornada, el excedente no vendido debe ser desechado o regalado, y el producto que logra devolverse a la vereda se deteriora durante el trayecto, resultando igualmente en pérdida total.</p>
+
+    <p>Si esta situación persiste sin intervención, es previsible que los jóvenes del ámbito rural migren hacia las ciudades en búsqueda de oportunidades laborales distintas a la agricultura, profundizando el relevo generacional en el campo. Bogotá incrementará su dependencia de las grandes cadenas de supermercados, y el desperdicio de alimentos en las plazas continuará en aumento. La implementación de una plataforma tecnológica que facilite la conexión directa entre productor y consumidor, permita la realización de preórdenes y la activación de ofertas de último minuto, representa una alternativa viable para mitigar esta problemática.</p>
+
+    <h2>2.1 Formulación o Pregunta de Investigación</h2>
+
+    <p>¿Es posible desarrollar una plataforma web accesible desde cualquier dispositivo móvil, en la cual los campesinos publiquen anticipadamente los productos que llevarán a la plaza, los consumidores realicen apartados, y mediante un mapa en tiempo real junto con ofertas de último minuto se logre reducir el desperdicio de alimentos y aumentar los ingresos del productor a través de la venta directa sin intermediarios?</p>
+  </div>
+
+  <!-- 3 OBJETIVOS -->
+  <div class="section">
+    <h1>3 Objetivos</h1>
+
+    <h2>3.1 Objetivo general</h2>
+    <p>Desarrollar una plataforma web que funcione en dispositivos móviles, denominada MercadoCampesino, con el propósito de facilitar la comercialización directa entre campesinos de Cundinamarca y consumidores de Bogotá, mediante funcionalidades de preórdenes, geolocalización en tiempo real del puesto de venta, ajuste dinámico de precios y activación de ofertas flash, contribuyendo así a la reducción del desperdicio de alimentos y al incremento de los ingresos del productor.</p>
+
+    <h2>3.2 Objetivos específicos</h2>
+    <ol class="num-list">
+      <li>Identificar las necesidades y dinámicas de comercialización de los campesinos en las plazas de mercado de Bogotá, así como las expectativas de los consumidores, mediante trabajo de campo que permita definir los requisitos funcionales de la plataforma.</li>
+      <li>Diseñar e implementar una arquitectura de software basada en Angular, FastAPI y PostgreSQL que integre los módulos de publicación de viajes, preórdenes, geolocalización en mapa interactivo y ofertas flash, garantizando una base de datos normalizada bajo tercera forma normal y un sistema parametrizable desde paneles de administración.</li>
+      <li>Evaluar la funcionalidad y usabilidad de la plataforma mediante pruebas con usuarios reales en una plaza de mercado de Bogotá, con el fin de medir su impacto en la reducción de pérdida de producto y en la satisfacción de las partes involucradas.</li>
+    </ol>
+  </div>
+
+  <!-- 4 JUSTIFICACIÓN -->
+  <div class="section">
+    <h1>4 Justificación</h1>
+
+    <p>El desarrollo de MercadoCampesino se fundamenta en la necesidad de transformar la dinámica de comercialización en las plazas de mercado de Bogotá, donde la asimetría de información y la intervención de intermediarios generan ineficiencias que afectan tanto al productor como al consumidor. Desde una perspectiva social, la plataforma busca restablecer el equilibrio en la cadena de valor, permitiendo que el campesino reciba un precio justo por su trabajo y que el consumidor acceda a productos frescos a un costo razonable. La eliminación de intermediarios redunda en un beneficio directo para ambas partes, fortaleciendo el tejido económico local y promoviendo la sostenibilidad de la agricultura familiar en Cundinamarca.</p>
+
+    <p>En el ámbito ambiental, la reducción del desperdicio de alimentos constituye una de las prioridades globales más apremiantes. Según la Organización de las Naciones Unidas para la Alimentación y la Agricultura (FAO), aproximadamente un tercio de los alimentos producidos en el mundo se pierde o desperdicia. MercadoCampesino contribuye a mitigar este problema al permitir que el campesino anticipe su oferta y que, mediante las ofertas flash, logre colocar el producto que de otra manera sería desechado al finalizar la jornada. Cada kilogramo de alimento que se vende gracias a la plataforma es un kilogramo que no se desperdicia, con el consiguiente impacto positivo en la huella ecológica asociada a la producción y transporte de alimentos.</p>
+
+    <p>Desde el punto de vista tecnológico y académico, el proyecto resulta viable porque se sustenta en herramientas modernas, de código abierto y sin costo de licenciamiento: Angular para el frontend, FastAPI para el backend, PostgreSQL para la base de datos y Leaflet.js para la cartografía. La decisión de no gestionar pagos dentro de la plataforma elimina barreras regulatorias y de seguridad que habrían complicado significativamente el desarrollo, permitiendo enfocar los recursos en las funcionalidades que generan valor directo al usuario. El carácter parametrizable del sistema garantiza que la plataforma pueda adaptarse a cambios en el entorno operativo sin requerir modificaciones al código fuente, lo que constituye un diferenciador importante frente a soluciones existentes.</p>
+
+    <p>Cabe destacar que en el contexto colombiano actual no existe una plataforma que integre todas las funcionalidades propuestas —preórdenes anticipadas, geolocalización en vivo, calidades diferenciadas por producto y ofertas flash— diseñada específicamente para las plazas de mercado. Esta ausencia de alternativas consolida la pertinencia del proyecto y su potencial para generar un impacto significativo en el sector agrícola local.</p>
+  </div>
+
+  <!-- 5 ALCANCES Y LIMITACIONES -->
+  <div class="section">
+    <h1>5 Alcances y Limitaciones del Proyecto</h1>
+
+    <h2>¿Qué va a incluir?</h2>
+    <ul class="bullet-list">
+      <li>Una página principal que explica el proyecto y un mapa donde cualquier persona puede ver los campesinos activos hoy.</li>
+      <li>Registro para campesinos, con su perfil, publicación de viajes, cambios de precios en vivo, ubicación en el mapa, ofertas flash e historial de ventas.</li>
+      <li>Registro para compradores, con mapa interactivo, búsqueda de productos, apartados y reseñas.</li>
+      <li>Panel para administradores: manejar usuarios, categorías, moderar reseñas y ver reportes.</li>
+      <li>Panel para superadmin: todo configurable desde la interfaz gráfica (límites de ofertas, tiempos de expiración, puntajes de bloqueo, etc.) sin modificar el código fuente, además de manejo de claves de API y registros de actividad.</li>
+    </ul>
+    <p>La plataforma funciona en cualquier dispositivo móvil (Android y iOS) sin necesidad de descarga desde tiendas de aplicaciones, al ser una PWA instalable desde el navegador.</p>
+
+    <h2>¿Qué NO va a incluir?</h2>
+    <ul class="bullet-list">
+      <li>La plataforma <strong>no gestiona pagos</strong>. La transacción se realiza directamente entre el campesino y el comprador, preservando la dinámica tradicional de la plaza.</li>
+      <li>La verificación de los campesinos se realiza mediante foto de la cédula, permitiendo que la plataforma mantenga un registro confiable de los productores; no se contempla verificación presencial en terreno.</li>
+      <li>El alcance geográfico se limita a campesinos de Cundinamarca que venden en plazas de Bogotá.</li>
+      <li>Las notificaciones son las estándar del navegador, no notificaciones push nativas.</li>
+      <li>No se incluye una aplicación nativa para Android o iOS, aunque la PWA es instalable desde el navegador.</li>
+      <li>Las pruebas se realizarán con un grupo acotado de usuarios, dado el alcance académico y los recursos disponibles.</li>
+      <li>No existe un sistema de chat entre campesino y comprador, únicamente reseñas públicas posteriores a la compra, para evitar que el campesino deba atender el teléfono mientras atiende su puesto.</li>
+      <li>No se incorpora inteligencia artificial ni recomendaciones automáticas en esta versión, aunque la arquitectura basada en Python facilitaría su incorporación futura.</li>
+    </ul>
+  </div>
+
+  <div class="page-num">Fin del Capítulo 1</div>
+
+</div>
+</body>
+</html>

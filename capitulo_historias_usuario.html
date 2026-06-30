@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MercadoCampesino - Historias de Usuario</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap');
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Inter', sans-serif;
+    background: #0f0f1a;
+    color: #e0e0e0;
+    padding: 40px 20px;
+  }
+  .container { max-width: 800px; margin: 0 auto; }
+
+  .header {
+    text-align: center;
+    margin-bottom: 40px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #2a2a4a;
+  }
+  .header h1 {
+    font-size: 1.8rem;
+    font-weight: 800;
+    background: linear-gradient(135deg, #fcc419, #ff922b);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    letter-spacing: -1px;
+  }
+  .header .sub {
+    color: #8888aa;
+    font-size: 1rem;
+    margin-top: 8px;
+  }
+
+  .intro {
+    background: linear-gradient(145deg, #16162a, #1a1a30);
+    border-radius: 16px;
+    border: 1px solid #2a2a4a;
+    padding: 24px 28px;
+    margin-bottom: 24px;
+  }
+  .intro p {
+    color: #bbb;
+    font-size: 0.95rem;
+    line-height: 1.8;
+    text-align: justify;
+    margin-bottom: 10px;
+  }
+
+  .section {
+    background: linear-gradient(145deg, #16162a, #1a1a30);
+    border-radius: 16px;
+    border: 1px solid #2a2a4a;
+    padding: 24px 28px;
+    margin-bottom: 24px;
+  }
+
+  .section h1 {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #fcc419;
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid #fcc41922;
+  }
+
+  .user-story {
+    background: #0f0f1a88;
+    border-left: 3px solid #fcc419;
+    border-radius: 8px;
+    padding: 16px 20px;
+    margin-bottom: 16px;
+  }
+  .user-story .id {
+    font-size: 0.75rem;
+    color: #777;
+    margin-bottom: 4px;
+  }
+  .user-story .rol {
+    font-size: 0.85rem;
+    color: #ff922b;
+    font-weight: 600;
+    margin-bottom: 6px;
+  }
+  .user-story .texto {
+    font-size: 0.92rem;
+    color: #ccc;
+    line-height: 1.7;
+    margin-bottom: 8px;
+  }
+  .user-story .texto em {
+    color: #fcc419;
+    font-style: italic;
+  }
+  .user-story .criterios {
+    margin-top: 8px;
+  }
+  .user-story .criterios p {
+    font-size: 0.83rem;
+    color: #999;
+    margin-bottom: 3px;
+  }
+  .user-story .criterios p::before {
+    content: "✓ ";
+    color: #4caf50;
+  }
+  .user-story .origen {
+    font-size: 0.78rem;
+    color: #666;
+    margin-top: 8px;
+    border-top: 1px solid #2a2a4a;
+    padding-top: 8px;
+  }
+
+  .resumen {
+    background: #0f0f1a88;
+    border-radius: 8px;
+    padding: 16px 20px;
+    margin-top: 20px;
+  }
+  .resumen table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.85rem;
+  }
+  .resumen table th {
+    background: #1e1e3a;
+    color: #fcc419;
+    font-weight: 600;
+    padding: 8px 10px;
+    border: 1px solid #2a2a4a;
+    text-align: left;
+  }
+  .resumen table td {
+    padding: 6px 10px;
+    border: 1px solid #2a2a4a;
+    color: #bbb;
+  }
+  .resumen table tr:nth-child(even) td {
+    background: #13132a;
+  }
+
+  .page-num {
+    text-align: right;
+    color: #555;
+    font-size: 0.8rem;
+    margin-top: 20px;
+    border-top: 1px solid #2a2a4a;
+    padding-top: 20px;
+  }
+
+  @media (max-width: 640px) {
+    .header h1 { font-size: 1.5rem; }
+    .section { padding: 20px 18px; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <div class="header">
+    <h1>MercadoCampesino</h1>
+    <p class="sub">Historias de Usuario — Trabajo de Campo: Plaza 20 de Julio y Abastos</p>
+  </div>
+
+  <div class="intro">
+    <p>Entre el 15 y el 26 de junio de 2026, el equipo de trabajo se desplazó a la Plaza 20 de Julio y a la Central de Abastos de Bogotá para entrevistar a 23 campesinos y conocer de primera mano sus necesidades, expectativas y sugerencias respecto a una plataforma tecnológica que facilite la comercialización directa de sus productos. A partir de estas entrevistas se definieron las siguientes historias de usuario, que constituyen la base funcional del desarrollo de MercadoCampesino.</p>
+    <p>Cada historia incluye el perfil del usuario, la necesidad expresada, los criterios de aceptación y la mención del campesino que la inspiró. Se priorizaron las funcionalidades que los 23 entrevistados señalaron como más importantes para su día a día en la plaza.</p>
+  </div>
+
+  <!-- CAMPESINO -->
+  <div class="section">
+    <h1>Historias de usuario — Perfil Campesino</h1>
+
+    <div class="user-story">
+      <div class="id">HU-001</div>
+      <div class="rol">Campesino</div>
+      <div class="texto">Como campesino que viaja desde mi vereda hasta Bogotá, quiero <em>publicar los productos que llevaré a la plaza antes de salir</em> para que los compradores sepan qué voy a ofrecer y puedan apartarme desde temprano.</div>
+      <div class="criterios">
+        <p>Poder crear un viaje con fecha, plaza de destino y lista de productos.</p>
+        <p>Cada producto debe tener nombre, precio, cantidad y calidad (primera, segunda, tercera).</p>
+        <p>El viaje debe quedar visible para los consumidores al llegar a la plaza.</p>
+      </div>
+      <div class="origen">&mdash; Don Carlos, campesino de Fómeque, 52 años, lleva papa y zanahoria a la 20 de Julio.</div>
+    </div>
+
+    <div class="user-story">
+      <div class="id">HU-002</div>
+      <div class="rol">Campesino</div>
+      <div class="texto">Como campesino, quiero <em>marcar mi puesto en un mapa al llegar a la plaza</em> para que los compradores me encuentren fácilmente sin tener que recorrer todo el mercado.</div>
+      <div class="criterios">
+        <p>Poder señalar mi ubicación actual en un mapa interactivo.</p>
+        <p>La ubicación debe actualizarse si me cambio de puesto durante el día.</p>
+        <p>Los consumidores deben ver mi ubicación desde la página principal del mapa.</p>
+      </div>
+      <div class="origen">&mdash; Doña María, campesina de Choachí, 45 años, siempre vende en el mismo puesto pero dice que "la gente no encuentra".</div>
+    </div>
+
+    <div class="user-story">
+      <div class="id">HU-003</div>
+      <div class="rol">Campesino</div>
+      <div class="texto">Como campesino, quiero <em>recibir apartados o preórdenes de los consumidores</em> para saber qué cantidad de producto llevar y no cargar de más.</div>
+      <div class="criterios">
+        <p>Recibir notificaciones cuando un consumidor aparte un producto.</p>
+        <p>Poder confirmar o rechazar el apartado según disponibilidad.</p>
+        <p>El producto apartado debe marcarse como comprometido para evitar doble venta.</p>
+      </div>
+      <div class="origen">&mdash; Don Pedro, campesino de Ubaque, 60 años, dice que "muchas veces traigo de más y toca botar".</div>
+    </div>
+
+    <div class="user-story">
+      <div class="id">HU-004</div>
+      <div class="rol">Campesino</div>
+      <div class="texto">Como campesino, quiero <em>activar ofertas flash sobre los productos que no he vendido al final de la jornada</em> para liquidarlos antes de devolverme a la vereda.</div>
+      <div class="criterios">
+        <p>Poder marcar uno o varios productos con descuento y tiempo límite.</p>
+        <p>Los consumidores cercanos deben recibir la oferta destacada en la página principal.</p>
+        <p>Al finalizar la oferta, el producto vuelve a su precio normal o se marca como no disponible.</p>
+      </div>
+      <div class="origen">&mdash; Don José, campesino de Sibaté, 55 años, frutas, "prefiero vender barato a llevar la carga de vuelta".</div>
+    </div>
+
+    <div class="user-story">
+      <div class="id">HU-005</div>
+      <div class="rol">Campesino</div>
+      <div class="texto">Como campesino, quiero <em>ofrecer distintas calidades del mismo producto a precios diferenciados</em> para no desperdiciar los que tienen imperfecciones estéticas.</div>
+      <div class="criterios">
+        <p>Poder asignar calidad (primera, segunda, tercera) a cada producto.</p>
+        <p>Precios distintos según la calidad.</p>
+        <p>Los consumidores deben ver las distintas calidades y sus precios.</p>
+      </div>
+      <div class="origen">&mdash; Don Luis, campesino de Chipaque, 48 años, "la papa fea también sirve, pero nadie la compra al mismo precio".</div>
+    </div>
+
+    <div class="user-story">
+      <div class="id">HU-006</div>
+      <div class="rol">Campesino</div>
+      <div class="texto">Como campesino, quiero <em>ver un historial de mis ventas y apartados</em> para llevar la cuenta de lo que he vendido en el día y en la semana.</div>
+      <div class="criterios">
+        <p>Ver listado de apartados recibidos con estado (pendiente, confirmado, completado).</p>
+        <p>Ver resumen de ingresos del día y acumulado semanal.</p>
+        <p>Poder marcar un producto como vendido cuando el comprador paga en efectivo.</p>
+      </div>
+      <div class="origen">&mdash; Doña Rosa, campesina de Facatativá, 50 años, "uno vende pero nunca sabe cuánto vendió al final del día".</div>
+    </div>
+
+    <div class="user-story">
+      <div class="id">HU-007</div>
+      <div class="rol">Campesino</div>
+      <div class="texto">Como campesino, quiero <em>poder desactivar un producto si se me acaba durante el día</em> para no recibir más apartados de algo que ya no tengo.</div>
+      <div class="criterios">
+        <p>Botón para desactivar/activar producto desde el listado de productos del viaje.</p>
+        <p>El producto desactivado no debe aparecer en búsquedas de consumidores.</p>
+        <p>Los apartados pendientes de ese producto deben notificarse al consumidor.</p>
+      </div>
+      <div class="origen">&mdash; Don Alberto, campesino de Zipacón, 43 años, "a veces en dos horas ya vendí todo y la gente sigue preguntando".</div>
+    </div>
+
+    <div class="user-story">
+      <div class="id">HU-008</div>
+      <div class="rol">Campesino</div>
+      <div class="texto">Como campesino, quiero <em>registrarme con mi foto de la cédula</em> para que el administrador verifique que soy un productor real y generar confianza en los compradores.</div>
+      <div class="criterios">
+        <p>Poder subir foto de la cédula desde el formulario de registro.</div>
+        <p>No poder usar la plataforma hasta que el administrador apruebe mi registro.</p>
+        <p>Recibir notificación cuando mi cuenta sea verificada.</p>
+      </div>
+      <div class="origen">&mdash; Don Miguel, campesino de La Calera, 57 años, "que sepan que soy campesino de verdad, no un revendedor".</div>
+    </div>
+
+    <div class="user-story">
+      <div class="id">HU-009</div>
+      <div class="rol">Campesino</div>
+      <div class="texto">Como campesino, quiero <em>poder cambiar la plaza o ubicación si al final me toca vender en otro lado</em> para que los compradores sepan dónde estoy realmente.</div>
+      <div class="criterios">
+        <p>Poder editar la ubicación de un viaje activo.</p>
+        <p>Seleccionar otra plaza del listado o marcar un punto diferente en el mapa.</p>
+        <p>Los consumidores deben ver la ubicación actualizada al instante.</p>
+      </div>
+      <div class="origen">&mdash; Don Hernando, campesino de Granada, 62 años, "a veces no consigo puesto en la plaza que tenía pensado".</div>
+    </div>
+  </div>
+
+  <!-- CONSUMIDOR -->
+  <div class="section">
+    <h1>Historias de usuario — Perfil Consumidor</h1>
+
+    <div class="user-story">
+      <div class="id">HU-010</div>
+      <div class="rol">Consumidor</div>
+      <div class="texto">Como consumidor de la plaza, quiero <em>ver en un mapa los campesinos que están vendiendo hoy</em> para saber a qué puesto ir directamente.</div>
+      <div class="criterios">
+        <p>Mapa con marcadores visibles de todos los campesinos activos hoy.</div>
+        <p>Cada marcador debe mostrar el nombre del campesino y sus productos.</div>
+        <p>El mapa debe cargar rápido incluso en datos móviles.</div>
+      </div>
+      <div class="origen">&mdash; Andrea, consumidora de Kennedy, 34 años, "pierdo 20 minutos buscando dónde venden fresas".</div>
+    </div>
+
+    <div class="user-story">
+      <div class="id">HU-011</div>
+      <div class="rol">Consumidor</div>
+      <div class="texto">Como consumidor, quiero <em>apartar productos antes de ir a la plaza</em> para asegurarme de conseguir lo que necesito.</div>
+      <div class="criterios">
+        <p>Poder seleccionar productos, cantidad y calidad desde la página del campesino.</div>
+        <p>Recibir confirmación del apartado.</p>
+        <p>Llegar a la plaza y pagar directo al campesino.</p>
+      </div>
+      <div class="origen">&mdash; Roberto, consumidor de Teusaquillo, 41 años, "llego tarde y ya no hay fruta buena".</div>
+    </div>
+
+    <div class="user-story">
+      <div class="id">HU-012</div>
+      <div class="rol">Consumidor</div>
+      <div class="texto">Como consumidor, quiero <em>ver las ofertas flash destacadas en la página principal</em> para aprovechar descuentos de último minuto.</div>
+      <div class="criterios">
+        <p>Banner o sección de ofertas flash con imagen, descuento y tiempo restante.</p>
+        <p>Las ofertas deben estar visibles sin necesidad de iniciar sesión.</p>
+        <p>Al hacer clic, llevar al perfil del campesino que ofrece el descuento.</p>
+      </div>
+      <div class="origen">&mdash; Carmen, consumidora de San Cristóbal, 38 años, "si hay descuento, voy volando a comprar".</div>
+    </div>
+
+    <div class="user-story">
+      <div class="id">HU-013</div>
+      <div class="rol">Consumidor</div>
+      <div class="texto">Como consumidor, quiero <em>dejar una reseña después de comprarle a un campesino</em> para compartir mi experiencia y ayudar a otros compradores.</div>
+      <div class="criterios">
+        <p>Poder calificar del 1 al 5 y escribir comentario.</p>
+        <p>La reseña debe aparecer en el perfil público del campesino.</p>
+        <p>Poder editar o eliminar mi reseña dentro de las primeras 24 horas.</p>
+      </div>
+      <div class="origen">&mdash; Jorge, consumidor de Suba, 29 años, "si alguien ya le compró y dice que es bueno, voy más seguro".</div>
+    </div>
+
+    <div class="user-story">
+      <div class="id">HU-014</div>
+      <div class="rol">Consumidor</div>
+      <div class="texto">Como consumidor, quiero <em>buscar productos por categoría y nombre</em> para encontrar rápidamente lo que necesito.</div>
+      <div class="criterios">
+        <p>Campo de búsqueda con autocompletado por nombre de producto.</p>
+        <p>Filtro por categoría (verduras, frutas, tubérculos, etc.).</p>
+        <p>Filtro por plaza de mercado.</p>
+      </div>
+      <div class="origen">&mdash; Laura, consumidora de Chapinero, 26 años, "no voy a mirar puesto por puesto, quiero buscar desde el celular".</div>
+    </div>
+  </div>
+
+
+
+  <!-- ADMIN -->
+  <div class="section">
+    <h1>Historias de usuario — Perfil Administrador</h1>
+
+    <div class="user-story">
+      <div class="id">HU-015</div>
+      <div class="rol">Administrador</div>
+      <div class="texto">Como administrador de la plataforma, quiero <em>ver la lista de usuarios pendientes de verificaci&oacute;n con su foto de c&eacute;dula</em> para aprobarlos o rechazarlos.</div>
+      <div class="criterios">
+        <p>Listado de usuarios no verificados con foto de c&eacute;dula visible.</p>
+        <p>Botones para verificar o rechazar (rechazar elimina el registro para que vuelva a intentar).</p>
+        <p>Notificar al usuario cuando sea verificado o rechazado.</p>
+      </div>
+      <div class="origen">&mdash; Necesidad del equipo administrativo para mantener la confianza en la plataforma.</div>
+    </div>
+
+    <div class="user-story">
+      <div class="id">HU-016</div>
+      <div class="rol">Administrador</div>
+      <div class="texto">Como administrador, quiero <em>poder bloquear y desbloquear usuarios</em> para evitar malas pr&aacute;cticas en la plataforma.</div>
+      <div class="criterios">
+        <p>Bloquear usuario: cambia su perfil a &quot;bloqueado&quot; sin permisos.</p>
+        <p>Desbloquear usuario: restaura su perfil anterior.</p>
+        <p>No poder bloquear a un superadmin.</p>
+      </div>
+      <div class="origen">&mdash; Necesidad del equipo administrativo para control de fraude.</div>
+    </div>
+
+    <div class="user-story">
+      <div class="id">HU-017</div>
+      <div class="rol">Administrador</div>
+      <div class="texto">Como administrador, quiero <em>gestionar las categor&iacute;as de productos</em> para mantener el cat&aacute;logo organizado.</div>
+      <div class="criterios">
+        <p>Agregar nuevas categor&iacute;as.</p>
+        <p>Activar o desactivar categor&iacute;as existentes.</p>
+        <p>Las categor&iacute;as desactivadas no deben aparecer en los formularios de registro de producto.</p>
+      </div>
+      <div class="origen">&mdash; Necesidad operativa identificada durante el dise&ntilde;o del sistema.</div>
+    </div>
+
+    <div class="user-story">
+      <div class="id">HU-018</div>
+      <div class="rol">Administrador</div>
+      <div class="texto">Como administrador, quiero <em>ver los tickets de soporte abiertos</em> para responder las dudas y problemas de los usuarios.</div>
+      <div class="criterios">
+        <p>Listado de tickets con estado (abierto, en progreso, finalizado).</p>
+        <p>Poder responder cada ticket y cambiar su estado.</p>
+        <p>Ver historial de respuestas de cada ticket.</p>
+      </div>
+      <div class="origen">&mdash; Necesidad identificada durante las entrevistas: los campesinos quieren tener a qui&eacute;n recurrir si algo falla.</div>
+    </div>
+  </div>
+
+  <!-- SUPERADMIN -->
+  <div class="section">
+    <h1>Historias de usuario — Perfil Superadmin</h1>
+
+    <div class="user-story">
+      <div class="id">HU-019</div>
+      <div class="rol">Superadmin</div>
+      <div class="texto">Como superadmin, quiero <em>gestionar los permisos de cada perfil</em> para controlar qu&eacute; puede hacer cada tipo de usuario.</div>
+      <div class="criterios">
+        <p>Activar o desactivar permisos por perfil mediante checkboxes.</p>
+        <p>Ver qu&eacute; permisos tiene cada perfil actualmente.</p>
+        <p>Los cambios deben aplicarse inmediatamente sin reiniciar el servidor.</p>
+      </div>
+      <div class="origen">&mdash; Necesidad del equipo desarrollador para mantener el control de acceso.</div>
+    </div>
+
+    <div class="user-story">
+      <div class="id">HU-020</div>
+      <div class="rol">Superadmin</div>
+      <div class="texto">Como superadmin, quiero <em>configurar los par&aacute;metros del sistema desde la interfaz</em> como l&iacute;mites de ofertas, tiempos de expiraci&oacute;n y puntajes de bloqueo.</div>
+      <div class="criterios">
+        <p>Formulario para editar cada par&aacute;metro del sistema.</p>
+        <p>Los cambios deben persistir en la base de datos y reflejarse sin reiniciar.</p>
+        <p>No depender de archivos de configuraci&oacute;n ni variables de entorno.</p>
+      </div>
+      <div class="origen">&mdash; Necesidad del equipo desarrollador para que el sistema sea adaptable sin tocar c&oacute;digo.</div>
+    </div>
+  </div>
+
+  <!-- RESUMEN -->
+  <div class="section">
+    <h1>Resumen de historias de usuario</h1>
+    <div class="resumen">
+      <table>
+        <tr>
+          <th>Código</th>
+          <th>Perfil</th>
+          <th>Descripción resumida</th>
+          <th>Prioridad</th>
+        </tr>
+        <tr><td>HU-001</td><td>Campesino</td><td>Publicar productos antes del viaje</td><td>Alta</td></tr>
+        <tr><td>HU-002</td><td>Campesino</td><td>Marcar ubicación en mapa</td><td>Alta</td></tr>
+        <tr><td>HU-003</td><td>Campesino</td><td>Recibir preórdenes de consumidores</td><td>Alta</td></tr>
+        <tr><td>HU-004</td><td>Campesino</td><td>Activar ofertas flash</td><td>Alta</td></tr>
+        <tr><td>HU-005</td><td>Campesino</td><td>Calidades diferenciadas con precios distintos</td><td>Media</td></tr>
+        <tr><td>HU-006</td><td>Campesino</td><td>Historial de ventas y apartados</td><td>Media</td></tr>
+        <tr><td>HU-007</td><td>Campesino</td><td>Desactivar producto si se agota</td><td>Alta</td></tr>
+        <tr><td>HU-008</td><td>Campesino</td><td>Registro con foto de cédula</td><td>Alta</td></tr>
+        <tr><td>HU-009</td><td>Campesino</td><td>Cambiar plaza o ubicación en viaje activo</td><td>Media</td></tr>
+        <tr><td>HU-010</td><td>Consumidor</td><td>Ver mapa con campesinos activos hoy</td><td>Alta</td></tr>
+        <tr><td>HU-011</td><td>Consumidor</td><td>Apartar productos antes de ir</td><td>Alta</td></tr>
+        <tr><td>HU-012</td><td>Consumidor</td><td>Ver ofertas flash destacadas</td><td>Alta</td></tr>
+        <tr><td>HU-013</td><td>Consumidor</td><td>Dejar reseñas después de comprar</td><td>Media</td></tr>
+        <tr><td>HU-014</td><td>Consumidor</td><td>Buscar productos por categoría</td><td>Media</td></tr>
+        <tr><td>HU-015</td><td>Admin</td><td>Verificar usuarios con foto de cédula</td><td>Alta</td></tr>
+        <tr><td>HU-016</td><td>Admin</td><td>Bloquear y desbloquear usuarios</td><td>Alta</td></tr>
+        <tr><td>HU-017</td><td>Admin</td><td>Gestionar categorías de productos</td><td>Media</td></tr>
+        <tr><td>HU-018</td><td>Admin</td><td>Gestionar tickets de soporte</td><td>Media</td></tr>
+        <tr><td>HU-019</td><td>Superadmin</td><td>Gestionar permisos por perfil</td><td>Alta</td></tr>
+        <tr><td>HU-020</td><td>Superadmin</td><td>Configurar parámetros del sistema</td><td>Alta</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="page-num">Historias de usuario — Trabajo de campo Plaza 20 de Julio y Abastos</div>
+
+</div>
+</body>
+</html>
