@@ -19,6 +19,7 @@
 - **Sin variables de entorno**: todas las credenciales van hardcodeadas como defaults en `config.py` (Supabase: `aws-1-us-west-2.pooler.supabase.com`, user: `postgres.bfpxpvophaixbvvluxaq`, pass: `bXo76SLW1sozXDmY`). El `.env` es solo para desarrollo local y está en `.gitignore`.
 - **Push automático de fixes**: no esperar aprobación para subir fixes a los repos. Si hay un error de compilación o runtime, fixear y pushear inmediatamente.
 - **Sin crear ramas nuevas**: todo cambio va directo a `main`. No crear ramas `master`, `develop` u otras.
+- **Pull antes de cambios**: siempre hacer `git pull` en ambos repos antes de empezar a trabajar, para evitar conflictos.
 
 ## Progress
 ### Done
