@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, inject, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ChatService, ChatConv, ChatMsg } from '../../services/chat.service';
@@ -96,7 +96,7 @@ import { AuthService } from '../../services/auth.service';
     </div>
   `
 })
-export class ChatWidget implements OnInit {
+export class ChatWidget implements OnInit, OnDestroy {
   private chatSvc = inject(ChatService);
   private auth = inject(AuthService);
   private cdr = inject(ChangeDetectorRef);
@@ -112,6 +112,7 @@ export class ChatWidget implements OnInit {
   cargando = false;
   finalizada = false;
   errorChat = '';
+  private polling: any = null;
 
   ngOnInit() {
     const stored = localStorage.getItem('chat_conv');
@@ -133,10 +134,38 @@ export class ChatWidget implements OnInit {
   abrir() {
     this.abierto = true;
     if (this.convId) this.recargar();
+    this.iniciarPolling();
   }
 
   cerrar() {
     this.abierto = false;
+    this.detenerPolling();
+  }
+
+  ngOnDestroy() {
+    this.detenerPolling();
+  }
+
+  private iniciarPolling() {
+    this.detenerPolling();
+    if (!this.convId) return;
+    this.polling = setInterval(() => {
+      if (!this.convId || this.finalizada) return;
+      this.chatSvc.obtenerConv(this.convId, this.sessionToken).subscribe({
+        next: c => {
+          this.mensajes = c.mensajes;
+          this.finalizada = c.estado === 'finalizado';
+          this.cdr.detectChanges();
+        }
+      });
+    }, 4000);
+  }
+
+  private detenerPolling() {
+    if (this.polling) {
+      clearInterval(this.polling);
+      this.polling = null;
+    }
   }
 
   nuevaConversacion() {
@@ -185,6 +214,7 @@ export class ChatWidget implements OnInit {
           convId: r.id, sessionToken: r.session_token,
           id_usuario: user?.id || null
         }));
+        this.iniciarPolling();
         this.chatSvc.enviarMensaje(r.id, 'Hola, necesito ayuda', r.session_token).subscribe({
           next: msg => {
             this.mensajes = [msg];
