@@ -73,7 +73,10 @@ import { ApiService } from '../../services/api.service';
               </div>
 
               @if (msgPass) {
-                <div class="alert alert-success py-2 small rounded-3"><i class="bi bi-check-circle me-1"></i>{{ msgPass }}</div>
+                <div class="alert alert-success py-2 small rounded-3">
+                  <i class="bi bi-check-circle me-1"></i>{{ msgPass }}
+                  <button type="button" class="btn btn-sm btn-success ms-3" (click)="recargar()">OK</button>
+                </div>
               }
               @if (errPass) {
                 <div class="alert alert-danger py-2 small rounded-3"><i class="bi bi-exclamation-triangle me-1"></i>{{ errPass }}</div>
@@ -164,6 +167,8 @@ export class Profile {
     return 'Error inesperado, inténtalo de nuevo';
   }
 
+  recargar() { location.reload(); }
+
   cambiarPassword() {
     this.msgPass = '';
     this.errPass = '';
@@ -177,7 +182,7 @@ export class Profile {
       password_nueva: this.passData.password_nueva
     }).subscribe({
       next: (r: any) => {
-        this.msgPass = r?.mensaje || 'Contraseña cambiada correctamente';
+        this.msgPass = 'Contraseña cambiada exitosamente';
         this.passData = { password_actual: '', password_nueva: '', password_confirm: '' };
         this.cargandoPass = false;
       },
