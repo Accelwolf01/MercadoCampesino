@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ChangeDetectorRef } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
@@ -119,6 +119,7 @@ export class Profile {
   private api = inject(ApiService);
   private auth = inject(AuthService);
   private router = inject(Router);
+  private cdr = inject(ChangeDetectorRef);
 
   data = { nombres: '', apellidos: '', email: '', celular: '' };
   mensaje = '';
@@ -180,22 +181,16 @@ export class Profile {
     this.api.put<any>('/auth/cambiar-password', {
       password_actual: this.passData.password_actual,
       password_nueva: this.passData.password_nueva
-    }).subscribe({
-      next: (r: any) => {
-        this.msgPass = 'Contraseña cambiada exitosamente';
-        this.passData = { password_actual: '', password_nueva: '', password_confirm: '' };
-        this.cargandoPass = false;
-      },
-      error: e => {
-        this.errPass = this.extraerError(e);
-        this.cargandoPass = false;
-      }
+    }).subscribe((r: any) => {
+      this.msgPass = 'Contraseña cambiada exitosamente';
+      this.passData = { password_actual: '', password_nueva: '', password_confirm: '' };
+      this.cargandoPass = false;
+      this.cdr.detectChanges();
+      setTimeout(() => this.cargandoPass = false, 100);
+    }, (e: any) => {
+      this.errPass = this.extraerError(e);
+      this.cargandoPass = false;
+      this.cdr.detectChanges();
     });
-    setTimeout(() => {
-      if (this.cargandoPass) {
-        this.errPass = 'El servidor está tardando mucho, inténtalo de nuevo';
-        this.cargandoPass = false;
-      }
-    }, 30000);
   }
 }
