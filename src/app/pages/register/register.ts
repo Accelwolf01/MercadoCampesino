@@ -91,7 +91,15 @@ import { AuthService } from '../../services/auth.service';
                     <option value="consumidor"><i class="bi bi-cart"></i> Consumidor (comprar productos)</option>
                   </select>
                 </div>
-                <button type="submit" class="btn btn-danger w-100 fw-semibold py-2 rounded-3 shadow-sm" [disabled]="cargando">
+                <div class="mb-3 form-check">
+                  <input class="form-check-input border-1" type="checkbox" id="terminos" [(ngModel)]="aceptaTerminos" name="terminos" required />
+                  <label class="form-check-label small text-muted" for="terminos">
+                    Acepto los <strong>términos y condiciones</strong>: entiendo que MercadoCampesino es solo una plataforma gratuita de <strong>conexión</strong> entre campesinos y consumidores.
+                    Las <strong>transacciones, pagos, entregas y calidad</strong> de los productos se acuerdan directamente entre las partes,
+                    sin responsabilidad de la plataforma.
+                  </label>
+                </div>
+                <button type="submit" class="btn btn-danger w-100 fw-semibold py-2 rounded-3 shadow-sm" [disabled]="cargando || !aceptaTerminos">
                   <i class="bi bi-person-plus me-1"></i>{{ cargando ? 'Registrando...' : 'Crear cuenta' }}
                 </button>
               </form>
@@ -110,6 +118,7 @@ export class Register {
   fotoCedulaBase64 = '';
   error = '';
   cargando = false;
+  aceptaTerminos = false;
 
   onFileSelected(event: Event) {
     const input = event.target as HTMLInputElement;
