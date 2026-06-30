@@ -20,6 +20,7 @@
 - **Push automático de fixes**: no esperar aprobación para subir fixes a los repos. Si hay un error de compilación o runtime, fixear y pushear inmediatamente.
 - **Sin crear ramas nuevas**: todo cambio va directo a `main`. No crear ramas `master`, `develop` u otras.
 - **Pull antes de cambios**: siempre hacer `git pull` en ambos repos antes de empezar a trabajar, para evitar conflictos.
+- **Verificar push**: siempre verificar que el push se haya completado correctamente revisando `git log --oneline origin/main -3` tras cada push.
 
 ## Progress
 ### Done
