@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
+import { Component, inject, OnInit, OnDestroy, ChangeDetectorRef, ViewChild, ElementRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ChatService, ChatConv, ChatMsg } from '../../services/chat.service';
@@ -113,6 +113,7 @@ export class ChatWidget implements OnInit, OnDestroy {
   finalizada = false;
   errorChat = '';
   private polling: any = null;
+  @ViewChild('chatMsgs') private chatMsgsEl!: ElementRef;
 
   ngOnInit() {
     const stored = localStorage.getItem('chat_conv');
@@ -153,9 +154,12 @@ export class ChatWidget implements OnInit, OnDestroy {
       if (!this.convId || this.finalizada) return;
       this.chatSvc.obtenerConv(this.convId, this.sessionToken).subscribe({
         next: c => {
-          this.mensajes = c.mensajes;
-          this.finalizada = c.estado === 'finalizado';
-          this.cdr.detectChanges();
+          if (c.mensajes.length !== this.mensajes.length) {
+            this.mensajes = c.mensajes;
+            this.finalizada = c.estado === 'finalizado';
+            this.cdr.detectChanges();
+            this.scrollAbajo();
+          }
         }
       });
     }, 4000);
@@ -166,6 +170,12 @@ export class ChatWidget implements OnInit, OnDestroy {
       clearInterval(this.polling);
       this.polling = null;
     }
+  }
+
+  private scrollAbajo() {
+    setTimeout(() => {
+      if (this.chatMsgsEl) this.chatMsgsEl.nativeElement.scrollTop = this.chatMsgsEl.nativeElement.scrollHeight;
+    }, 50);
   }
 
   nuevaConversacion() {
@@ -179,6 +189,7 @@ export class ChatWidget implements OnInit, OnDestroy {
         this.nombre = c.nombre;
         this.finalizada = c.estado === 'finalizado';
         this.cdr.detectChanges();
+        this.scrollAbajo();
       },
       error: () => {
         this.limpiarConv();
@@ -220,6 +231,7 @@ export class ChatWidget implements OnInit, OnDestroy {
             this.mensajes = [msg];
             this.cargando = false;
             this.cdr.detectChanges();
+            this.scrollAbajo();
           },
           error: () => {
             this.cargando = false;
@@ -244,6 +256,7 @@ export class ChatWidget implements OnInit, OnDestroy {
         this.nuevoMensaje = '';
         this.cargando = false;
         this.cdr.detectChanges();
+        this.scrollAbajo();
       },
       error: () => this.cargando = false
     });

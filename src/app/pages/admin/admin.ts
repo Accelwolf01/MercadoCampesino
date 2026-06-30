@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, inject, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject, ChangeDetectorRef, ViewChild, ElementRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ApiService } from '../../services/api.service';
@@ -300,7 +300,7 @@ interface Usuario {
                     </button>
                   }
                 </div>
-                <div class="flex-grow-1 overflow-auto p-3 bg-light">
+                <div class="flex-grow-1 overflow-auto p-3 bg-light" #adminChatMsgs>
                   @for (m of chatMensajes; track m.id) {
                     <div class="d-flex mb-2" [class.justify-content-end]="!m.es_admin" [class.justify-content-start]="m.es_admin">
                       <div class="rounded-3 px-3 py-2 small" style="max-width:80%;"
@@ -628,6 +628,7 @@ export class Admin implements OnInit, OnDestroy {
   chatCargando = false;
   chatBusqueda = '';
   private chatPolling: any = null;
+  @ViewChild('adminChatMsgs') private adminChatMsgsEl!: ElementRef;
 
   reseniasBajas: any[] = [];
   cargandoAlertas = false;
@@ -782,12 +783,15 @@ export class Admin implements OnInit, OnDestroy {
       if (this.chatSeleccionada && this.tab === 'chat') {
         this.chatSvc.obtenerConv(this.chatSeleccionada.id, '').subscribe({
           next: conv => {
-            this.chatMensajes = conv.mensajes;
-            if (conv.estado !== this.chatSeleccionada!.estado) {
-              this.chatSeleccionada = conv;
-              this.cargarChat();
+            if (conv.mensajes.length !== this.chatMensajes.length) {
+              this.chatMensajes = conv.mensajes;
+              if (conv.estado !== this.chatSeleccionada!.estado) {
+                this.chatSeleccionada = conv;
+                this.cargarChat();
+              }
+              this.cdr.detectChanges();
+              this.scrollAbajo();
             }
-            this.cdr.detectChanges();
           }
         });
       } else {
@@ -803,6 +807,12 @@ export class Admin implements OnInit, OnDestroy {
     }
   }
 
+  private scrollAbajo() {
+    setTimeout(() => {
+      if (this.adminChatMsgsEl) this.adminChatMsgsEl.nativeElement.scrollTop = this.adminChatMsgsEl.nativeElement.scrollHeight;
+    }, 50);
+  }
+
   ngOnDestroy() {
     this.detenerChatPolling();
   }
@@ -810,7 +820,7 @@ export class Admin implements OnInit, OnDestroy {
   seleccionarChat(c: ChatConvMini) {
     this.chatSeleccionada = c;
     this.chatSvc.obtenerConv(c.id, '').subscribe({
-      next: conv => { this.chatMensajes = conv.mensajes; this.cdr.detectChanges(); }
+      next: conv => { this.chatMensajes = conv.mensajes; this.cdr.detectChanges(); this.scrollAbajo(); }
     });
   }
 
@@ -831,6 +841,7 @@ export class Admin implements OnInit, OnDestroy {
         this.chatRespuesta = '';
         this.chatCargando = false;
         this.cdr.detectChanges();
+        this.scrollAbajo();
       },
       error: () => this.chatCargando = false
     });
