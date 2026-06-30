@@ -642,6 +642,7 @@ export class Admin implements OnInit, OnDestroy {
     this.cargarUsuarios();
     this.cargarCategorias();
     this.cargarPerfilesDisponibles();
+    this.iniciarChatPolling();
   }
 
   cargarPerfilesDisponibles() {
@@ -776,10 +777,9 @@ export class Admin implements OnInit, OnDestroy {
   private iniciarChatPolling() {
     this.detenerChatPolling();
     this.chatPolling = setInterval(() => {
-      if (this.tab !== 'chat') { this.detenerChatPolling(); return; }
       this.chatSvc.pendientes().subscribe({ next: r => { this.chatPendientes = r; } });
       this.chatSvc.asignadas().subscribe({ next: r => { this.chatAsignadas = r; } });
-      if (this.chatSeleccionada) {
+      if (this.chatSeleccionada && this.tab === 'chat') {
         this.chatSvc.obtenerConv(this.chatSeleccionada.id, '').subscribe({
           next: conv => {
             this.chatMensajes = conv.mensajes;
@@ -790,6 +790,8 @@ export class Admin implements OnInit, OnDestroy {
             this.cdr.detectChanges();
           }
         });
+      } else {
+        this.cdr.detectChanges();
       }
     }, 4000);
   }
