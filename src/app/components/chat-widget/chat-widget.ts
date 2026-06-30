@@ -20,9 +20,18 @@ import { AuthService } from '../../services/auth.service';
           <div class="bg-danger text-white p-3 d-flex justify-content-between align-items-center">
             <div class="d-flex align-items-center gap-2">
               <i class="bi bi-chat-dots fs-5"></i>
-              <span class="fw-bold">Chat MercadoCampesino</span>
+              @if (convId) {
+                <span class="fw-bold">Chat</span>
+              } @else {
+                <span class="fw-bold">Chat MercadoCampesino</span>
+              }
             </div>
-            <button class="btn btn-sm text-white border-0" (click)="cerrar()"><i class="bi bi-x-lg"></i></button>
+            <div class="d-flex gap-1">
+              @if (convId) {
+                <button class="btn btn-sm text-white border-0" (click)="nuevaConversacion()" title="Nueva conversación"><i class="bi bi-plus-lg"></i></button>
+              }
+              <button class="btn btn-sm text-white border-0" (click)="cerrar()"><i class="bi bi-x-lg"></i></button>
+            </div>
           </div>
           <div class="flex-grow-1 overflow-auto p-3 bg-light" #chatMsgs>
             @if (!convId) {
@@ -126,6 +135,10 @@ export class ChatWidget implements OnInit {
     this.abierto = false;
   }
 
+  nuevaConversacion() {
+    this.limpiarConv();
+  }
+
   recargar() {
     this.chatSvc.obtenerConv(this.convId!, this.sessionToken).subscribe({
       next: c => {
@@ -133,8 +146,21 @@ export class ChatWidget implements OnInit {
         this.nombre = c.nombre;
         this.finalizada = c.estado === 'finalizado';
         this.cdr.detectChanges();
+      },
+      error: () => {
+        this.limpiarConv();
+        this.cdr.detectChanges();
       }
     });
+  }
+
+  limpiarConv() {
+    this.convId = null;
+    this.sessionToken = '';
+    this.mensajes = [];
+    this.nuevoMensaje = '';
+    this.finalizada = false;
+    localStorage.removeItem('chat_conv');
   }
 
   iniciarConv() {
