@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
@@ -21,8 +21,12 @@ import { AuthService, LoginResponse } from '../../services/auth.service';
                 <h3 class="fw-bold" style="color:var(--rojo);">Ingresar</h3>
                 <p class="text-muted small mb-0">Accede a tu cuenta de MercadoCampesino</p>
               </div>
-              @if (error) {
-                <div class="alert alert-danger py-2 small rounded-3"><i class="bi bi-exclamation-triangle me-1"></i>{{ error }}</div>
+              @if (error()) {
+                <div class="alert alert-danger d-flex align-items-center gap-2 p-3 rounded-3 border-0 shadow-sm">
+                  <i class="bi bi-x-circle-fill fs-4 flex-shrink-0"></i>
+                  <span class="small fw-semibold">{{ error() }}</span>
+                  <button type="button" class="btn-close ms-auto" (click)="error.set('')" aria-label="Cerrar"></button>
+                </div>
               }
               <form (ngSubmit)="login()">
                 <div class="mb-3">
@@ -59,15 +63,15 @@ export class Login {
   private router = inject(Router);
   cedula = '';
   password = '';
-  error = '';
+  error = signal('');
   cargando = false;
   showPassword = false;
 
   login() {
     this.cargando = true;
-    this.error = '';
-    this.auth.login(this.cedula, this.password).subscribe({
-      next: (r: LoginResponse) => {
+    this.error.set('');
+    this.auth.login(this.cedula, this.password).subscribe(
+      (r: LoginResponse) => {
         this.auth.token.set(r.access_token);
         this.auth.usuario.set(r.usuario);
         localStorage.setItem('token', r.access_token);
@@ -79,10 +83,10 @@ export class Login {
         else if (perfil === 4) this.router.navigate(['/consumidor']);
         else this.router.navigate(['/']);
       },
-      error: (e: HttpErrorResponse) => {
-        this.error = e.error?.detail || (typeof e.error === 'string' ? e.error : 'Error al iniciar sesi\u00f3n');
+      (e: HttpErrorResponse) => {
+        this.error.set(e.error?.detail || (typeof e.error === 'string' ? e.error : 'Error al iniciar sesi\u00f3n'));
         this.cargando = false;
       }
-    });
+    );
   }
 }
