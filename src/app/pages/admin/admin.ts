@@ -12,6 +12,7 @@ interface Usuario {
   puntos_confianza: number; motivo_bloqueo: string | null;
   id_perfil_original: number | null;
   rechazado: boolean; motivo_rechazo: string | null;
+  created_at: string;
 }
 
 @Component({
