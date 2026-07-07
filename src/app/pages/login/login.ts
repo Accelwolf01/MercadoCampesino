@@ -1,7 +1,8 @@
 import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
-import { AuthService } from '../../services/auth.service';
+import { HttpErrorResponse } from '@angular/common/http';
+import { AuthService, LoginResponse } from '../../services/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -65,8 +66,8 @@ export class Login {
   login() {
     this.cargando = true;
     this.error = '';
-    this.auth.login(this.cedula, this.password).subscribe({
-      next: r => {
+    this.auth.login(this.cedula, this.password).subscribe(
+      (r: LoginResponse) => {
         const perfil = r.usuario.id_perfil;
         if (perfil === 1) this.router.navigate(['/superadmin']);
         else if (perfil === 2) this.router.navigate(['/admin']);
@@ -74,12 +75,10 @@ export class Login {
         else if (perfil === 4) this.router.navigate(['/consumidor']);
         else this.router.navigate(['/']);
       },
-      error: e => {
-        setTimeout(() => {
-          this.error = e.error?.detail || (typeof e.error === 'string' ? e.error : '') || 'Error al iniciar sesi\u00f3n';
-          this.cargando = false;
-        });
+      (e: HttpErrorResponse) => {
+        this.error = e.error?.detail || 'Error al iniciar sesi\u00f3n';
+        this.cargando = false;
       }
-    });
+    );
   }
 }
