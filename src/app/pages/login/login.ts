@@ -80,9 +80,7 @@ export class Login {
         else this.router.navigate(['/']);
       },
       error: (e: HttpErrorResponse) => {
-        const msg = e.error?.detail || (typeof e.error === 'string' ? e.error : 'Error al iniciar sesi\u00f3n');
-        alert('ERROR: ' + msg);
-        this.error = msg;
+        this.error = e.error?.detail || (typeof e.error === 'string' ? e.error : 'Error al iniciar sesi\u00f3n');
         this.cargando = false;
       }
     });
