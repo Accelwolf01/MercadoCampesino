@@ -2,7 +2,6 @@ import { Injectable, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { environment } from '../../environments/environment';
-import { tap } from 'rxjs/operators';
 
 export interface Usuario {
   id: number; nombres: string; apellidos: string;
@@ -33,14 +32,7 @@ export class AuthService {
   }
 
   login(cedula: string, password: string) {
-    return this.http.post<LoginResponse>(`${environment.apiUrl}/auth/login`, { cedula, password }).pipe(
-      tap(r => {
-        this.token.set(r.access_token);
-        this.usuario.set(r.usuario);
-        localStorage.setItem('token', r.access_token);
-        localStorage.setItem('usuario', JSON.stringify(r.usuario));
-      })
-    );
+    return this.http.post<LoginResponse>(`${environment.apiUrl}/auth/login`, { cedula, password });
   }
 
   register(data: any) {

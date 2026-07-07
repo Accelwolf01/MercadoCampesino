@@ -66,9 +66,12 @@ export class Login {
   login() {
     this.cargando = true;
     this.error = '';
-    setTimeout(() => { if (this.cargando) { this.cargando = false; } }, 5000);
-    this.auth.login(this.cedula, this.password).subscribe(
-      (r: LoginResponse) => {
+    this.auth.login(this.cedula, this.password).subscribe({
+      next: (r: LoginResponse) => {
+        this.auth.token.set(r.access_token);
+        this.auth.usuario.set(r.usuario);
+        localStorage.setItem('token', r.access_token);
+        localStorage.setItem('usuario', JSON.stringify(r.usuario));
         const perfil = r.usuario.id_perfil;
         if (perfil === 1) this.router.navigate(['/superadmin']);
         else if (perfil === 2) this.router.navigate(['/admin']);
@@ -76,12 +79,12 @@ export class Login {
         else if (perfil === 4) this.router.navigate(['/consumidor']);
         else this.router.navigate(['/']);
       },
-      (e: HttpErrorResponse) => {
+      error: (e: HttpErrorResponse) => {
         const msg = e.error?.detail || (typeof e.error === 'string' ? e.error : 'Error al iniciar sesi\u00f3n');
         alert('ERROR: ' + msg);
         this.error = msg;
         this.cargando = false;
       }
-    );
+    });
   }
 }
