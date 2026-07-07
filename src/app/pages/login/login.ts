@@ -66,6 +66,7 @@ export class Login {
   login() {
     this.cargando = true;
     this.error = '';
+    setTimeout(() => { if (this.cargando) { this.cargando = false; } }, 5000);
     this.auth.login(this.cedula, this.password).subscribe(
       (r: LoginResponse) => {
         const perfil = r.usuario.id_perfil;
@@ -76,7 +77,9 @@ export class Login {
         else this.router.navigate(['/']);
       },
       (e: HttpErrorResponse) => {
-        this.error = e.error?.detail || 'Error al iniciar sesi\u00f3n';
+        const msg = e.error?.detail || (typeof e.error === 'string' ? e.error : 'Error al iniciar sesi\u00f3n');
+        alert('ERROR: ' + msg);
+        this.error = msg;
         this.cargando = false;
       }
     );
