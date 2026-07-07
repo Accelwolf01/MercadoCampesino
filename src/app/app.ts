@@ -19,6 +19,7 @@ import { ChatWidget } from './components/chat-widget/chat-widget';
         <strong>No realizamos transacciones</strong>, no cobramos comisiones ni tenemos responsabilidad sobre los acuerdos entre las partes.
         El pago, la entrega y la calidad de los productos se acuerdan <strong>directamente entre campesino y consumidor</strong>.
         Al usar nuestros servicios aceptas estos términos.
+        <span class="d-block mt-2">▸ Recomendamos usar <strong>MercadoPago</strong> o plataformas de depósito en garantía para proteger a ambas partes, pero no es obligatorio — es solo una sugerencia.</span>
       </p>
     </footer>
     <app-chat-widget></app-chat-widget>
