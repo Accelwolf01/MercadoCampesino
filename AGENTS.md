@@ -8,7 +8,8 @@
 
 ## Constraints & Preferences
 - **Pagos NO en plataforma** — directo entre campesino y consumidor
-- **Sin chat** — solo reseñas públicas
+- **Chat con admin** — chat widget con sesión anónima vía UUID, polling 4s, badge de pendientes
+- **Sin chat entre pares** — solo reseñas públicas entre campesino y consumidor
 - **Seguridad**: bcrypt directo (sin passlib 1.7.4), JWT, permisos por perfil
 - **Control de fraude**: penalización por no-retiro, verificación admin con foto de cédula
 - **Parametrizable**: configuración del sistema desde GUI admin/superadmin
@@ -39,6 +40,12 @@
 - **Productos con dueño**: modelo Producto ahora tiene `id_creador` nullable FK a usuarios — admin crea productos globales (sin creador), campesinos crean sus propios productos (con su id como creador)
 - **Permisos por perfil**: endpoints `POST /perfiles/{id}/permisos` y `DELETE /perfiles/{id}/permisos/{permiso_id}` para toggle desde superadmin
 - **Compilación**: frontend build exitoso, backend routers verificados sintácticamente
+- **Login con signals**: error y cargando convertidos a signals para detección de cambios automática
+- **Modal de error en login**: mensajes 403 aparecen como modal con botón "Aceptar" que recarga la página
+- **Footer con recomendación MercadoPago**: sugerencia no obligatoria de usar plataformas de pago protegido
+- **Eliminado `provideBrowserGlobalErrorListeners()`**: interfería con propagación de errores RxJS
+- **Simplificado auth.service**: eliminado `tap` operator, token guardado en callback del componente
+- **app.config simplificado**: `provideHttpClient()` sin `withInterceptorsFromDi()`
 
 ### In Progress
 - (ninguno)
@@ -50,6 +57,8 @@
 - **Alcances**: se aclaró que el chat no usa IA por ser proyecto gratuito, pero la arquitectura Python permitiría integrar LLM a futuro (chat automático, recomendaciones, predicción de demanda)
 - **Antecedentes**: se expandió con análisis detallado de Mercado Libre (sistema de reputación que inspiró las reseñas mutuas), Rappi, Didi Food, OLX, Facebook Marketplace, Farmers Market Online y La Ruche qui dit Oui
 - **Diagramas de flujo**: se agregaron 4 diagramas con Mermaid.js (registro y verificación, creación de viaje y preórdenes, reseñas y calificaciones, ofertas flash), renderizados con tema dark mediante CDN
+- **Login con signals**: se documentó el manejo de errores HTTP 403 con signals y modal popup
+- **Recomendación MercadoPago**: se agregó al footer y al documento la sugerencia no obligatoria de pagos protegidos
 
 ## Key Decisions
 - **bcrypt directo** en lugar de passlib (passlib 1.7.4 incompatible con bcrypt 4.1.3 en Python 3.14)
