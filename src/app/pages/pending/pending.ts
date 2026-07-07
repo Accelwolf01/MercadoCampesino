@@ -17,7 +17,7 @@ import { RouterLink } from '@angular/router';
               <h3 class="fw-bold mb-2" style="color:var(--amarillo);">¡Registro exitoso!</h3>
               <div class="bg-light rounded-4 p-3 mb-3">
                 <p class="text-muted mb-1">Tu cuenta está pendiente de verificación por un administrador.</p>
-                <p class="text-muted small mb-0">Recibirás un correo cuando tu cuenta sea activada y puedas ingresar.</p>
+                <p class="text-muted small mb-0">Intenta ingresar en un tiempo máximo de 72 horas. Tu solicitud será aceptada o rechazada.</p>
               </div>
               <a routerLink="/login" class="btn btn-danger rounded-3 px-4 fw-semibold shadow-sm">
                 <i class="bi bi-box-arrow-in-right me-1"></i>Volver al inicio de sesión
