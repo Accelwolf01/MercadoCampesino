@@ -8,6 +8,20 @@ import { AuthService, LoginResponse } from '../../services/auth.service';
   selector: 'app-login',
   standalone: true,
   imports: [FormsModule, RouterLink],
+  styles: `
+    .modal-overlay {
+      position: fixed; inset: 0; background: rgba(0,0,0,0.6);
+      display: flex; align-items: center; justify-content: center; z-index: 9999;
+    }
+    .modal-popup {
+      background: #fff; border-radius: 16px; padding: 2rem; max-width: 400px; width: 90%;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3); animation: popIn 0.3s ease;
+    }
+    @keyframes popIn {
+      from { transform: scale(0.8); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+  `,
   template: `
     <div class="container py-5">
       <div class="row justify-content-center">
@@ -22,10 +36,15 @@ import { AuthService, LoginResponse } from '../../services/auth.service';
                 <p class="text-muted small mb-0">Accede a tu cuenta de MercadoCampesino</p>
               </div>
               @if (error()) {
-                <div class="alert alert-danger d-flex align-items-center gap-2 p-3 rounded-3 border-0 shadow-sm">
-                  <i class="bi bi-x-circle-fill fs-4 flex-shrink-0"></i>
-                  <span class="small fw-semibold">{{ error() }}</span>
-                  <button type="button" class="btn-close ms-auto" (click)="error.set('')" aria-label="Cerrar"></button>
+                <div class="modal-overlay">
+                  <div class="modal-popup">
+                    <div class="text-center mb-3">
+                      <i class="bi bi-x-octagon-fill text-danger" style="font-size:3rem;"></i>
+                    </div>
+                    <h5 class="text-center fw-bold mb-3">Error al iniciar sesión</h5>
+                    <p class="text-center text-muted small mb-4">{{ error() }}</p>
+                    <button class="btn btn-danger w-100 fw-semibold py-2 rounded-3" (click)="recargar()">Aceptar</button>
+                  </div>
                 </div>
               }
               <form (ngSubmit)="login()">
@@ -46,8 +65,8 @@ import { AuthService, LoginResponse } from '../../services/auth.service';
                     </button>
                   </div>
                 </div>
-                <button type="submit" class="btn btn-danger w-100 fw-semibold py-2 rounded-3 shadow-sm" [disabled]="cargando">
-                  <i class="bi bi-box-arrow-in-right me-1"></i>{{ cargando ? 'Entrando...' : 'Ingresar' }}
+                <button type="submit" class="btn btn-danger w-100 fw-semibold py-2 rounded-3 shadow-sm" [disabled]="cargando()">
+                  <i class="bi bi-box-arrow-in-right me-1"></i>{{ cargando() ? 'Entrando...' : 'Ingresar' }}
                 </button>
               </form>
               <p class="text-center text-muted small mt-4 mb-0">¿No tienes cuenta? <a routerLink="/register" class="fw-semibold" style="color:var(--rojo);">Regístrate aquí</a></p>
@@ -64,11 +83,11 @@ export class Login {
   cedula = '';
   password = '';
   error = signal('');
-  cargando = false;
+  cargando = signal(false);
   showPassword = false;
 
   login() {
-    this.cargando = true;
+    this.cargando.set(true);
     this.error.set('');
     this.auth.login(this.cedula, this.password).subscribe(
       (r: LoginResponse) => {
@@ -85,8 +104,10 @@ export class Login {
       },
       (e: HttpErrorResponse) => {
         this.error.set(e.error?.detail || (typeof e.error === 'string' ? e.error : 'Error al iniciar sesi\u00f3n'));
-        this.cargando = false;
+        this.cargando.set(false);
       }
     );
   }
+
+  recargar() { location.reload(); }
 }
