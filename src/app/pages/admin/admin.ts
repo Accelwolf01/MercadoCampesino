@@ -11,6 +11,7 @@ interface Usuario {
   activo: boolean; verificado_por_admin: boolean; foto_cedula: string | null;
   puntos_confianza: number; motivo_bloqueo: string | null;
   id_perfil_original: number | null;
+  rechazado: boolean; motivo_rechazo: string | null;
 }
 
 @Component({
@@ -47,6 +48,11 @@ interface Usuario {
         <li class="nav-item">
           <button class="nav-link rounded-3" [class.active]="tab==='chat'" [class.fw-bold]="tab==='chat'" (click)="tab='chat';cargarChat()">
             <i class="bi bi-chat-dots me-1"></i>Chat {{ chatPendientes.length > 0 ? '('+chatPendientes.length+')' : '' }}
+          </button>
+        </li>
+        <li class="nav-item">
+          <button class="nav-link rounded-3" [class.active]="tab==='rechazados'" [class.fw-bold]="tab==='rechazados'" (click)="tab='rechazados';cargarRechazados()">
+            <i class="bi bi-x-circle me-1"></i>Rechazados{{ rechazados.length > 0 ? ' ('+rechazados.length+')' : '' }}
           </button>
         </li>
         <li class="nav-item">
@@ -213,6 +219,66 @@ interface Usuario {
         </div>
       }
     </div>
+
+      @if (tab === 'rechazados') {
+        <div class="card border-0 shadow-sm rounded-4">
+          <div class="card-body p-4">
+            <h6 class="card-title fw-bold mb-3"><i class="bi bi-x-circle" style="color:var(--rojo);"></i> Solicitudes rechazadas</h6>
+            <p class="text-muted small mb-3">Usuarios cuyo registro fue rechazado por documento no v&aacute;lido. Pueden volver a registrarse.</p>
+            @if (cargandoRechazados) {
+              <div class="text-center py-4"><div class="spinner-border spinner-border-sm text-danger me-2"></div>Cargando...</div>
+            }
+            @if (!cargandoRechazados && rechazados.length === 0) {
+              <div class="text-center py-4">
+                <i class="bi bi-check-circle fs-1 text-success d-block mb-2"></i>
+                <p class="text-muted mb-0">No hay solicitudes rechazadas.</p>
+              </div>
+            }
+            @if (!cargandoRechazados && rechazados.length > 0) {
+              <div class="table-responsive">
+                <table class="table table-sm align-middle mb-0">
+                  <thead class="table-light">
+                    <tr>
+                      <th class="fw-semibold">#</th>
+                      <th class="fw-semibold">Usuario</th>
+                      <th class="fw-semibold">C&eacute;dula</th>
+                      <th class="fw-semibold">Perfil</th>
+                      <th class="fw-semibold">Rechazado</th>
+                      <th class="fw-semibold">Motivo</th>
+                      <th class="fw-semibold text-end">Acci&oacute;n</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    @for (u of rechazados; track u.id) {
+                      <tr>
+                        <td class="text-muted small">{{ u.id }}</td>
+                        <td>
+                          <div class="d-flex align-items-center gap-2">
+                            <div class="rounded-circle bg-danger d-flex align-items-center justify-content-center flex-shrink-0 text-white fw-bold small" style="width:32px;height:32px;">{{ u.nombres.charAt(0) }}{{ u.apellidos.charAt(0) }}</div>
+                            <div>
+                              <div class="fw-semibold">{{ u.nombres }} {{ u.apellidos }}</div>
+                              <small class="text-muted">{{ u.email || '—' }}</small>
+                            </div>
+                          </div>
+                        </td>
+                        <td class="small">{{ u.cedula }}</td>
+                        <td><span class="badge bg-danger rounded-pill">{{ perfiles[u.id_perfil] }}</span></td>
+                        <td><small class="text-muted">{{ u.created_at | date:'short' }}</small></td>
+                        <td class="small text-danger">{{ u.motivo_rechazo || '—' }}</td>
+                        <td class="text-end">
+                          <button class="btn btn-sm btn-outline-danger rounded-3" (click)="rechazadoEliminar(u)">
+                            <i class="bi bi-trash me-1"></i>Eliminar
+                          </button>
+                        </td>
+                      </tr>
+                    }
+                  </tbody>
+                </table>
+              </div>
+            }
+          </div>
+        </div>
+      }
 
       @if (tab === 'chat') {
         <div class="row g-3">
@@ -632,6 +698,8 @@ export class Admin implements OnInit, OnDestroy {
 
   reseniasBajas: any[] = [];
   cargandoAlertas = false;
+  rechazados: Usuario[] = [];
+  cargandoRechazados = false;
 
   plazasAdmin: any[] = [];
   nuevaPlazaNombre = '';
@@ -712,9 +780,9 @@ export class Admin implements OnInit, OnDestroy {
   }
 
   rechazar(id: number) {
-    if (!confirm('¿Estás seguro? Se eliminará la solicitud y el usuario podrá volver a registrarse.')) return;
+    if (!confirm('¿Estás seguro? Se rechazará la solicitud y el usuario recibirá un mensaje explicativo al intentar iniciar sesión.')) return;
     this.api.put(`/usuarios/${id}/rechazar`).subscribe({
-      next: () => { this.fotoModal = null; this.cargarUsuarios(); }
+      next: () => { this.fotoModal = null; this.cargarUsuarios(); this.rechazados = []; }
     });
   }
 
@@ -857,6 +925,22 @@ export class Admin implements OnInit, OnDestroy {
     if (!confirm('¿Finalizar esta conversación?')) return;
     this.chatSvc.finalizar(id).subscribe({
       next: () => { this.chatSeleccionada = null; this.cargarChat(); this.cdr.detectChanges(); }
+    });
+  }
+
+  cargarRechazados() {
+    this.cargandoRechazados = true;
+    this.api.get<Usuario[]>('/usuarios/rechazados').subscribe({
+      next: r => { this.rechazados = r; this.cargandoRechazados = false; this.cdr.detectChanges(); },
+      error: () => { this.cargandoRechazados = false; this.cdr.detectChanges(); }
+    });
+  }
+
+  rechazadoEliminar(u: Usuario) {
+    if (!confirm(`¿Eliminar definitivamente a ${u.nombres} ${u.apellidos}? Esta acción no se puede deshacer.`)) return;
+    this.api.delete(`/usuarios/${u.id}`).subscribe({
+      next: () => { this.rechazados = this.rechazados.filter(x => x.id !== u.id); this.cdr.detectChanges(); },
+      error: e => alert(e.error?.detail || 'Error al eliminar')
     });
   }
 

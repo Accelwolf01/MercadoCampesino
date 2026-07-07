@@ -343,7 +343,25 @@
     .portada .logo { font-size: 2.2rem; }
     .portada .titulo { font-size: 1.2rem; }
   }
+  .diagrama {
+    background: #0f0f1a88;
+    border: 1px solid #2a2a4a;
+    border-radius: 12px;
+    padding: 16px;
+    margin: 16px 0;
+    text-align: center;
+  }
+  .diagrama .titulo-diag {
+    font-size: 0.9rem;
+    color: #fcc419;
+    margin-bottom: 12px;
+    font-weight: 600;
+  }
 </style>
+<script type="module">
+import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+mermaid.initialize({ startOnLoad: true, theme: 'dark', themeVariables: { primaryColor: '#1a1a30', edgeLabelBackground: '#1a1a30', tertiaryColor: '#16162a' } });
+</script>
 </head>
 <body>
 <div class="container">
@@ -582,7 +600,8 @@
       <li>No se incluye una aplicaci&oacute;n nativa para Android o iOS, aunque la PWA es instalable desde el navegador. Se generar&aacute; un APK como empaquetado alternativo.</li>
       <li>Las pruebas se realizar&aacute;n con un grupo acotado de usuarios, dado el alcance acad&eacute;mico y los recursos disponibles.</li>
       <li>No existe un sistema de chat entre campesino y comprador, &uacute;nicamente rese&ntilde;as p&uacute;blicas posteriores a la compra, para evitar que el campesino deba atender el tel&eacute;fono mientras atiende su puesto.</li>
-      <li>No se incorpora inteligencia artificial ni recomendaciones autom&aacute;ticas en esta versi&oacute;n, aunque la arquitectura basada en Python facilitar&iacute;a su incorporaci&oacute;n futura.</li>
+      <li>El sistema de chat no utiliza inteligencia artificial ni bots automatizados para responder a los usuarios, ya que es un proyecto acad&eacute;mico sin fines de lucro que se sostiene con recursos gratuitos. Todas las respuestas son proporcionadas manualmente por el equipo administrativo.</li>
+      <li>No se incorpora inteligencia artificial ni recomendaciones autom&aacute;ticas en esta versi&oacute;n. Sin embargo, la arquitectura basada en Python y la infraestructura modular del backend facilitar&iacute;an la incorporaci&oacute;n futura de un asistente basado en modelos de lenguaje (LLM) para automatizar respuestas del chat, recomendar productos seg&uacute;n el perfil del consumidor o predecir la demanda de ciertos productos en d&iacute;as espec&iacute;ficos.</li>
     </ul>
   </div>
 
@@ -596,7 +615,13 @@
 
     <h2>6.1 Antecedentes</h2>
 
-    <p>El comercio electr&oacute;nico de alimentos ha experimentado un crecimiento acelerado en la &uacute;ltima d&eacute;cada. Plataformas como Mercado Libre, OLX y Facebook Marketplace permiten la compra y venta de productos agr&iacute;colas, pero ninguna de ellas est&aacute; dise&ntilde;ada espec&iacute;ficamente para la din&aacute;mica de las plazas de mercado colombianas, donde el vendedor es un productor que viaja desde su vereda, ofrece productos perecederos y necesita herramientas como la geolocalizaci&oacute;n en tiempo real y las ofertas de &uacute;ltimo minuto.</p>
+    <p>El comercio electr&oacute;nico de alimentos ha experimentado un crecimiento acelerado en la &uacute;ltima d&eacute;cada. A continuaci&oacute;n se analizan las plataformas existentes que, aunque no est&aacute;n dise&ntilde;adas espec&iacute;ficamente para plazas de mercado, comparten funcionalidades que sirvieron como referencia para MercadoCampesino.</p>
+
+    <p><strong>Mercado Libre</strong> es la plataforma de comercio electr&oacute;nico m&aacute;s grande de Am&eacute;rica Latina y cuenta con un sistema de reputaci&oacute;n que permite a compradores y vendedores calificarse mutuamente despu&eacute;s de cada transacci&oacute;n. Las calificaciones (1 a 5 estrellas) y los comentarios escritos son visibles para toda la comunidad, generando confianza y transparencia en el ecosistema. MercadoCampesino tom&oacute; este modelo como referencia para implementar su propio sistema de rese&ntilde;as mutuas entre campesinos y consumidores, adapt&aacute;ndolo al contexto de las plazas de mercado: la rese&ntilde;a se deja despu&eacute;s de la compra directa (no dentro de la plataforma) y permite tanto al campesino como al consumidor calificar la experiencia. A diferencia de Mercado Libre, MercadoCampesino limita a una rese&ntilde;a por d&iacute;a entre los mismos actores para evitar spam, y permite que el campesino responda p&uacute;blicamente a las rese&ntilde;as recibidas, creando un di&aacute;logo abierto similar al que ocurre naturalmente en la plaza.</p>
+
+    <p>Otras plataformas como <strong>Rappi</strong> y <strong>Didi Food</strong> implementan sistemas de calificaci&oacute;n para repartidores y restaurantes, donde el usuario valora la rapidez, la calidad del producto y la atenci&oacute;n. Sin embargo, estas plataformas operan sobre un modelo log&iacute;stico centralizado (el repartidor recoge y entrega), y no permiten la venta directa sin intermediarios ni la geolocalizaci&oacute;n del puesto de venta f&iacute;sico, que son pilares fundamentales de MercadoCampesino.</p>
+
+    <p><strong>OLX</strong> y <strong>Facebook Marketplace</strong> funcionan como clasificados en l&iacute;nea donde el vendedor publica un producto y el comprador contacta directamente. Estas plataformas permiten la venta de productos agr&iacute;colas, pero carecen de funcionalidades especializadas como pre&oacute;rdenes anticipadas, gesti&oacute;n de calidades diferenciadas por producto, geolocalizaci&oacute;n en vivo del vendedor u ofertas flash de &uacute;ltimo minuto. Adem&aacute;s, no cuentan con un sistema de verificaci&oacute;n de la identidad del vendedor, lo que en el contexto de las plazas de mercado es cr&iacute;tico para generar confianza.</p>
 
     <p>A nivel internacional, existen iniciativas como <em>Farmers Market Online</em> en Estados Unidos y <em>La Ruche qui dit Oui</em> en Francia, que conectan productores locales con consumidores mediante pedidos anticipados y puntos de entrega. Sin embargo, estas plataformas operan bajo modelos log&iacute;sticos distintos: el productor entrega en un punto centralizado y no vende directamente en una plaza de mercado. Tampoco incorporan la funcionalidad de geolocalizaci&oacute;n en vivo ni ofertas flash para evitar el retorno de mercanc&iacute;a no vendida.</p>
 
@@ -751,7 +776,7 @@
     </table>
     </div>
 
-    <p>Para la prueba piloto posterior al desarrollo, se seleccionar&aacute;n 10 campesinos de los 23 entrevistados que voluntariamente acepten utilizar la plataforma durante un per&iacute;odo de cuatro semanas, junto con 50 consumidores reclutados entre los 40 encuestados y sus contactos cercanos. Este tama&ntilde;o de muestra es consistente con estudios exploratorios de adopci&oacute;n tecnol&oacute;gica en comunidades rurales (Aker, 2011) y permite obtener resultados significativos dentro del alcance acad&eacute;mico del proyecto.</p>
+    <p>Para la prueba piloto posterior al desarrollo, se espera contar con la participaci&oacute;n voluntaria de aproximadamente 5 campesinos de los 23 entrevistados y unos 10 consumidores reclutados entre los 40 encuestados y sus contactos cercanos, durante un per&iacute;odo de cuatro semanas. Al tratarse de una actividad acad&eacute;mica futura, estos n&uacute;meros son estimados y dependen de la disponibilidad y el inter&eacute;s de los participantes en el momento de la convocatoria.</p>
 
     <h2>7.5 Plan de an&aacute;lisis de la informaci&oacute;n</h2>
 
@@ -942,6 +967,97 @@
 
     <h3>Disclaimer legal y t&eacute;rminos de uso</h3>
     <p>Se incorpor&oacute; un disclaimer legal en el footer global de la aplicaci&oacute;n indicando que MercadoCampesino es una "plataforma gratuita de conexi&oacute;n, no realizamos transacciones, sin responsabilidad por p&eacute;rdidas, da&ntilde;os o incumplimientos entre las partes". En el formulario de registro se agreg&oacute; un checkbox obligatorio de "Acepto t&eacute;rminos y condiciones" con el texto expl&iacute;cito sobre el rol de la plataforma, y el bot&oacute;n de registro permanece deshabilitado hasta que el usuario marque la casilla.</p>
+
+    <h3>Diagramas de flujo del sistema</h3>
+    <p>A continuaci&oacute;n se presentan los diagramas de flujo que ilustran los procesos principales de la plataforma: registro y verificaci&oacute;n de usuarios, creaci&oacute;n de viaje con pre&oacute;rdenes, sistema de rese&ntilde;as y calificaciones, y activaci&oacute;n de ofertas flash.</p>
+
+    <h4>Flujo de registro y verificaci&oacute;n de usuario</h4>
+    <p>Este diagrama muestra el proceso completo desde que un nuevo usuario se registra hasta que el administrador verifica su identidad y habilita el acceso a la plataforma.</p>
+    <div class="diagrama">
+      <div class="titulo-diag">Registro y verificaci&oacute;n de usuario</div>
+      <div class="mermaid">
+        flowchart TD
+          A[Usuario ingresa a la plataforma] --> B{Selecciona tipo de cuenta}
+          B -->|Campesino| C[Formulario de registro<br/>con foto de c&eacute;dula]
+          B -->|Consumidor| D[Formulario de registro<br/>sin foto de c&eacute;dula]
+          C --> E[Registro creado<br/>activo = false<br/>verificado = false]
+          D --> E
+          E --> F[Admin revisa usuarios<br/>pendientes de verificaci&oacute;n]
+          F --> G{Documentos v&aacute;lidos?}
+          G -->|S&iacute;| H[Admin verifica usuario<br/>activo = true<br/>verificado = true]
+          G -->|No| I[Admin rechaza usuario<br/>se elimina el registro]
+          H --> J[Usuario puede iniciar sesi&oacute;n<br/>y usar la plataforma]
+          I --> A
+      </div>
+    </div>
+
+    <h4>Flujo de creaci&oacute;n de viaje y pre&oacute;rdenes</h4>
+    <p>Representa el proceso que sigue un campesino desde que crea un viaje hasta que los consumidores realizan apartados y la transacci&oacute;n se completa en la plaza.</p>
+    <div class="diagrama">
+      <div class="titulo-diag">Creaci&oacute;n de viaje y pre&oacute;rdenes</div>
+      <div class="mermaid">
+        flowchart TD
+          A[Campesino inicia sesi&oacute;n] --> B[Selecciona fecha y plaza<br/>de destino]
+          B --> C[Agrega productos al viaje<br/>con precio, cantidad y calidad]
+          C --> D[Viaje creado y visible<br/>para consumidores]
+          D --> E[Consumidor navega y<br/>selecciona productos]
+          E --> F[Consumidor realiza<br/>preorden / apartado]
+          F --> G[Campesino recibe<br/>notificaci&oacute;n del apartado]
+          G --> H[Campesino viaja a la<br/>plaza con su producto]
+          H --> I[Campesino marca su<br/>ubicaci&oacute;n en el mapa]
+          I --> J[Consumidor llega a la<br/>plaza y busca el puesto]
+          J --> K[Compra directa:<br/>consumidor paga en efectivo]
+          K --> L[Campesino marca la<br/>preorden como entregada]
+          L --> M[Transacci&oacute;n completada]
+      </div>
+    </div>
+
+    <h4>Flujo de rese&ntilde;as y calificaciones</h4>
+    <p>Inspirado en el sistema de reputaci&oacute;n de Mercado Libre, este diagrama muestra c&oacute;mo los consumidores y campesinos pueden calificarse mutuamente despu&eacute;s de una compra, generando un historial de confianza p&uacute;blico y transparente.</p>
+    <div class="diagrama">
+      <div class="titulo-diag">Sistema de rese&ntilde;as y calificaciones</div>
+      <div class="mermaid">
+        flowchart TD
+          A[Compra completada<br/>en la plaza] --> B[Consumidor puede dejar<br/>rese&ntilde;a al campesino]
+          A --> C[Campesino puede dejar<br/>rese&ntilde;a al consumidor]
+          B --> D[Consumidor califica 1-5<br/>y escribe comentario]
+          C --> E[Campesino califica 1-5<br/>y escribe comentario]
+          D --> F[Rese&ntilde;a publicada en el<br/>perfil del campesino]
+          E --> G[Rese&ntilde;a publicada en el<br/>perfil del consumidor]
+          F --> H{El campesino<br/>desea responder?}
+          H -->|S&iacute;| I[Campesino responde<br/>p&uacute;blicamente]
+          H -->|No| J[Rese&ntilde;a visible sin respuesta]
+          I --> J
+          J --> K{Alg&uacute;n usuario<br/>reporta la rese&ntilde;a?}
+          K -->|S&iacute;| L[Admin revisa y decide<br/>si elimina la rese&ntilde;a]
+          K -->|No| M[Rese&ntilde;a permanece<br/>visible permanentemente]
+          L --> N{Rese&ntilde;a<br/>viola normas?}
+          N -->|S&iacute;| O[Admin elimina la rese&ntilde;a]
+          N -->|No| M
+      </div>
+    </div>
+
+    <h4>Flujo de activaci&oacute;n de ofertas flash</h4>
+    <p>Muestra c&oacute;mo el campesino, al final de la jornada, puede activar descuentos de &uacute;ltimo minuto sobre los productos no vendidos para evitar su desperdicio.</p>
+    <div class="diagrama">
+      <div class="titulo-diag">Activaci&oacute;n de ofertas flash</div>
+      <div class="mermaid">
+        flowchart TD
+          A[Campesino en su puesto<br/>durante la jornada] --> B{Le queda producto<br/>sin vender?}
+          B -->|No| C[Jornada normal<br/>sin ofertas]
+          B -->|S&iacute;| D[Cerca del cierre,<br/>decide activar oferta]
+          D --> E[Selecciona producto,<br/>% de descuento y duraci&oacute;n]
+          E --> F[Sistema calcula<br/>precio con descuento]
+          F --> G[Oferta flash publicada<br/>en banner principal]
+          G --> H[Consumidores ven la oferta<br/>destacada en la p&aacute;gina]
+          H --> I[Consumidores llegan al<br/>puesto y compran]
+          I --> J{Se vendi&oacute; todo<br/>el producto en oferta?}
+          J -->|S&iacute;| K[Oferta finaliza<br/>autom&aacute;ticamente]
+          J -->|No| L[Tiempo de oferta<br/>se agota]
+          L --> K
+          K --> M[Producto vuelve a<br/>precio normal o se<br/>marca como agotado]
+      </div>
+    </div>
 
     <h2>Fase 4: Pruebas y validaci&oacute;n</h2>
     <p>Se realizaron pruebas unitarias y de integraci&oacute;n en cada m&oacute;dulo. Se verific&oacute; la autenticaci&oacute;n JWT, el bloqueo de usuarios (cambio a perfil bloqueado + desactivaci&oacute;n de viajes activos), el registro con foto de c&eacute;dula, la publicaci&oacute;n de viajes, la geolocalizaci&oacute;n en el mapa, la activaci&oacute;n de ofertas flash, el sistema de pre&oacute;rdenes, el m&oacute;dulo de chat con polling y el m&oacute;dulo de soporte. Se corrigieron errores 500 en el backend relacionados con el chat (columna <code>updated_at</code> con NOT NULL), errores 422 no manejados en el frontend del cambio de contrase&ntilde;a, y problemas de sesi&oacute;n an&oacute;nima para usuarios sin token. Se confirm&oacute; que el frontend compila correctamente con el build de producci&oacute;n de Angular.</p>

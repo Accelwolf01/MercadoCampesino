@@ -46,6 +46,11 @@
 ### Blocked
 - (ninguno)
 
+## Documento de Trabajo de Grado (`trabajo_grado_completo.html`)
+- **Alcances**: se aclaró que el chat no usa IA por ser proyecto gratuito, pero la arquitectura Python permitiría integrar LLM a futuro (chat automático, recomendaciones, predicción de demanda)
+- **Antecedentes**: se expandió con análisis detallado de Mercado Libre (sistema de reputación que inspiró las reseñas mutuas), Rappi, Didi Food, OLX, Facebook Marketplace, Farmers Market Online y La Ruche qui dit Oui
+- **Diagramas de flujo**: se agregaron 4 diagramas con Mermaid.js (registro y verificación, creación de viaje y preórdenes, reseñas y calificaciones, ofertas flash), renderizados con tema dark mediante CDN
+
 ## Key Decisions
 - **bcrypt directo** en lugar de passlib (passlib 1.7.4 incompatible con bcrypt 4.1.3 en Python 3.14)
 - **Todos los usuarios requieren verificación admin** — `activo=false` + `verificado_por_admin=false` al registrar
@@ -66,6 +71,12 @@
 3. Probar flujo completo: registro → verificación admin → login → crear producto → crear viaje
 4. Sembrar datos de prueba con ofertas para ver banner funcionando
 5. Probar backend corriendo con `uvicorn app.main:app`
+
+## Rechazo de registros
+- Cuando el admin rechaza, ya no se borra al usuario de la BD — se marca `rechazado=True` con `motivo_rechazo`
+- Al intentar login, el rechazado ve: *"Tu solicitud de registro fue rechazada. Por favor regístrate nuevamente. Asegúrate de que la foto de tu cédula tenga la mejor calidad posible."*
+- Admin tiene pestaña "Rechazados" con lista, puede eliminar definitivamente si lo desea
+- Al re-registrarse con la misma cédula, se actualizan los datos del registro rechazado (reutiliza el registro existente)
 
 ## Critical Context
 - Backend: `http://localhost:8000` (Swagger en `/docs`)
