@@ -762,8 +762,8 @@ export class Admin implements OnInit, OnDestroy {
   filtrarUsuarios() {
     const q = this.busqueda.toLowerCase();
     this.usuariosFiltrados = this.usuarios.filter(u =>
-      !q || u.nombres.toLowerCase().includes(q) || u.apellidos.toLowerCase().includes(q) ||
-      u.email.toLowerCase().includes(q) || u.cedula.includes(q)
+      !u.rechazado && (!q || u.nombres.toLowerCase().includes(q) || u.apellidos.toLowerCase().includes(q) ||
+      u.email.toLowerCase().includes(q) || u.cedula.includes(q))
     );
   }
 

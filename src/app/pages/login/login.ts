@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ChangeDetectorRef } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
@@ -56,6 +56,7 @@ import { AuthService } from '../../services/auth.service';
 export class Login {
   private auth = inject(AuthService);
   private router = inject(Router);
+  private cdr = inject(ChangeDetectorRef);
   cedula = '';
   password = '';
   error = '';
@@ -75,8 +76,9 @@ export class Login {
         else this.router.navigate(['/']);
       },
       error: e => {
-        this.error = e.error?.detail || 'Error al iniciar sesión';
+        this.error = e.error?.detail || (typeof e.error === 'string' ? e.error : '') || 'Error al iniciar sesión';
         this.cargando = false;
+        this.cdr.detectChanges();
       }
     });
   }
