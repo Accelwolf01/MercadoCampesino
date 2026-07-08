@@ -357,6 +357,37 @@
     margin-bottom: 12px;
     font-weight: 600;
   }
+  .galeria {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 20px;
+    margin: 20px 0;
+  }
+  .galeria-item {
+    background: #0f0f1a88;
+    border: 1px solid #2a2a4a;
+    border-radius: 12px;
+    padding: 12px;
+    text-align: center;
+    transition: border-color 0.2s;
+  }
+  .galeria-item:hover {
+    border-color: #fcc41966;
+  }
+  .galeria-item img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    border: 1px solid #2a2a4a;
+    cursor: pointer;
+  }
+  .galeria-descripcion {
+    font-size: 0.85rem;
+    color: #bbb;
+    margin-top: 10px;
+    line-height: 1.5;
+    text-align: left;
+  }
 </style>
 <script type="module">
 import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
@@ -1067,8 +1098,87 @@ mermaid.initialize({ startOnLoad: true, theme: 'dark', themeVariables: { primary
       </div>
     </div>
 
+    <h3>Interfaz de usuario &mdash; Galer&iacute;a de capturas</h3>
+    <p>A continuaci&oacute;n se presentan capturas de pantalla de la plataforma desplegada en producci&oacute;n (<a href="https://mercado-campesino.vercel.app" target="_blank">mercado-campesino.vercel.app</a>), mostrando las p&aacute;ginas principales del sistema.</p>
+
+    <div class="galeria">
+      <div class="galeria-item">
+        <a href="capturas/home.png" target="_blank"><img src="capturas/home.png" alt="P&aacute;gina principal"></a>
+        <p class="galeria-descripcion"><strong>P&aacute;gina principal:</strong> Banner de ofertas flash con tarjetas de producto, navegaci&oacute;n superior y footer con disclaimer legal.</p>
+      </div>
+      <div class="galeria-item">
+        <a href="capturas/login.png" target="_blank"><img src="capturas/login.png" alt="Inicio de sesi&oacute;n"></a>
+        <p class="galeria-descripcion"><strong>Inicio de sesi&oacute;n:</strong> Formulario de ingreso con campo de c&eacute;dula, contrase&ntilde;a con toggle de visibilidad y modal de error en caso de rechazo o pendiente.</p>
+      </div>
+      <div class="galeria-item">
+        <a href="capturas/register.png" target="_blank"><img src="capturas/register.png" alt="Registro de usuario"></a>
+        <p class="galeria-descripcion"><strong>Registro:</strong> Formulario con selecci&oacute;n de perfil (campesino/consumidor), carga de foto de c&eacute;dula y checkbox de t&eacute;rminos.</p>
+      </div>
+      <div class="galeria-item">
+        <a href="capturas/mapa.png" target="_blank"><img src="capturas/mapa.png" alt="Mapa interactivo"></a>
+        <p class="galeria-descripcion"><strong>Mapa interactivo:</strong> Vista Leaflet con marcadores personalizados, popups con informaci&oacute;n del campesino y sus productos.</p>
+      </div>
+      <div class="galeria-item">
+        <a href="capturas/admin.png" target="_blank"><img src="capturas/admin.png" alt="Panel de administraci&oacute;n"></a>
+        <p class="galeria-descripcion"><strong>Panel de administraci&oacute;n:</strong> Pesta&ntilde;as para gesti&oacute;n de usuarios (verificar, bloquear, rechazar) y categor&iacute;as de productos.</p>
+      </div>
+      <div class="galeria-item">
+        <a href="capturas/superadmin.png" target="_blank"><img src="capturas/superadmin.png" alt="Panel de superadmin"></a>
+        <p class="galeria-descripcion"><strong>Panel de superadmin:</strong> Gesti&oacute;n de perfiles con permisos toggleables mediante checkboxes y configuraci&oacute;n del sistema parametrizable.</p>
+      </div>
+    </div>
+
     <h2>Fase 4: Pruebas y validaci&oacute;n</h2>
     <p>Se realizaron pruebas unitarias y de integraci&oacute;n en cada m&oacute;dulo. Se verific&oacute; la autenticaci&oacute;n JWT, el bloqueo de usuarios (cambio a perfil bloqueado + desactivaci&oacute;n de viajes activos), el registro con foto de c&eacute;dula, la publicaci&oacute;n de viajes, la geolocalizaci&oacute;n en el mapa, la activaci&oacute;n de ofertas flash, el sistema de pre&oacute;rdenes, el m&oacute;dulo de chat con polling y el m&oacute;dulo de soporte. Se corrigieron errores 500 en el backend relacionados con el chat (columna <code>updated_at</code> con NOT NULL), errores 422 no manejados en el frontend del cambio de contrase&ntilde;a, y problemas de sesi&oacute;n an&oacute;nima para usuarios sin token. Se confirm&oacute; que el frontend compila correctamente con el build de producci&oacute;n de Angular.</p>
+
+    <h2>An&aacute;lisis DOFA (Debilidades, Oportunidades, Fortalezas, Amenazas)</h2>
+
+    <p>A continuaci&oacute;n se presenta el an&aacute;lisis DOFA estrat&eacute;gico de MercadoCampesino, evaluando los factores internos (fortalezas y debilidades) y externos (oportunidades y amenazas) que determinan la viabilidad y el potencial de la plataforma en el contexto del mercado de plazas de Bogot&aacute;.</p>
+
+    <h3>Fortalezas (Factores internos positivos)</h3>
+    <ul class="bullet-list">
+      <li><strong>Plataforma 100 % gratuita:</strong> Sin costos de licenciamiento ni comisiones por uso, gracias a tecnolog&iacute;as de c&oacute;digo abierto (Angular, FastAPI, PostgreSQL, Leaflet.js).</li>
+      <li><strong>Sin gesti&oacute;n de pagos:</strong> Al no procesar transacciones financieras, se eliminan barreras regulatorias, costos de integraci&oacute;n con pasarelas de pago y riesgos de seguridad financiera.</li>
+      <li><strong>Accesibilidad universal:</strong> PWA instalable desde cualquier navegador sin pasar por tiendas de aplicaciones, compatible con dispositivos de gama baja y conexiones lentas.</li>
+      <li><strong>Mapa en tiempo real:</strong> Geolocalizaci&oacute;n del puesto de venta mediante Leaflet.js, permitiendo a los consumidores encontrar r&aacute;pidamente al campesino dentro de la plaza.</li>
+      <li><strong>Sistema parametrizable:</strong> L&iacute;mites de ofertas, tiempos de expiraci&oacute;n, puntajes de bloqueo y tipos de calidad se gestionan desde el panel de administraci&oacute;n sin tocar c&oacute;digo fuente.</li>
+      <li><strong>Base de datos normalizada (3NF):</strong> Esquema relacional sin redundancias que garantiza integridad y eficiencia en las consultas.</li>
+      <li><strong>Arquitectura moderna:</strong> Stack Angular 19 + FastAPI + PostgreSQL con autenticaci&oacute;n JWT y sistema de permisos granular por perfil.</li>
+      <li><strong>Verificaci&oacute;n de identidad:</strong> Registro con foto de c&eacute;dula y aprobaci&oacute;n manual por el administrador, generando confianza entre los participantes.</li>
+    </ul>
+
+    <h3>Debilidades (Factores internos negativos)</h3>
+    <ul class="bullet-list">
+      <li><strong>Dependencia de conexi&oacute;n a internet:</strong> La plataforma requiere conexi&oacute;n activa para funcionar; no cuenta con modo offline para zonas sin cobertura.</li>
+      <li><strong>Sin aplicaci&oacute;n nativa:</strong> Al ser una PWA, no tiene acceso completo a APIs nativas del dispositivo como notificaciones push avanzadas o geocercas.</li>
+      <li><strong>Sin sistema de pagos integrado:</strong> Si bien es una decisi&oacute;n deliberada, limita la automatizaci&oacute;n del proceso de compra-venta y obliga a la transacci&oacute;n en efectivo.</li>
+      <li><strong>Verificaci&oacute;n manual de usuarios:</strong> El proceso de aprobaci&oacute;n depende de la disponibilidad del administrador, pudiendo generar demoras en la activaci&oacute;n de cuentas.</li>
+      <li><strong>Notificaciones limitadas:</strong> Solo notificaciones del navegador, sin soporte para notificaciones push nativas ni SMS.</li>
+      <li><strong>Alcance geogr&aacute;fico acotado:</strong> Limitado a campesinos de Cundinamarca y consumidores de Bogot&aacute; en la versi&oacute;n inicial.</li>
+      <li><strong>Sin chat entre pares:</strong> La comunicaci&oacute;n directa entre campesino y consumidor solo ocurre presencialmente en la plaza; la plataforma no facilita el contacto previo.</li>
+    </ul>
+
+    <h3>Oportunidades (Factores externos positivos)</h3>
+    <ul class="bullet-list">
+      <li><strong>Crecimiento del comercio electr&oacute;nico en Colombia:</strong> El mercado digital colombiano crece a tasas de dos d&iacute;gitos anuales, con cada vez m&aacute;s consumidores dispuestos a comprar alimentos en l&iacute;nea.</li>
+      <li><strong>Alta penetraci&oacute;n de smartphones en zonas rurales:</strong> Seg&uacute;n los datos de campo, el 83 % de los campesinos entrevistados posee un tel&eacute;fono inteligente con datos m&oacute;viles, facilitando la adopci&oacute;n tecnol&oacute;gica.</li>
+      <li><strong>Inter&eacute;s creciente por alimentos frescos y locales:</strong> Tendencia global hacia el consumo de productos de proximidad y agricultura familiar, que se alinea con la propuesta de valor de la plataforma.</li>
+      <li><strong>Pol&iacute;ticas gubernamentales de apoyo al campesino:</strong> Programas como "Colombia Compra Eficiente" y las rutas cortas de comercializaci&oacute;n de la Secretar&iacute;a de Desarrollo Econ&oacute;mico generan un entorno favorable.</li>
+      <li><strong>Posibilidad de integrar inteligencia artificial:</strong> La arquitectura Python del backend permite a futuro incorporar un asistente LLM para chat automatizado, recomendaciones personalizadas y predicci&oacute;n de demanda.</li>
+      <li><strong>Expansi&oacute;n a otras regiones:</strong> El modelo puede replicarse en otras ciudades del pa&iacute;s (Medell&iacute;n, Cali, Barranquilla) con plazas de mercado similares.</li>
+      <li><strong>Integraci&oacute;n con plataformas de pago:</strong> La recomendaci&oacute;n de MercadoPago en el footer puede evolucionar a una integraci&oacute;n directa con APIs de pago protegido.</li>
+    </ul>
+
+    <h3>Amenazas (Factores externos negativos)</h3>
+    <ul class="bullet-list">
+      <li><strong>Competencia de plataformas establecidas:</strong> Mercado Libre, Rappi y Didi Food tienen presupuestos de marketing y bases de usuarios consolidadas, aunque no ofrecen la misma especializaci&oacute;n en plazas de mercado.</li>
+      <li><strong>Baja alfabetizaci&oacute;n digital de algunos campesinos:</strong> El 17 % de los entrevistados no posee smartphone, y entre los que s&iacute; lo tienen, algunos reportan dificultades con interfaces complejas.</li>
+      <li><strong>Problemas de conectividad en zonas rurales:</strong> Muchos municipios de Cundinamarca tienen cobertura de internet limitada, lo que puede afectar la publicaci&oacute;n de viajes desde la vereda.</li>
+      <li><strong>Cambios regulatorios en comercio electr&oacute;nico:</strong> Nuevas regulaciones sobre protecci&oacute;n de datos o comercio digital podr&iacute;an requerir adaptaciones en la plataforma.</li>
+      <li><strong>Resistencia al cambio en usuarios tradicionales:</strong> Algunos campesinos han vendido de la misma forma durante d&eacute;cadas y pueden mostrarse esc&eacute;pticos ante una herramienta digital.</li>
+      <li><strong>Costos de infraestructura al escalar:</strong> Los planes gratuitos de Render y Vercel tienen l&iacute;mites de recursos; un crecimiento significativo de usuarios requerir&iacute;a migrar a planes de pago.</li>
+      <li><strong>Seguridad inform&aacute;tica:</strong> Almacenar fotos de c&eacute;dulas e informaci&oacute;n personal representa un riesgo de seguridad que debe gestionarse con buenas pr&aacute;cticas.</li>
+    </ul>
   </div>
 
   <!-- ============================================================ -->
