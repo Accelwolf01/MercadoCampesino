@@ -479,6 +479,7 @@ mermaid.initialize({ startOnLoad: true, theme: 'dark', themeVariables: { primary
       <p>8 Desarrollo de las fases del proyecto .................................................. 31</p>
       <p>9 Resultados esperados ...................................................................... 32</p>
       <p>10 Conclusiones ................................................................................ 34</p>
+      <p>&emsp;10.1 Recomendaciones ..................................................................... 35</p>
       <p>Referencias bibliogr&aacute;ficas ................................................................... 36</p>
       <p>Anexo A &mdash; Instrumentos de recolecci&oacute;n de informaci&oacute;n .......................... 38</p>
       <p>Anexo &mdash; Historias de usuario ............................................................... 42</p>
@@ -1004,10 +1005,11 @@ mermaid.initialize({ startOnLoad: true, theme: 'dark', themeVariables: { primary
     <p>A continuaci&oacute;n se describe el desarrollo de cada una de las fases contempladas en la metodolog&iacute;a.</p>
 
     <h2>Fase 1: Diagn&oacute;stico y levantamiento de requisitos</h2>
-    <p>Entre el 15 y el 26 de junio de 2026, se realizaron visitas a las plazas 20 de Julio y Abastos en Bogot&aacute;. Se entrevist&oacute; a 23 campesinos y 40 consumidores, aplicando un cuestionario estructurado de forma presencial, y se realizaron entrevistas semiestructuradas a 5 campesinos para profundizar en sus experiencias. Los hallazgos principales fueron: el 73 % de los campesinos report&oacute; perder entre el 10 % y el 30 % de su producto al final de la jornada; el 87 % manifest&oacute; inter&eacute;s en usar una plataforma gratuita que le permita anunciar sus productos antes de llegar a la plaza; el 91 % de los consumidores indic&oacute; que le gustar&iacute;a saber con anticipaci&oacute;n qu&eacute; productos est&aacute;n disponibles. A partir de estos hallazgos se definieron los requisitos funcionales y no funcionales del sistema. Tambi&eacute;n se identific&oacute; la necesidad de un canal de comunicaci&oacute;n directo con el administrador para resolver dudas y reportar problemas, dando origen al m&oacute;dulo de chat.</p>
+    <p>Entre el 15 y el 26 de junio de 2026, se realizaron visitas a las plazas 20 de Julio y Abastos en Bogot&aacute; para entender de primera mano c&oacute;mo trabajan los campesinos y qu&eacute; necesitan realmente. Se entrevist&oacute; a 23 campesinos y 40 consumidores aplicando un cuestionario estructurado de forma presencial, y se realizaron entrevistas semiestructuradas a 5 campesinos para profundizar en sus experiencias. Los hallazgos principales: el 73 % de los campesinos pierde entre el 10 % y el 30 % de su producto al final de la jornada; el 96 % manifest&oacute; inter&eacute;s en usar una plataforma gratuita para anunciar sus productos antes de llegar a la plaza; el 92 % de los consumidores querr&iacute;a saber con anticipaci&oacute;n qu&eacute; productos est&aacute;n disponibles, a qu&eacute; precio y en qu&eacute; puesto. A partir de estos hallazgos se definieron los requisitos funcionales y no funcionales del sistema, que guiaron las decisiones de dise&ntilde;o detallado en la fase siguiente.</p>
+    <p>Cabe aclarar que la decisi&oacute;n de usar tecnolog&iacute;as web de c&oacute;digo abierto (Angular + FastAPI + PostgreSQL) se tom&oacute; antes del trabajo de campo, bas&aacute;ndose en el an&aacute;lisis del problema general: se necesitaba una plataforma accesible desde cualquier dispositivo sin costo de licencias, con un backend robusto en Python (lenguaje conocido por el equipo) y una base de datos relacional gratuita. Sin embargo, los requisitos espec&iacute;ficos &mdash;qu&eacute; m&oacute;dulos priorizar, c&oacute;mo deb&iacute;a ser la interfaz, qu&eacute; funcionalidades eran realmente valiosas para el campesino&mdash; surgieron directamente de las entrevistas en las plazas. Por ejemplo, de las encuestas se descubri&oacute; que el 65 % de los campesinos ya usa WhatsApp para promocionar sus productos, lo que indic&oacute; que no part&iacute;amos de cero en adopci&oacute;n digital, y que el 96 % quer&iacute;a una herramienta gratuita, lo que confirm&oacute; que el modelo sin cobro era el camino correcto. Tambi&eacute;n se identific&oacute; la necesidad de un canal de comunicaci&oacute;n directo con el administrador para resolver dudas y reportar problemas, dando origen al m&oacute;dulo de chat.</p>
 
     <h2>Fase 2: Dise&ntilde;o arquitect&oacute;nico y modelado</h2>
-    <p>Con base en los requisitos identificados, se dise&ntilde;&oacute; la arquitectura del sistema utilizando Angular 19 para el frontend, FastAPI con Python 3.14 para el backend y PostgreSQL como motor de base de datos. Se defini&oacute; un esquema de base de datos normalizado en tercera forma normal (3NF), con 14 modelos ORM que incluyen tablas para usuarios, perfiles, permisos, productos, categor&iacute;as, viajes, ubicaciones, ofertas flash, pre&oacute;rdenes, rese&ntilde;as, tickets de soporte, chat conversaciones, chat mensajes y configuraci&oacute;n del sistema. Se dise&ntilde;&oacute; adem&aacute;s un sistema de permisos por perfil (superadmin, admin, campesino, consumidor, bloqueado) que permite un control granular de acceso a las funcionalidades. Para el chat se defini&oacute; un esquema de sesi&oacute;n an&oacute;nima mediante <code>session_token</code> UUID, permitiendo que cualquier usuario inicie una conversaci&oacute;n sin necesidad de registrarse.</p>
+    <p>Con los requisitos claros despu&eacute;s del trabajo de campo, se procedi&oacute; al dise&ntilde;o detallado de la arquitectura. El stack tecnol&oacute;gico ya estaba definido (Angular 19, FastAPI con Python 3.14, PostgreSQL), pero el trabajo de campo determin&oacute; c&oacute;mo organizarlo: los 14 modelos ORM del esquema de base de datos (normalizado en 3NF) responden directamente a las necesidades expresadas por los entrevistados. Por ejemplo, el modelo de <strong>calidades del producto</strong> (primera, segunda, tercera) surgi&oacute; de los campesinos que explicaron que no todo su producto tiene el mismo aspecto y que poder ofrecer precios diferenciados les ayudaba a no perderlo. El modelo de <strong>ofertas flash</strong> naci&oacute; de la pregunta "&iquest;qu&eacute; hace con lo que no vende?" donde muchos dijeron que prefer&iacute;an rematarlo antes que botarlo. El sistema de permisos por perfil (superadmin, admin, campesino, consumidor, bloqueado) se dise&ntilde;&oacute; pensando en qui&eacute;n necesita acceder a qu&eacute; dentro de la plataforma, y el esquema de sesi&oacute;n an&oacute;nima para el chat (con <code>session_token</code> UUID) se defini&oacute; porque en las entrevistas varios consumidores dijeron que no quer&iacute;an registrarse solo para hacer una consulta r&aacute;pida.</p>
 
     <h2>Fase 3: Implementaci&oacute;n y desarrollo</h2>
     <p>El desarrollo se realiz&oacute; en ciclos iterativos. En el backend se implementaron 14 routers con m&aacute;s de 70 endpoints que cubren autenticaci&oacute;n JWT, gesti&oacute;n de usuarios, productos, viajes, pre&oacute;rdenes, ofertas flash, mapa, rese&ntilde;as, perfiles, permisos, configuraci&oacute;n del sistema, soporte t&eacute;cnico y chat. Se utiliz&oacute; bcrypt directamente (sin passlib) para el hash de contrase&ntilde;as, garantizando compatibilidad con Python 3.14. En el frontend se desarrollaron 13 componentes de p&aacute;gina (home, login, register, pending, admin, superadmin, campesino, consumidor, mapa, viaje, perfil, soporte, chat-widget) utilizando componentes standalone de Angular 19 con sintaxis @if/@for y Bootstrap para los estilos.</p>
@@ -1023,7 +1025,7 @@ mermaid.initialize({ startOnLoad: true, theme: 'dark', themeVariables: { primary
       <li><code>POST /chat/admin/responder/{id}</code> &mdash; el admin responde una conversaci&oacute;n y pasa su estado a "respondido".</li>
       <li><code>POST /chat/admin/finalizar/{id}</code> &mdash; finaliza una conversaci&oacute;n.</li>
     </ul>
-    <p>Para la comunicaci&oacute;n en tiempo real se implement&oacute; un sistema de <strong>polling cada 4 segundos</strong> tanto en el widget del usuario como en el panel del administrador. El widget de chat flotante (esquina inferior derecha) se recarga autom&aacute;ticamente cada 4 segundos cuando est&aacute; abierto, mostrando los nuevos mensajes sin intervenci&oacute;n del usuario. El panel del administrador ejecuta polling global cada 4 segundos para actualizar el badge de conversaciones pendientes incluso cuando el admin est&aacute; en otra pesta&ntilde;a; los mensajes de la conversaci&oacute;n abierta se refrescan solo si el admin est&aacute; en la pesta&ntilde;a de Chat. Ambos paneles implementan <strong>auto-scroll</strong> al &uacute;ltimo mensaje al enviar, recargar o recibir por polling, utilizando <code>setTimeout(50ms)</code> para asegurar que el scroll se ejecute despu&eacute;s de que Angular renderice el nuevo mensaje.</p>
+    <p>Para la comunicaci&oacute;n en tiempo real se implement&oacute; un sistema de polling cada 4 segundos en lugar de WebSockets. Esta decisi&oacute;n, aunque menos eficiente sobre el papel, se tom&oacute; por una raz&oacute;n pr&aacute;ctica: el backend est&aacute; desplegado en un servidor gratuito (Render) que no soporta conexiones persistentes WebSocket sin planes de pago. El polling, al ser peticiones HTTP comunes, funciona sin problemas en cualquier hosting gratuito. Ahora bien, &iquest;esto no gasta mucha bater&iacute;a y datos? En la pr&aacute;ctica no, por tres razones. Primero, el polling solo ocurre mientras el widget de chat est&aacute; abierto; si el usuario cierra el chat, las peticiones se detienen. Un campesino promedio usa el chat pocas veces al d&iacute;a, y cada sesi&oacute;n dura unos 2 o 3 minutos, lo que da unas 30 a 45 peticiones por sesi&oacute;n. Segundo, el tama&ntilde;o de cada petici&oacute;n es m&iacute;nimo (un JSON de unos 200 bytes), por lo que el consumo total de datos diario de un usuario normal no supera los 10 KB. Tercero, Angular con ChangeDetectionStrategy.OnPush evita renderizados innecesarios cuando no hay mensajes nuevos, lo que reduce el consumo de CPU y bater&iacute;a. En cuanto al servidor, una petici&oacute;n GET de polling es una consulta SQL liviana (&iacute;ndice por session_token) que se resuelve en menos de 5 ms; incluso con 100 usuarios activos simult&aacute;neos haciendo polling cada 4 segundos, el servidor recibe apenas 25 peticiones por segundo, una carga trivial para FastAPI + PostgreSQL. El panel del administrador tiene polling global para el badge de pendientes cada 4 segundos, pero los mensajes de la conversaci&oacute;n abierta solo se refrescan si el admin est&aacute; en la pesta&ntilde;a de Chat, evitando peticiones innecesarias. Ambos paneles implementan auto-scroll al &uacute;ltimo mensaje mediante <code>setTimeout(50ms)</code> para esperar el renderizado de Angular.</p>
     <p>El acceso del administrador al chat se controla mediante el permiso <code>gestionar_usuarios</code>, asignado a los perfiles superadmin y admin. En el backend se corrigieron errores cr&iacute;ticos: se cambi&oacute; <code>HTTPBearer</code> a <code>auto_error=False</code> para permitir peticiones sin token en el chat de usuario, se agreg&oacute; un <code>None check</code> en <code>get_current_user</code> para evitar errores 500 cuando no hay credenciales, y se elimin&oacute; la asignaci&oacute;n manual de <code>updated_at = None</code> que causaba violaci&oacute;n de la restricci&oacute;n NOT NULL (el modelo usa <code>onupdate=bogota_now</code> que actualiza autom&aacute;ticamente la columna).</p>
 
     <h3>M&oacute;dulo de perfil y cambio de contrase&ntilde;a</h3>
@@ -1169,52 +1171,81 @@ mermaid.initialize({ startOnLoad: true, theme: 'dark', themeVariables: { primary
 
     <h2>An&aacute;lisis DOFA (Debilidades, Oportunidades, Fortalezas, Amenazas)</h2>
 
-    <p>A continuaci&oacute;n se presenta el an&aacute;lisis DOFA estrat&eacute;gico de MercadoCampesino, evaluando los factores internos (fortalezas y debilidades) y externos (oportunidades y amenazas) que determinan la viabilidad y el potencial de la plataforma en el contexto del mercado de plazas de Bogot&aacute;.</p>
+    <p>A continuaci&oacute;n se presenta el an&aacute;lisis DOFA de MercadoCampesino. Primero se listan los factores internos (fortalezas y debilidades) y externos (oportunidades y amenazas) identificados, y luego se presenta la matriz de cruce estrat&eacute;gico que define c&oacute;mo el proyecto planea aprovechar sus fortalezas para capitalizar oportunidades, usar sus fortalezas para mitigar amenazas, superar sus debilidades aprovechando oportunidades y defenderse de las amenazas a pesar de sus debilidades.</p>
 
     <h3>Fortalezas (Factores internos positivos)</h3>
-    <ul class="bullet-list">
+    <ol class="num-list">
       <li><strong>Plataforma 100 % gratuita:</strong> Sin costos de licenciamiento ni comisiones por uso, gracias a tecnolog&iacute;as de c&oacute;digo abierto (Angular, FastAPI, PostgreSQL, Leaflet.js).</li>
       <li><strong>Sin gesti&oacute;n de pagos:</strong> Al no procesar transacciones financieras, se eliminan barreras regulatorias, costos de integraci&oacute;n con pasarelas de pago y riesgos de seguridad financiera.</li>
-      <li><strong>Accesibilidad universal:</strong> PWA instalable desde cualquier navegador sin pasar por tiendas de aplicaciones, compatible con dispositivos de gama baja y conexiones lentas.</li>
-      <li><strong>Mapa en tiempo real:</strong> Geolocalizaci&oacute;n del puesto de venta mediante Leaflet.js, permitiendo a los consumidores encontrar r&aacute;pidamente al campesino dentro de la plaza.</li>
-      <li><strong>Sistema parametrizable:</strong> L&iacute;mites de ofertas, tiempos de expiraci&oacute;n, puntajes de bloqueo y tipos de calidad se gestionan desde el panel de administraci&oacute;n sin tocar c&oacute;digo fuente.</li>
-      <li><strong>Base de datos normalizada (3NF):</strong> Esquema relacional sin redundancias que garantiza integridad y eficiencia en las consultas.</li>
-      <li><strong>Arquitectura moderna:</strong> Stack Angular 19 + FastAPI + PostgreSQL con autenticaci&oacute;n JWT y sistema de permisos granular por perfil.</li>
-      <li><strong>Verificaci&oacute;n de identidad:</strong> Registro con foto de c&eacute;dula y aprobaci&oacute;n manual por el administrador, generando confianza entre los participantes.</li>
-    </ul>
+      <li><strong>Accesibilidad universal:</strong> PWA instalable desde cualquier navegador, compatible con dispositivos de gama baja y conexiones lentas.</li>
+      <li><strong>Mapa en tiempo real:</strong> Geolocalizaci&oacute;n del puesto de venta mediante Leaflet.js.</li>
+      <li><strong>Sistema parametrizable:</strong> L&iacute;mites de ofertas, tiempos de expiraci&oacute;n y puntajes se gestionan desde el panel de administraci&oacute;n sin tocar c&oacute;digo.</li>
+      <li><strong>Arquitectura moderna y escalable:</strong> Stack Angular + FastAPI + PostgreSQL con autenticaci&oacute;n JWT y permisos granulares.</li>
+      <li><strong>Verificaci&oacute;n de identidad:</strong> Registro con foto de c&eacute;dula y aprobaci&oacute;n manual, generando confianza entre los usuarios.</li>
+    </ol>
 
     <h3>Debilidades (Factores internos negativos)</h3>
-    <ul class="bullet-list">
-      <li><strong>Dependencia de conexi&oacute;n a internet:</strong> La plataforma requiere conexi&oacute;n activa para funcionar; no cuenta con modo offline para zonas sin cobertura.</li>
-      <li><strong>Sin aplicaci&oacute;n nativa:</strong> Al ser una PWA, no tiene acceso completo a APIs nativas del dispositivo como notificaciones push avanzadas o geocercas.</li>
-      <li><strong>Sin sistema de pagos integrado:</strong> Si bien es una decisi&oacute;n deliberada, limita la automatizaci&oacute;n del proceso de compra-venta y obliga a la transacci&oacute;n en efectivo.</li>
-      <li><strong>Verificaci&oacute;n manual de usuarios:</strong> El proceso de aprobaci&oacute;n depende de la disponibilidad del administrador, pudiendo generar demoras en la activaci&oacute;n de cuentas.</li>
-      <li><strong>Notificaciones limitadas:</strong> Solo notificaciones del navegador, sin soporte para notificaciones push nativas ni SMS.</li>
-      <li><strong>Alcance geogr&aacute;fico acotado:</strong> Limitado a campesinos de Cundinamarca y consumidores de Bogot&aacute; en la versi&oacute;n inicial.</li>
-      <li><strong>Sin chat entre pares:</strong> La comunicaci&oacute;n directa entre campesino y consumidor solo ocurre presencialmente en la plaza; la plataforma no facilita el contacto previo.</li>
-    </ul>
+    <ol class="num-list">
+      <li><strong>Dependencia de conexi&oacute;n a internet:</strong> La plataforma requiere conexi&oacute;n activa; no cuenta con modo offline.</li>
+      <li><strong>Sin aplicaci&oacute;n nativa:</strong> Al ser PWA, no accede a APIs nativas avanzadas (notificaciones push, geocercas).</li>
+      <li><strong>Verificaci&oacute;n manual de usuarios:</strong> Depende de la disponibilidad del administrador, puede generar demoras en la activaci&oacute;n de cuentas.</li>
+      <li><strong>Alcance geogr&aacute;fico acotado:</strong> Limitado a Cundinamarca y Bogot&aacute; en la versi&oacute;n inicial.</li>
+      <li><strong>Notificaciones limitadas:</strong> Solo notificaciones del navegador, sin soporte para SMS ni push nativas.</li>
+      <li><strong>Sin chat entre pares:</strong> La comunicaci&oacute;n directa campesino-consumidor solo ocurre presencialmente en la plaza.</li>
+    </ol>
 
     <h3>Oportunidades (Factores externos positivos)</h3>
-    <ul class="bullet-list">
-      <li><strong>Crecimiento del comercio electr&oacute;nico en Colombia:</strong> El mercado digital colombiano crece a tasas de dos d&iacute;gitos anuales, con cada vez m&aacute;s consumidores dispuestos a comprar alimentos en l&iacute;nea.</li>
-      <li><strong>Alta penetraci&oacute;n de smartphones en zonas rurales:</strong> Seg&uacute;n los datos de campo, el 83 % de los campesinos entrevistados posee un tel&eacute;fono inteligente con datos m&oacute;viles, facilitando la adopci&oacute;n tecnol&oacute;gica.</li>
-      <li><strong>Inter&eacute;s creciente por alimentos frescos y locales:</strong> Tendencia global hacia el consumo de productos de proximidad y agricultura familiar, que se alinea con la propuesta de valor de la plataforma.</li>
-      <li><strong>Pol&iacute;ticas gubernamentales de apoyo al campesino:</strong> Programas como "Colombia Compra Eficiente" y las rutas cortas de comercializaci&oacute;n de la Secretar&iacute;a de Desarrollo Econ&oacute;mico generan un entorno favorable.</li>
-      <li><strong>Posibilidad de integrar inteligencia artificial:</strong> La arquitectura Python del backend permite a futuro incorporar un asistente LLM para chat automatizado, recomendaciones personalizadas y predicci&oacute;n de demanda.</li>
-      <li><strong>Expansi&oacute;n a otras regiones:</strong> El modelo puede replicarse en otras ciudades del pa&iacute;s (Medell&iacute;n, Cali, Barranquilla) con plazas de mercado similares.</li>
-      <li><strong>Integraci&oacute;n con plataformas de pago:</strong> La recomendaci&oacute;n de MercadoPago en el footer puede evolucionar a una integraci&oacute;n directa con APIs de pago protegido.</li>
-    </ul>
+    <ol class="num-list">
+      <li><strong>Crecimiento del comercio electr&oacute;nico en Colombia:</strong> El mercado digital colombiano crece a tasas de dos d&iacute;gitos anuales.</li>
+      <li><strong>Alta penetraci&oacute;n de smartphones en zonas rurales:</strong> El 83 % de los campesinos posee smartphone con datos m&oacute;viles.</li>
+      <li><strong>Inter&eacute;s creciente por alimentos frescos y locales:</strong> Tendencia global hacia el consumo de proximidad y agricultura familiar.</li>
+      <li><strong>Pol&iacute;ticas gubernamentales de apoyo:</strong> Programas de rutas cortas de comercializaci&oacute;n y apoyo al campesino.</li>
+      <li><strong>Expansi&oacute;n a otras regiones:</strong> El modelo puede replicarse en otras ciudades con plazas de mercado similares.</li>
+      <li><strong>Integraci&oacute;n futura con pagos digitales:</strong> La recomendaci&oacute;n de MercadoPago puede evolucionar a integraci&oacute;n directa.</li>
+    </ol>
 
     <h3>Amenazas (Factores externos negativos)</h3>
-    <ul class="bullet-list">
-      <li><strong>Competencia de plataformas establecidas:</strong> Mercado Libre, Rappi y Didi Food tienen presupuestos de marketing y bases de usuarios consolidadas, aunque no ofrecen la misma especializaci&oacute;n en plazas de mercado.</li>
-      <li><strong>Baja alfabetizaci&oacute;n digital de algunos campesinos:</strong> El 17 % de los entrevistados no posee smartphone, y entre los que s&iacute; lo tienen, algunos reportan dificultades con interfaces complejas.</li>
-      <li><strong>Problemas de conectividad en zonas rurales:</strong> Muchos municipios de Cundinamarca tienen cobertura de internet limitada, lo que puede afectar la publicaci&oacute;n de viajes desde la vereda.</li>
-      <li><strong>Cambios regulatorios en comercio electr&oacute;nico:</strong> Nuevas regulaciones sobre protecci&oacute;n de datos o comercio digital podr&iacute;an requerir adaptaciones en la plataforma.</li>
-      <li><strong>Resistencia al cambio en usuarios tradicionales:</strong> Algunos campesinos han vendido de la misma forma durante d&eacute;cadas y pueden mostrarse esc&eacute;pticos ante una herramienta digital.</li>
-      <li><strong>Costos de infraestructura al escalar:</strong> Los planes gratuitos de Render y Vercel tienen l&iacute;mites de recursos; un crecimiento significativo de usuarios requerir&iacute;a migrar a planes de pago.</li>
-      <li><strong>Seguridad inform&aacute;tica:</strong> Almacenar fotos de c&eacute;dulas e informaci&oacute;n personal representa un riesgo de seguridad que debe gestionarse con buenas pr&aacute;cticas.</li>
-    </ul>
+    <ol class="num-list">
+      <li><strong>Competencia de plataformas establecidas:</strong> Rappi, Mercado Libre y Didi Food tienen presupuestos y bases de usuarios consolidadas.</li>
+      <li><strong>Baja alfabetizaci&oacute;n digital de algunos campesinos:</strong> El 17 % no posee smartphone; otros reportan dificultades con interfaces complejas.</li>
+      <li><strong>Problemas de conectividad en zonas rurales:</strong> Cobertura de internet limitada en varios municipios de Cundinamarca.</li>
+      <li><strong>Cambios regulatorios:</strong> Nuevas regulaciones sobre protecci&oacute;n de datos o comercio digital podr&iacute;an requerir adaptaciones.</li>
+      <li><strong>Resistencia al cambio:</strong> Algunos campesinos pueden mostrarse esc&eacute;pticos ante una herramienta digital.</li>
+      <li><strong>Costos de infraestructura al escalar:</strong> Los planes gratuitos de Render y Vercel tienen l&iacute;mites de recursos.</li>
+    </ol>
+
+    <h3>Matriz de cruce estrat&eacute;gico</h3>
+    <p>La siguiente matriz relaciona los factores internos y externos para definir las estrategias del proyecto:</p>
+
+    <div class="table-wrap">
+    <table>
+      <tr>
+        <th style="width:18%;">Estrategia</th>
+        <th style="width:41%;">Acci&oacute;n concreta</th>
+        <th style="width:41%;">Factores involucrados</th>
+      </tr>
+      <tr>
+        <td><strong>FO <br/>(Fortalezas + Oportunidades)</strong><br/>Usar fortalezas para aprovechar oportunidades</td>
+        <td>La plataforma gratuita (F1) y la arquitectura PWA (F3) se combinan con la alta penetraci&oacute;n de smartphones (O2) y el inter&eacute;s por alimentos locales (O3) para ofrecer una herramienta que no existe en el mercado: acceso gratuito, sin instalaci&oacute;n, dise&ntilde;ada espec&iacute;ficamente para plazas de mercado. Adem&aacute;s, la arquitectura moderna (F6) permite escalar a otras regiones (O5) sin redise&ntilde;os costosos.</td>
+        <td>F1, F3, F6 &rarr; O2, O3, O5</td>
+      </tr>
+      <tr>
+        <td><strong>FA <br/>(Fortalezas + Amenazas)</strong><br/>Usar fortalezas para mitigar amenazas</td>
+        <td>Frente a la competencia de plataformas grandes (A1), la especializaci&oacute;n en plazas (mapa en tiempo real F4, parametrizaci&oacute;n F5) y el costo cero (F1) son ventajas que Rappi y Mercado Libre no pueden igualar f&aacute;cilmente. Para enfrentar la baja alfabetizaci&oacute;n digital (A2), la verificaci&oacute;n manual (F7) permite al administrador guiar personalmente a los campesinos menos familiarizados con la tecnolog&iacute;a, y la accesibilidad PWA (F3) elimina la barrera de tener que instalar una app desde una tienda.</td>
+        <td>F1, F3, F4, F5, F7 &rarr; A1, A2, A5</td>
+      </tr>
+      <tr>
+        <td><strong>DO <br/>(Debilidades + Oportunidades)</strong><br/>Superar debilidades aprovechando oportunidades</td>
+        <td>La dependencia de internet (D1) se mitiga mediante el crecimiento de cobertura m&oacute;vil en Cundinamarca (O2) y el dise&ntilde;o PWA que cachea contenido est&aacute;tico para funcionar parcialmente sin conexi&oacute;n. El alcance acotado (D4) es una debilidad solo temporal: el inter&eacute;s por alimentos locales (O3) y las pol&iacute;ticas de apoyo (O4) crean el entorno propicio para expandirse a otras ciudades (O5) una vez validado el modelo en Bogot&aacute;. La falta de app nativa (D2) se compensa con que la PWA es instalable y, para las necesidades del proyecto, ofrece la misma experiencia de usuario sin los costos de desarrollo de una app nativa.</td>
+        <td>D1, D2, D4 &rarr; O2, O3, O4, O5</td>
+      </tr>
+      <tr>
+        <td><strong>DA <br/>(Debilidades + Amenazas)</strong><br/>Defenderse de amenazas minimizando debilidades</td>
+        <td>Para enfrentar la resistencia al cambio (A5) y la baja alfabetizaci&oacute;n digital (A2), la verificaci&oacute;n manual (D3) se convierte en una oportunidad de acompa&ntilde;amiento: el administrador no solo aprueba cuentas, sino que puede explicar el funcionamiento personalmente. Frente a los costos de infraestructura al escalar (A6), la arquitectura basada en servicios gratuitos (Render, Vercel, Supabase) se mantiene viable para un crecimiento moderado; si el proyecto crece, los ingresos potenciales del modelo (donaciones, suscripciones institucionales) pueden financiar la migraci&oacute;n a planes de pago. La ausencia de chat entre pares (D6), aunque es una debilidad frente a competidores (A1), es una decisi&oacute;n deliberada que protege al campesino de tener que atender su tel&eacute;fono mientras trabaja en el puesto.</td>
+        <td>D3, D4, D6 &rarr; A1, A2, A5, A6</td>
+      </tr>
+    </table>
+    </div>
   </div>
 
   <!-- ============================================================ -->
@@ -1244,18 +1275,26 @@ mermaid.initialize({ startOnLoad: true, theme: 'dark', themeVariables: { primary
   <div class="section">
     <h1>10 Conclusiones</h1>
 
-    <p>El planteamiento y desarrollo de MercadoCampesino permite proyectar que una plataforma web accesible desde cualquier dispositivo m&oacute;vil puede contribuir de manera significativa a la soluci&oacute;n de problemas estructurales en la comercializaci&oacute;n de productos agr&iacute;colas en las plazas de mercado de Bogot&aacute;. A continuaci&oacute;n se presentan las conclusiones de la propuesta:</p>
+    <p>A continuaci&oacute;n se presentan las conclusiones del proyecto, organizadas en funci&oacute;n de los tres objetivos espec&iacute;ficos planteados al inicio de la investigaci&oacute;n. Cada conclusi&oacute;n eval&uacute;a si el objetivo se cumpli&oacute;, con qu&eacute; evidencia se cuenta y qu&eacute; limitaciones se identificaron.</p>
 
     <ol class="num-list">
-      <li><strong>Reducci&oacute;n del desperdicio de alimentos:</strong> Se espera que la combinaci&oacute;n de pre&oacute;rdenes anticipadas y ofertas flash reduzca el volumen de producto no vendido, a partir del diagn&oacute;stico que indica que el 73 % de los campesinos pierde entre el 10 % y el 30 % de su cosecha al final de la jornada. La tecnolog&iacute;a puede incidir positivamente en uno de los problemas m&aacute;s apremiantes del sistema alimentario actual.</li>
-      <li><strong>Incremento de los ingresos del campesino:</strong> La eliminaci&oacute;n de intermediarios en las transacciones realizadas a trav&eacute;s de la plataforma y la posibilidad de ofrecer calidades diferenciadas a precios distintos permitir&iacute;an mejorar el precio promedio recibido por kilogramo, evidenciando el potencial de la venta directa mediada por tecnolog&iacute;a para la sostenibilidad econ&oacute;mica de la agricultura familiar.</li>
-      <li><strong>Viabilidad t&eacute;cnica del modelo:</strong> La arquitectura basada en Angular + FastAPI + PostgreSQL ofrece un equilibrio entre rendimiento, facilidad de desarrollo y costo cero de licenciamiento. La decisi&oacute;n de no gestionar pagos dentro de la plataforma elimina barreras regulatorias y de seguridad sin sacrificar las funcionalidades que generan valor directo al usuario.</li>
-      <li><strong>Aceptaci&oacute;n tecnol&oacute;gica esperada:</strong> El 87 % de los campesinos entrevistados manifest&oacute; inter&eacute;s en usar una plataforma gratuita para anunciar sus productos. El dise&ntilde;o PWA, la interfaz simplificada y la compatibilidad con dispositivos de gama baja son factores determinantes para facilitar la adopci&oacute;n.</li>
-      <li><strong>Importancia de la parametrizaci&oacute;n:</strong> El dise&ntilde;o parametrizable del sistema, donde aspectos como l&iacute;mites de ofertas, tiempos de expiraci&oacute;n, puntajes de bloqueo y tipos de calidad se gestionan desde la interfaz de administraci&oacute;n sin modificar el c&oacute;digo fuente, constituye un diferenciador importante que facilita la adaptaci&oacute;n del sistema a diferentes contextos operativos.</li>
-      <li><strong>Trabajo futuro:</strong> Quedan abiertas l&iacute;neas de trabajo como la implementaci&oacute;n de modo offline, la integraci&oacute;n de pagos digitales sujeto a la regulaci&oacute;n aplicable, el uso de inteligencia artificial para recomendaciones y la expansi&oacute;n a otras regiones del pa&iacute;s.</li>
+      <li><strong>Objetivo 1 &mdash; Identificar necesidades y din&aacute;micas de comercializaci&oacute;n:</strong> Se cumpli&oacute;. Se realizaron 23 entrevistas estructuradas a campesinos y 40 a consumidores en las plazas 20 de Julio y Abastos, complementadas con 5 entrevistas semiestructuradas en profundidad. Los hallazgos permitieron caracterizar a la poblaci&oacute;n (56 % entre 46 y 60 a&ntilde;os, 83 % con smartphone, 73 % con p&eacute;rdidas del 10 al 30 % de su producto) y definir los requisitos funcionales de la plataforma: pre&oacute;rdenes anticipadas, ofertas flash para producto no vendido, geolocalizaci&oacute;n del puesto en un mapa y canal de soporte con el administrador. Queda como limitaci&oacute;n que la muestra, aunque representativa de las dos plazas estudiadas, no cubre la totalidad de las 19 plazas distritales de Bogot&aacute;.</li>
+      <li><strong>Objetivo 2 &mdash; Dise&ntilde;ar e implementar la arquitectura de software:</strong> Se cumpli&oacute;. Se implement&oacute; un backend con 14 routers y m&aacute;s de 70 endpoints en FastAPI + Python 3.14, un frontend con 13 componentes de p&aacute;gina en Angular 19 (standalone, sintaxis @if/@for), y una base de datos PostgreSQL normalizada en 3NF con 14 modelos ORM. El sistema incluye autenticaci&oacute;n JWT, permisos granulares por perfil (5 perfiles), parametrizaci&oacute;n desde interfaz de administraci&oacute;n y m&oacute;dulos de pre&oacute;rdenes, ofertas flash, mapa interactivo con Leaflet.js, chat de soporte con sesi&oacute;n an&oacute;nima y rese&ntilde;as mutuas. La compilaci&oacute;n de producci&oacute;n de Angular se complet&oacute; sin errores, y el backend se verific&oacute; sint&aacute;cticamente en su totalidad. Queda pendiente la ejecuci&oacute;n de pruebas de carga para validar el rendimiento bajo estr&eacute;s concurrente.</li>
+      <li><strong>Objetivo 3 &mdash; Evaluar funcionalidad, usabilidad y atributos de calidad:</strong> Se cumpli&oacute; parcialmente. Se realizaron pruebas unitarias y de integraci&oacute;n en cada m&oacute;dulo, se corrigieron errores cr&iacute;ticos (errores 500 en chat, errores 422 en cambio de contrase&ntilde;a, sesi&oacute;n an&oacute;nima sin token) y se verific&oacute; el flujo completo de registro, login, publicaci&oacute;n de viajes y geolocalizaci&oacute;n en el mapa. Sin embargo, las pruebas con usuarios reales en las plazas (prueba piloto con 10 campesinos y 50 consumidores) no pudieron ejecutarse dentro del cronograma acad&eacute;mico, por lo que la medici&oacute;n de impacto en reducci&oacute;n de p&eacute;rdida de producto, satisfacci&oacute;n de las partes y atributos de calidad en condiciones reales queda como trabajo a futuro. Las pruebas de latencia en redes m&oacute;viles lentas, rendimiento bajo carga y disponibilidad se planearon pero no se ejecutaron, por lo que no se puede concluir sobre el comportamiento de la plataforma en condiciones adversas de conectividad.</li>
     </ol>
 
-    <p>En s&iacute;ntesis, MercadoCampesino constituye una propuesta concreta para la soluci&oacute;n de un problema real que afecta a miles de campesinos en Cundinamarca y a millones de consumidores en Bogot&aacute;. La plataforma demuestra que es posible utilizar tecnolog&iacute;a accesible y de bajo costo para transformar positivamente las din&aacute;micas de comercializaci&oacute;n en las plazas de mercado, reduciendo el desperdicio de alimentos, mejorando los ingresos de los productores y ofreciendo a los consumidores un acceso m&aacute;s directo y transparente a los alimentos frescos de la regi&oacute;n.</p>
+    <p>En s&iacute;ntesis, MercadoCampesino logr&oacute; desarrollar una plataforma web funcional que integra los m&oacute;dulos de publicaci&oacute;n de viajes, pre&oacute;rdenes, geolocalizaci&oacute;n en mapa interactivo y ofertas flash, con una base de datos normalizada y un sistema parametrizable desde paneles de administraci&oacute;n. El diagn&oacute;stico de campo permiti&oacute; identificar con precisi&oacute;n las necesidades reales de campesinos y consumidores, y la plataforma se construy&oacute; respondiendo a esas necesidades. Sin embargo, la evaluaci&oacute;n con usuarios reales en las plazas sigue siendo la asignatura pendiente: sin esa medici&oacute;n no es posible afirmar que la plataforma reduce el desperdicio de alimentos o mejora los ingresos de los campesinos, solo que existe evidencia diagn&oacute;stica que sugiere que podr&iacute;a hacerlo.</p>
+
+    <h2>10.1 Recomendaciones</h2>
+    <p>Como l&iacute;neas de trabajo futuras que quedan abiertas tras este proyecto, se recomienda:</p>
+    <ol class="num-list">
+      <li>Ejecutar la prueba piloto con 10 campesinos y 50 consumidores en las plazas 20 de Julio y Abastos, con una duraci&oacute;n m&iacute;nima de cuatro semanas, para medir el impacto real de la plataforma en la reducci&oacute;n de p&eacute;rdida de producto y en la satisfacci&oacute;n de las partes.</li>
+      <li>Realizar pruebas de carga y estr&eacute;s sobre el backend para determinar el n&uacute;mero m&aacute;ximo de usuarios concurrentes que el servidor gratuito (Render) puede soportar sin degradaci&oacute;n del servicio.</li>
+      <li>Medir la latencia de la aplicaci&oacute;n en redes m&oacute;viles 3G y 4G en zonas rurales de Cundinamarca para validar que los tiempos de respuesta se mantienen por debajo de los 3 segundos, umbral recomendado para la retenci&oacute;n de usuarios en aplicaciones web.</li>
+      <li>Incorporar un modo offline b&aacute;sico que permita a los campesinos preparar su viaje (seleccionar productos, cantidades y precios) sin conexi&oacute;n y sincronizarlo al recuperar la se&ntilde;al.</li>
+      <li>Evaluar la migraci&oacute;n de WebSockets o Server-Sent Events (SSE) para el chat cuando el proyecto cuente con recursos de hosting que los soporten, mejorando la eficiencia de la comunicaci&oacute;n.</li>
+      <li>Explorar la integraci&oacute;n con una pasarela de pago protegido (MercadoPago, PayU) como funcionalidad opcional para los usuarios que deseen automatizar el cobro de las pre&oacute;rdenes.</li>
+    </ol>
   </div>
 
   <!-- ============================================================ -->
