@@ -184,10 +184,11 @@
 
   /* ============================================================
      FORMATO DE IMPRESIÓN (Ctrl+P / Imprimir)
+     Documento formal estilo Word: monocromo, serif, sin colores
      ============================================================ */
   @page {
     size: letter;
-    margin: 18mm 15mm 18mm 15mm;
+    margin: 25mm 22mm 25mm 22mm;
   }
 
   @media print {
@@ -198,128 +199,224 @@
 
     html, body {
       background: #ffffff !important;
-      color: #1a1a1a !important;
+      color: #000000 !important;
       padding: 0 !important;
       margin: 0 !important;
+      font-family: 'Times New Roman', Times, Georgia, serif !important;
     }
 
     .container { max-width: 100% !important; }
 
-    /* --- Encabezado de página --- */
+    /* --- Portada del documento --- */
     .header {
-      margin-bottom: 18px !important;
-      padding-bottom: 12px !important;
-      border-bottom: 2px solid #c62828 !important;
+      margin-bottom: 20px !important;
+      padding-bottom: 16px !important;
+      border-bottom: 1px solid #000 !important;
+      text-align: center !important;
       page-break-after: avoid;
     }
     .header h1 {
-      font-size: 1.6rem !important;
-      -webkit-text-fill-color: #c62828 !important;
-      background: none !important;
-      color: #c62828 !important;
+      font-family: 'Times New Roman', serif !important;
+      font-size: 2rem !important;
+      font-weight: 700 !important;
       letter-spacing: 0 !important;
+      -webkit-text-fill-color: #000 !important;
+      background: none !important;
+      color: #000 !important;
+      text-transform: uppercase !important;
     }
-    .header .sub { color: #444 !important; font-size: 0.85rem !important; }
+    .header .sub {
+      color: #000 !important;
+      font-size: 0.9rem !important;
+      font-style: italic !important;
+    }
 
     /* --- Tabla de contenido --- */
     .toc {
-      background: #f5f5f5 !important;
-      border: 1px solid #ccc !important;
-      border-radius: 8px !important;
+      background: #ffffff !important;
+      border: 1px solid #000 !important;
+      border-radius: 0 !important;
+      padding: 16px 20px !important;
       page-break-after: always;  /* el contenido inicia en página nueva */
     }
-    .toc h3 { color: #c62828 !important; }
-    .toc li { color: #333 !important; font-size: 0.8rem !important; line-height: 1.5 !important; }
-    .toc a { color: #c62828 !important; text-decoration: none !important; }
+    .toc h3 {
+      color: #000 !important;
+      font-size: 1.05rem !important;
+      text-transform: uppercase !important;
+      letter-spacing: 0 !important;
+      border-bottom: 1px solid #000 !important;
+      padding-bottom: 4px !important;
+    }
+    .toc li { color: #000 !important; font-size: 0.85rem !important; line-height: 1.6 !important; }
+    .toc a { color: #000 !important; text-decoration: none !important; }
 
-    /* --- Secciones --- */
+    /* --- Secciones (sin bordes, sin esquinas, sin colores) --- */
     .section {
       background: #ffffff !important;
-      border: 1px solid #ddd !important;
-      border-radius: 8px !important;
-      padding: 16px 18px !important;
-      margin-bottom: 14px !important;
-      page-break-inside: avoid;
+      border: none !important;
+      border-radius: 0 !important;
+      padding: 0 !important;
+      margin-bottom: 20px !important;
     }
     .section h1 {
-      font-size: 1.15rem !important;
-      color: #c62828 !important;
-      border-bottom: 2px solid #fdd835 !important;
-      padding-bottom: 5px !important;
-      margin-bottom: 10px !important;
+      font-family: 'Times New Roman', serif !important;
+      font-size: 1.35rem !important;
+      font-weight: 700 !important;
+      color: #000 !important;
+      border-bottom: 1px solid #000 !important;
+      padding-bottom: 6px !important;
+      margin: 0 0 14px 0 !important;
       page-break-after: avoid;
     }
-    .section h2 { font-size: 0.98rem !important; color: #222 !important; page-break-after: avoid; }
-    .section h3 { font-size: 0.9rem !important; color: #333 !important; page-break-after: avoid; }
+    .section h2 {
+      font-family: 'Times New Roman', serif !important;
+      font-size: 1.05rem !important;
+      font-weight: 700 !important;
+      color: #000 !important;
+      margin: 18px 0 8px 0 !important;
+      page-break-after: avoid;
+    }
+    .section h3 {
+      font-family: 'Times New Roman', serif !important;
+      font-size: 0.95rem !important;
+      font-weight: 700 !important;
+      font-style: italic !important;
+      color: #000 !important;
+      margin: 14px 0 6px 0 !important;
+      page-break-after: avoid;
+    }
 
-    .section p { color: #333 !important; font-size: 0.82rem !important; line-height: 1.55 !important; }
-
-    ul.bullet-list { padding-left: 16px !important; }
-    ul.bullet-list li { color: #333 !important; font-size: 0.82rem !important; line-height: 1.55 !important; }
-    ol.num-list li { color: #333 !important; font-size: 0.82rem !important; line-height: 1.55 !important; }
-
-    /* --- Cajas de pasos, notas y advertencias --- */
-    .pasos {
-      background: #f9f9f9 !important;
-      border: 1px solid #ccc !important;
-      border-radius: 8px !important;
-      padding: 10px 14px !important;
+    .section p {
+      color: #000 !important;
+      font-family: 'Times New Roman', serif !important;
+      font-size: 12pt !important;
+      line-height: 1.6 !important;
       margin-bottom: 10px !important;
-      page-break-inside: avoid;
+      text-align: justify !important;
     }
-    .pasos .titulo { color: #c62828 !important; font-size: 0.85rem !important; }
-    .pasos li { color: #333 !important; font-size: 0.8rem !important; line-height: 1.5 !important; }
 
-    .nota {
-      background: #fff8e1 !important;
-      border-left: 3px solid #fdd835 !important;
-      border-radius: 4px !important;
-      color: #5a4a00 !important;
-      font-size: 0.78rem !important;
+    ul.bullet-list { padding-left: 18px !important; margin-bottom: 10px !important; }
+    ul.bullet-list li {
+      color: #000 !important;
+      font-family: 'Times New Roman', serif !important;
+      font-size: 12pt !important;
+      line-height: 1.6 !important;
+      margin-bottom: 5px !important;
+      text-align: justify !important;
+    }
+    ol.num-list { padding-left: 20px !important; }
+    ol.num-list li {
+      color: #000 !important;
+      font-family: 'Times New Roman', serif !important;
+      font-size: 12pt !important;
+      line-height: 1.6 !important;
+      margin-bottom: 6px !important;
+      text-align: justify !important;
+    }
+
+    /* --- Cajas de pasos: sin fondo, con borde sencillo --- */
+    .pasos {
+      background: #ffffff !important;
+      border: 1px solid #000 !important;
+      border-radius: 0 !important;
+      padding: 10px 14px !important;
+      margin: 0 0 12px 0 !important;
       page-break-inside: avoid;
     }
-    .nota strong { color: #8e6e00 !important; }
+    .pasos .titulo {
+      color: #000 !important;
+      font-size: 0.9rem !important;
+      font-weight: 700 !important;
+      text-decoration: underline !important;
+      margin-bottom: 6px !important;
+    }
+    .pasos li {
+      color: #000 !important;
+      font-family: 'Times New Roman', serif !important;
+      font-size: 11pt !important;
+      line-height: 1.55 !important;
+      margin-bottom: 4px !important;
+    }
+
+    /* --- Notas y advertencias: solo texto marcado, sin colores --- */
+    .nota {
+      background: #ffffff !important;
+      border: none !important;
+      border-radius: 0 !important;
+      padding: 2px 0 2px 12px !important;
+      margin: 0 0 12px 0 !important;
+      color: #000 !important;
+      font-family: 'Times New Roman', serif !important;
+      font-size: 10.5pt !important;
+      font-style: italic !important;
+      line-height: 1.5 !important;
+      page-break-inside: avoid;
+    }
+    .nota strong { color: #000 !important; font-weight: 700 !important; }
 
     .advertencia {
-      background: #fff0e6 !important;
-      border-left: 3px solid #ff922b !important;
-      border-radius: 4px !important;
-      color: #6b3a00 !important;
-      font-size: 0.78rem !important;
+      background: #ffffff !important;
+      border: 1px solid #000 !important;
+      border-radius: 0 !important;
+      padding: 8px 12px !important;
+      margin: 0 0 12px 0 !important;
+      color: #000 !important;
+      font-family: 'Times New Roman', serif !important;
+      font-size: 10.5pt !important;
+      line-height: 1.5 !important;
       page-break-inside: avoid;
     }
-    .advertencia strong { color: #d9600f !important; }
+    .advertencia strong { color: #000 !important; font-weight: 700 !important; }
 
-    /* --- Tablas --- */
-    .tabla { font-size: 0.78rem !important; page-break-inside: auto; }
-    .tabla th {
-      background: #c62828 !important;
-      color: #ffffff !important;
-      border-color: #a02020 !important;
-      font-size: 0.75rem !important;
+    /* --- Tablas estilo Word: bordes negros, encabezado en negrita --- */
+    .tabla {
+      font-family: 'Times New Roman', serif !important;
+      font-size: 10.5pt !important;
+      margin: 12px 0 16px 0 !important;
+      page-break-inside: auto;
     }
-    .tabla td { color: #333 !important; border-color: #ccc !important; }
+    .tabla th {
+      background: #ffffff !important;
+      color: #000 !important;
+      border: 1px solid #000 !important;
+      font-weight: 700 !important;
+      padding: 6px 8px !important;
+    }
+    .tabla td {
+      color: #000 !important;
+      border: 1px solid #000 !important;
+      padding: 5px 8px !important;
+      line-height: 1.5 !important;
+    }
     .tabla td strong { color: #000 !important; }
     .tabla tr { page-break-inside: avoid; }
     .tabla thead { display: table-header-group; }  /* repite encabezado en cada página */
 
     code {
-      background: #f5f5f5 !important;
-      border: 1px solid #ccc !important;
-      color: #c62828 !important;
-      font-size: 0.75rem !important;
+      background: #ffffff !important;
+      border: 1px solid #000 !important;
+      border-radius: 0 !important;
+      color: #000 !important;
+      font-family: 'Courier New', monospace !important;
+      font-size: 9.5pt !important;
     }
 
-    .tag-rojo { background: #c62828 !important; color: #fff !important; }
-    .tag-amarillo { background: #fdd835 !important; color: #8e0000 !important; }
-    .tag-verde { background: #2e7d32 !important; color: #fff !important; }
-    .tag-gris { background: #546e7a !important; color: #fff !important; }
-    .tag-info { background: #0288d1 !important; color: #fff !important; }
+    /* --- Etiquetas de perfil: texto plano en negrita, sin relleno --- */
+    .tag {
+      border: none !important;
+      padding: 0 !important;
+      font-size: 10.5pt !important;
+      font-weight: 700 !important;
+    }
+    .tag-rojo, .tag-amarillo, .tag-verde, .tag-gris, .tag-info {
+      background: #ffffff !important;
+      color: #000 !important;
+    }
 
     .footer {
-      color: #666 !important;
-      border-top: 1px solid #ccc !important;
-      font-size: 0.75rem !important;
+      color: #000 !important;
+      border-top: 1px solid #000 !important;
+      font-size: 10pt !important;
       page-break-inside: avoid;
     }
 
@@ -336,7 +433,7 @@
 <div class="container">
 
   <div class="header">
-    <h1>📖 Manual de Usuario</h1>
+    <h1>Manual de Usuario</h1>
     <div class="sub">MercadoCampesino &mdash; Plataforma web para conectar campesinos de Cundinamarca con consumidores de Bogotá</div>
     <div class="sub">Trabajo de Grado 3 &mdash; Corporación Unificada Nacional de Educación Superior (CUN)</div>
   </div>
@@ -576,7 +673,7 @@
     <h1>9. Mapa de campesinos</h1>
     <p>La sección <strong>Mapa</strong> muestra en tiempo real los puntos donde están los campesinos con viajes activos. Es accesible desde el menú superior para todos los visitantes (no requiere iniciar sesión).</p>
     <ul class="bullet-list">
-      <li>Cada campesino aparece como un marcador <strong>rojo con la cara de un maíz</strong> (🌽).</li>
+      <li>Cada campesino aparece como un marcador <strong>rojo con la cara de un maíz</strong>.</li>
       <li>Presione un marcador para ver el <strong>popup</strong> con el nombre del campesino, la dirección o plaza, y la lista de productos con su precio y la cantidad disponible.</li>
       <li>El mapa se centra automáticamente en los viajes activos del día.</li>
       <li>Los campesinos pueden <strong>actualizar su punto en el mapa durante el día</strong>, por ejemplo si se cambiaron de puesto dentro de la plaza.</li>
@@ -662,7 +759,7 @@
   <!-- ================= 13. CHAT ================= -->
   <div class="section" id="chat">
     <h1>13. Chat de soporte (widget)</h1>
-    <p>En la esquina inferior derecha de todas las páginas hay un botón redondo rojo con un ícono de chat (💬). Este es el <strong>widget de chat</strong> con el equipo de soporte. Es la vía rápida para hacer preguntas, reportar errores o pedir ayuda.</p>
+    <p>En la esquina inferior derecha de todas las páginas hay un botón redondo rojo con un ícono de chat. Este es el <strong>widget de chat</strong> con el equipo de soporte. Es la vía rápida para hacer preguntas, reportar errores o pedir ayuda.</p>
     <div class="pasos">
       <div class="titulo">Iniciar una conversación (sin necesidad de registrarse)</div>
       <ol>
@@ -695,7 +792,7 @@
   <!-- ================= 15. PERFIL ================= -->
   <div class="section" id="perfil">
     <h1>15. Mi perfil y cambio de contraseña</h1>
-    <p>Desde el menú superior, el ícono de engranaje (⚙️) lo lleva a la sección <strong>Mi perfil</strong>.</p>
+    <p>Desde el menú superior, el ícono de engranaje lo lleva a la sección <strong>Mi perfil</strong>.</p>
     <h2>15.1 Actualizar mis datos</h2>
     <p>Puede actualizar sus nombres, apellidos, correo y celular. Presione <strong>Guardar cambios</strong>. Los datos quedan actualizados de inmediato.</p>
     <h2>15.2 Cambiar mi contraseña</h2>
