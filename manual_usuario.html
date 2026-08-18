@@ -172,6 +172,24 @@
   .tag-gris { background: #546e7a; color: #fff; }
   .tag-info { background: #0288d1; color: #fff; }
 
+  .figura {
+    margin: 18px 0 20px 0;
+    text-align: center;
+  }
+  .figura img {
+    max-width: 100%;
+    border: 2px solid #2a2a4a;
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.35);
+  }
+  .figura .leyenda {
+    margin-top: 8px;
+    color: #8888aa;
+    font-size: 0.82rem;
+    font-style: italic;
+  }
+  .figura .leyenda strong { color: #fcc419; }
+
   .footer {
     text-align: center;
     color: #666688;
@@ -413,6 +431,27 @@
       color: #000 !important;
     }
 
+    /* --- Figuras (capturas de pantalla) --- */
+    .figura {
+      margin: 14px 0 16px 0 !important;
+      text-align: center !important;
+      page-break-inside: avoid;
+    }
+    .figura img {
+      max-width: 88% !important;
+      border: 1px solid #000 !important;
+      border-radius: 0 !important;
+      box-shadow: none !important;
+      filter: grayscale(100%) !important;   /* monocromo para impresión formal */
+    }
+    .figura .leyenda {
+      margin-top: 6px !important;
+      color: #000 !important;
+      font-size: 9.5pt !important;
+      font-style: italic !important;
+    }
+    .figura .leyenda strong { color: #000 !important; font-weight: 700 !important; }
+
     .footer {
       color: #000 !important;
       border-top: 1px solid #000 !important;
@@ -425,7 +464,7 @@
     .section h1 { break-after: avoid; }
     .section h2 { break-after: avoid; }
     .section h3 { break-after: avoid; }
-    img, table, tr, .pasos, .nota, .advertencia { break-inside: avoid; }
+    img, table, tr, .pasos, .nota, .advertencia, .figura { break-inside: avoid; }
   }
 </style>
 </head>
@@ -490,6 +529,11 @@
     <h1>3. Registro de cuenta</h1>
     <p>Para usar la plataforma debe crear una cuenta. El registro es gratuito. Existen dos tipos de cuenta: <strong>campesino</strong> (para vender sus productos) y <strong>consumidor</strong> (para comprar).</p>
 
+    <div class="figura">
+      <img src="capturas/register.png" alt="Formulario de registro de cuenta" />
+      <div class="leyenda"><strong>Figura 1.</strong> Formulario de registro de cuenta. Si selecciona el tipo "Campesino" aparecerá el campo para cargar la foto con su documento.</div>
+    </div>
+
     <h2>3.1 Pasos para registrarse</h2>
     <div class="pasos">
       <div class="titulo">Cómo crear su cuenta</div>
@@ -527,6 +571,10 @@
   <!-- ================= 5. LOGIN ================= -->
   <div class="section" id="login">
     <h1>5. Inicio de sesión</h1>
+    <div class="figura">
+      <img src="capturas/login.png" alt="Pantalla de inicio de sesión" />
+      <div class="leyenda"><strong>Figura 2.</strong> Pantalla de inicio de sesión. El ingreso se realiza con el número de cédula y la contraseña.</div>
+    </div>
     <div class="pasos">
       <div class="titulo">Cómo ingresar a su cuenta</div>
       <ol>
@@ -566,6 +614,11 @@
   <div class="section" id="campesino">
     <h1>7. Manual para el campesino</h1>
     <p>Al ingresar con una cuenta de campesino, verá el <strong>Panel de Venta</strong> con varias pestañas. Estas son las funciones que encontrará:</p>
+
+    <div class="figura">
+      <img src="capturas/campesino.png" alt="Panel de venta del campesino" />
+      <div class="leyenda"><strong>Figura 3.</strong> Panel de Venta del campesino, con las pestañas Mis productos, Mis viajes, Ofertas flash y Preórdenes.</div>
+    </div>
 
     <h2>7.1 Mis productos</h2>
     <p>Aquí gestiona el catálogo de productos que vende (papas, cebollas, tomates, plátanos, etc.).</p>
@@ -632,6 +685,11 @@
     <h1>8. Manual para el consumidor</h1>
     <p>Al ingresar con una cuenta de consumidor, verá el <strong>Panel de Compra</strong> con varias pestañas.</p>
 
+    <div class="figura">
+      <img src="capturas/consumidor.png" alt="Panel de compra del consumidor" />
+      <div class="leyenda"><strong>Figura 4.</strong> Panel de Compra del consumidor, con la pestaña Explorar donde se ven los productos de los viajes activos.</div>
+    </div>
+
     <h2>8.1 Explorar</h2>
     <p>Aquí ve los viajes activos de todos los campesinos, organizados por plaza. Cada tarjeta muestra la plaza, el campesino, sus productos, precios, cantidades disponibles y fotos.</p>
     <ul class="bullet-list">
@@ -672,6 +730,12 @@
   <div class="section" id="mapa">
     <h1>9. Mapa de campesinos</h1>
     <p>La sección <strong>Mapa</strong> muestra en tiempo real los puntos donde están los campesinos con viajes activos. Es accesible desde el menú superior para todos los visitantes (no requiere iniciar sesión).</p>
+
+    <div class="figura">
+      <img src="capturas/mapa.png" alt="Mapa de campesinos con marcadores" />
+      <div class="leyenda"><strong>Figura 5.</strong> Mapa de campesinos. Cada marcador rojo representa un campesino con viaje activo.</div>
+    </div>
+
     <ul class="bullet-list">
       <li>Cada campesino aparece como un marcador <strong>rojo con la cara de un maíz</strong>.</li>
       <li>Presione un marcador para ver el <strong>popup</strong> con el nombre del campesino, la dirección o plaza, y la lista de productos con su precio y la cantidad disponible.</li>
@@ -684,6 +748,12 @@
   <div class="section" id="home">
     <h1>10. Página de inicio y ofertas flash</h1>
     <p>La página de inicio (Home) es la vitrina pública de la plataforma. Cualquier persona puede verla, incluso sin iniciar sesión.</p>
+
+    <div class="figura">
+      <img src="capturas/home.png" alt="Página de inicio con ofertas flash" />
+      <div class="leyenda"><strong>Figura 6.</strong> Página de inicio. En la parte superior se muestran las ofertas flash del día y los productos disponibles.</div>
+    </div>
+
     <ul class="bullet-list">
       <li><strong>Banner de ofertas flash:</strong> en la parte superior se muestran las ofertas activas en tarjetas con la foto del producto, el porcentaje de descuento, el precio rebajado (comparado con el precio normal) y la ubicación del campesino. Si no hay ofertas activas, aparece el mensaje <em>"No hay ofertas activas"</em>.</li>
       <li><strong>Productos disponibles:</strong> lista de los productos en venta hoy, con precio, unidad, foto, campesino y dirección.</li>
@@ -695,6 +765,11 @@
   <div class="section" id="admin">
     <h1>11. Manual para el administrador</h1>
     <p>El Panel de Administración le permite gestionar usuarios, categorías, plazas, el chat de soporte, las alertas y las solicitudes rechazadas. Se accede desde el menú superior (Admin).</p>
+
+    <div class="figura">
+      <img src="capturas/admin.png" alt="Panel de administración" />
+      <div class="leyenda"><strong>Figura 7.</strong> Panel de Administración. La pestaña Usuarios muestra el listado con la verificación y las acciones por usuario.</div>
+    </div>
 
     <h2>11.1 Pestaña Usuarios</h2>
     <ul class="bullet-list">
@@ -732,6 +807,11 @@
     <h1>12. Manual para el superadministrador</h1>
     <p>El Panel Superadmin es la máxima autoridad de la plataforma. Se accede desde el menú superior (Superadmin) y solo existe un usuario con este perfil.</p>
 
+    <div class="figura">
+      <img src="capturas/superadmin.png" alt="Panel de superadministrador" />
+      <div class="leyenda"><strong>Figura 8.</strong> Panel Superadmin con la pestaña Perfiles y permisos, donde se activan o desactivan los permisos por perfil.</div>
+    </div>
+
     <h2>12.1 Perfiles y permisos</h2>
     <p>Aquí se gestionan los permisos de cada perfil con <strong>checkboxes (botones)</strong>. Cada permiso es una capacidad específica:</p>
     <table class="tabla">
@@ -760,6 +840,12 @@
   <div class="section" id="chat">
     <h1>13. Chat de soporte (widget)</h1>
     <p>En la esquina inferior derecha de todas las páginas hay un botón redondo rojo con un ícono de chat. Este es el <strong>widget de chat</strong> con el equipo de soporte. Es la vía rápida para hacer preguntas, reportar errores o pedir ayuda.</p>
+
+    <div class="figura">
+      <img src="capturas/chat.png" alt="Widget de chat de soporte" />
+      <div class="leyenda"><strong>Figura 9.</strong> Widget de chat de soporte. Permite iniciar una conversación anónima con el equipo administrativo.</div>
+    </div>
+
     <div class="pasos">
       <div class="titulo">Iniciar una conversación (sin necesidad de registrarse)</div>
       <ol>
@@ -793,6 +879,12 @@
   <div class="section" id="perfil">
     <h1>15. Mi perfil y cambio de contraseña</h1>
     <p>Desde el menú superior, el ícono de engranaje lo lleva a la sección <strong>Mi perfil</strong>.</p>
+
+    <div class="figura">
+      <img src="capturas/perfil.png" alt="Página de mi perfil" />
+      <div class="leyenda"><strong>Figura 10.</strong> Página Mi perfil. En la parte superior se actualizan los datos personales y en la inferior se cambia la contraseña.</div>
+    </div>
+
     <h2>15.1 Actualizar mis datos</h2>
     <p>Puede actualizar sus nombres, apellidos, correo y celular. Presione <strong>Guardar cambios</strong>. Los datos quedan actualizados de inmediato.</p>
     <h2>15.2 Cambiar mi contraseña</h2>
