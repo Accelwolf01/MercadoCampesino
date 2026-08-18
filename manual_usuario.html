@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MercadoCampesino - Manual de Usuario - Trabajo de Grado 3 - CUN Bogotá</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap');
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Inter', sans-serif;
+    background: #0f0f1a;
+    color: #e0e0e0;
+    padding: 40px 20px;
+  }
+  .container { max-width: 860px; margin: 0 auto; }
+
+  .header {
+    text-align: center;
+    margin-bottom: 40px;
+    padding-bottom: 30px;
+    border-bottom: 1px solid #2a2a4a;
+  }
+  .header h1 {
+    font-size: 2.2rem;
+    font-weight: 800;
+    background: linear-gradient(135deg, #fcc419, #ff922b);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    letter-spacing: -1px;
+  }
+  .header .sub {
+    color: #8888aa;
+    font-size: 1rem;
+    margin-top: 8px;
+  }
+
+  .section {
+    background: linear-gradient(145deg, #16162a, #1a1a30);
+    border-radius: 16px;
+    border: 1px solid #2a2a4a;
+    padding: 30px 32px;
+    margin-bottom: 24px;
+  }
+
+  .section h1 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #fcc419;
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid #fcc41922;
+  }
+  .section h2 {
+    font-size: 1.15rem;
+    font-weight: 600;
+    color: #fff;
+    margin: 22px 0 12px 0;
+  }
+  .section h3 {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #ddd;
+    margin: 16px 0 10px 0;
+  }
+
+  .section p {
+    color: #bbb;
+    font-size: 0.95rem;
+    line-height: 1.8;
+    margin-bottom: 12px;
+    text-align: justify;
+  }
+
+  .toc {
+    background: #0f0f1a88;
+    border: 1px solid #2a2a4a;
+    border-radius: 12px;
+    padding: 20px 24px;
+    margin-bottom: 20px;
+  }
+  .toc h3 {
+    color: #fcc419;
+    font-size: 0.9rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  .toc ol { padding-left: 20px; }
+  .toc li { color: #aaa; font-size: 0.9rem; line-height: 1.8; }
+  .toc a { color: #fcc419; text-decoration: none; }
+  .toc a:hover { text-decoration: underline; }
+
+  ul.bullet-list { padding-left: 20px; margin-bottom: 12px; }
+  ul.bullet-list li { color: #bbb; font-size: 0.95rem; line-height: 1.8; margin-bottom: 6px; text-align: justify; }
+  ul.bullet-list li strong { color: #fcc419; }
+
+  ol.num-list { padding-left: 22px; margin-bottom: 12px; }
+  ol.num-list li { color: #bbb; font-size: 0.95rem; line-height: 1.8; margin-bottom: 8px; text-align: justify; }
+
+  .pasos {
+    background: #0f0f1a88;
+    border: 1px solid #2a2a4a;
+    border-radius: 12px;
+    padding: 16px 20px;
+    margin-bottom: 16px;
+  }
+  .pasos .titulo {
+    color: #fcc419;
+    font-weight: 700;
+    font-size: 0.95rem;
+    margin-bottom: 8px;
+  }
+  .pasos ol { padding-left: 20px; }
+  .pasos li { color: #bbb; font-size: 0.9rem; line-height: 1.7; margin-bottom: 6px; }
+
+  .nota {
+    background: #fcc41910;
+    border-left: 3px solid #fcc419;
+    border-radius: 8px;
+    padding: 12px 16px;
+    margin-bottom: 16px;
+    font-size: 0.9rem;
+    line-height: 1.7;
+    color: #d5c490;
+  }
+  .nota strong { color: #fcc419; }
+
+  .advertencia {
+    background: #ff922b10;
+    border-left: 3px solid #ff922b;
+    border-radius: 8px;
+    padding: 12px 16px;
+    margin-bottom: 16px;
+    font-size: 0.9rem;
+    line-height: 1.7;
+    color: #e0b188;
+  }
+  .advertencia strong { color: #ff922b; }
+
+  .tabla { width: 100%; border-collapse: collapse; margin: 14px 0 18px 0; font-size: 0.9rem; }
+  .tabla th {
+    background: #1a1a30;
+    color: #fcc419;
+    text-align: left;
+    padding: 10px 12px;
+    border: 1px solid #2a2a4a;
+    font-weight: 600;
+  }
+  .tabla td {
+    color: #bbb;
+    padding: 9px 12px;
+    border: 1px solid #2a2a4a;
+    line-height: 1.6;
+  }
+  .tabla td strong { color: #fff; }
+
+  code {
+    background: #0f0f1a;
+    border: 1px solid #2a2a4a;
+    border-radius: 5px;
+    padding: 2px 6px;
+    font-size: 0.85rem;
+    color: #fcc419;
+  }
+
+  .tag { display: inline-block; padding: 2px 10px; border-radius: 999px; font-size: 0.78rem; font-weight: 600; }
+  .tag-rojo { background: #c62828; color: #fff; }
+  .tag-amarillo { background: #fdd835; color: #8e0000; }
+  .tag-verde { background: #2e7d32; color: #fff; }
+  .tag-gris { background: #546e7a; color: #fff; }
+  .tag-info { background: #0288d1; color: #fff; }
+
+  .footer {
+    text-align: center;
+    color: #666688;
+    font-size: 0.85rem;
+    margin-top: 40px;
+    padding-top: 20px;
+    border-top: 1px solid #2a2a4a;
+    line-height: 1.7;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <div class="header">
+    <h1>📖 Manual de Usuario</h1>
+    <div class="sub">MercadoCampesino &mdash; Plataforma web para conectar campesinos de Cundinamarca con consumidores de Bogotá</div>
+    <div class="sub">Trabajo de Grado 3 &mdash; Corporación Unificada Nacional de Educación Superior (CUN)</div>
+  </div>
+
+  <div class="toc">
+    <h3>Contenido</h3>
+    <ol>
+      <li><a href="#intro">Introducción</a></li>
+      <li><a href="#requisitos">Requisitos y acceso a la plataforma</a></li>
+      <li><a href="#registro">Registro de cuenta</a></li>
+      <li><a href="#verificacion">Verificación de identidad por un administrador</a></li>
+      <li><a href="#login">Inicio de sesión</a></li>
+      <li><a href="#perfiles">Perfiles de usuario</a></li>
+      <li><a href="#campesino">Manual para el campesino</a></li>
+      <li><a href="#consumidor">Manual para el consumidor</a></li>
+      <li><a href="#mapa">Mapa de campesinos</a></li>
+      <li><a href="#home">Página de inicio y ofertas flash</a></li>
+      <li><a href="#admin">Manual para el administrador</a></li>
+      <li><a href="#superadmin">Manual para el superadministrador</a></li>
+      <li><a href="#chat">Chat de soporte (widget)</a></li>
+      <li><a href="#tickets">Sistema de tickets de soporte</a></li>
+      <li><a href="#perfil">Mi perfil y cambio de contraseña</a></li>
+      <li><a href="#offline">Trabajo sin conexión (zonas rurales)</a></li>
+      <li><a href="#problemas">Solución de problemas frecuentes</a></li>
+      <li><a href="#preguntas">Preguntas frecuentes</a></li>
+    </ol>
+  </div>
+
+  <!-- ================= 1. INTRODUCCIÓN ================= -->
+  <div class="section" id="intro">
+    <h1>1. Introducción</h1>
+    <p>MercadoCampesino es una plataforma web gratuita que conecta directamente a los campesinos de Cundinamarca con los consumidores de Bogotá. Permite a los campesinos publicar los productos que van a llevar a las plazas de mercado (plaza 20 de Julio y Central de Abastos, entre otras) días antes de su viaje, con sus precios y cantidades, para que los consumidores puedan hacer <strong>preórdenes</strong> y asegurar sus productos frescos con anticipación.</p>
+    <p>La plataforma funciona a través del navegador del celular o del computador: no es necesario instalar ninguna aplicación. Toda la plataforma es gratuita para campesinos y consumidores. <strong>MercadoCampesino no maneja pagos:</strong> las transacciones, entregas y calidad de los productos se acuerdan directamente entre el campesino y el consumidor.</p>
+    <p>Este manual explica paso a paso cómo usar cada una de las funciones de la plataforma, de acuerdo con el perfil de cada usuario.</p>
+  </div>
+
+  <!-- ================= 2. REQUISITOS ================= -->
+  <div class="section" id="requisitos">
+    <h1>2. Requisitos y acceso a la plataforma</h1>
+    <h2>2.1 ¿Qué necesito para usar MercadoCampesino?</h2>
+    <ul class="bullet-list">
+      <li>Un celular con acceso a internet (3G, 4G o Wi-Fi) o un computador.</li>
+      <li>Un navegador web actualizado (Chrome, Safari, Edge, Firefox o el navegador del celular).</li>
+      <li>Su número de cédula y, si es campesino, una foto sosteniendo su documento.</li>
+      <li>Un número de celular y una contraseña.</li>
+    </ul>
+    <h2>2.2 ¿Cómo entro a la plataforma?</h2>
+    <p>Escriba la dirección de la plataforma en el navegador: <code>https://mercado-campesino.vercel.app</code>. Se recomienda agregarla a la pantalla de inicio del celular para acceder rápidamente (como si fuera una aplicación), función que la plataforma soporta gracias a su diseño PWA.</p>
+    <div class="nota"><strong>Nota:</strong> La plataforma funciona en dispositivos de gama baja porque está diseñada para consumir poca memoria y pocos datos. Incluso sin conexión, puede preparar su viaje y publicarlo cuando recupere la señal (ver sección 16).</div>
+  </div>
+
+  <!-- ================= 3. REGISTRO ================= -->
+  <div class="section" id="registro">
+    <h1>3. Registro de cuenta</h1>
+    <p>Para usar la plataforma debe crear una cuenta. El registro es gratuito. Existen dos tipos de cuenta: <strong>campesino</strong> (para vender sus productos) y <strong>consumidor</strong> (para comprar).</p>
+
+    <h2>3.1 Pasos para registrarse</h2>
+    <div class="pasos">
+      <div class="titulo">Cómo crear su cuenta</div>
+      <ol>
+        <li>Desde la página de inicio, presione el botón <strong>Registro</strong> (arriba a la derecha, en color amarillo).</li>
+        <li>Diligencie el formulario con sus <strong>nombres</strong> y <strong>apellidos</strong>.</li>
+        <li>Escriba su <strong>número de cédula</strong>. Este será su nombre de usuario para ingresar.</li>
+        <li>Si está registrándose como <strong>campesino</strong>, el sistema le pedirá una <strong>foto sosteniendo su cédula</strong>. Tómese una selfie donde se vea claramente su cara y su documento. Esta foto es obligatoria para que un administrador verifique su identidad.</li>
+        <li>Ingrese su <strong>correo electrónico</strong> (opcional) y su <strong>número de celular</strong>.</li>
+        <li>Cree una <strong>contraseña</strong> (mínimo 6 caracteres).</li>
+        <li>Seleccione el <strong>tipo de cuenta</strong>: Campesino (vender productos) o Consumidor (comprar productos).</li>
+        <li>Marque la casilla donde <strong>acepta los términos y condiciones</strong>. Estos aclaran que MercadoCampesino es solo una plataforma de conexión y que las transacciones, pagos, entregas y calidad de los productos se acuerdan directamente entre las partes.</li>
+        <li>Presione el botón <strong>Crear cuenta</strong>.</li>
+      </ol>
+    </div>
+
+    <h2>3.2 Después de registrarse</h2>
+    <p>Al completar el registro, la plataforma le mostrará una pantalla de confirmación que indica que <strong>su cuenta está pendiente de verificación por un administrador</strong>. Su solicitud será aceptada o rechazada en un tiempo máximo de 72 horas. Usted podrá intentar ingresar nuevamente cuando el administrador haya verificado su cuenta.</p>
+
+    <div class="advertencia"><strong>Importante para campesinos:</strong> Asegúrese de que la foto de su cédula tenga la mejor calidad posible (buena iluminación, documento legible y su cara visible). Si la foto no permite leer el documento, su solicitud puede ser rechazada.</div>
+  </div>
+
+  <!-- ================= 4. VERIFICACIÓN ================= -->
+  <div class="section" id="verificacion">
+    <h1>4. Verificación de identidad por un administrador</h1>
+    <p>Todos los usuarios nuevos deben ser verificados por un administrador antes de poder ingresar. Esta medida de seguridad protege a los compradores (evita que personas falsas ofrezcan productos) y a los vendedores (crea una red de confianza).</p>
+    <h2>4.1 ¿Qué pasa si mi solicitud es aprobada?</h2>
+    <p>Podrá iniciar sesión con su cédula y su contraseña, y acceder a las funciones de su perfil (campesino o consumidor).</p>
+    <h2>4.2 ¿Qué pasa si mi solicitud es rechazada?</h2>
+    <p>Si el administrador rechaza su solicitud (por ejemplo, porque la foto de su cédula no es legible), al intentar ingresar verá un mensaje que le explica que su registro fue rechazado y le recomienda registrarse nuevamente con una foto de mejor calidad. Cuando vuelva a registrarse con la misma cédula, se actualizarán los datos de su registro anterior.</p>
+    <h2>4.3 ¿Puedo usar la plataforma si mi cuenta está bloqueada?</h2>
+    <p>Un usuario bloqueado por el administrador (por incumplimiento, mal comportamiento o fraude) puede intentar iniciar sesión, pero <strong>no tendrá acceso a ninguna función</strong> porque su perfil no tiene permisos. Si considera que su bloqueo es un error, puede comunicarse con el soporte (ver secciones 13 y 14).</p>
+  </div>
+
+  <!-- ================= 5. LOGIN ================= -->
+  <div class="section" id="login">
+    <h1>5. Inicio de sesión</h1>
+    <div class="pasos">
+      <div class="titulo">Cómo ingresar a su cuenta</div>
+      <ol>
+        <li>Desde la página de inicio, presione el botón <strong>Ingresar</strong>.</li>
+        <li>Escriba su <strong>número de cédula</strong> en el campo correspondiente.</li>
+        <li>Escriba su <strong>contraseña</strong>. Puede presionar el ícono del ojo para ver la contraseña mientras la escribe (útil para evitar errores de digitación).</li>
+        <li>Presione el botón <strong>Ingresar</strong>.</li>
+      </ol>
+    </div>
+    <p>La plataforma lo llevará automáticamente a la sección correspondiente a su perfil:</p>
+    <table class="tabla">
+      <tr><th>Perfil</th><th>Sección a la que ingresa</th></tr>
+      <tr><td>Superadmin</td><td>Panel Superadmin</td></tr>
+      <tr><td>Admin</td><td>Panel de Administración</td></tr>
+      <tr><td>Campesino</td><td>Panel de Venta (Mis productos, viajes, ofertas, preórdenes)</td></tr>
+      <tr><td>Consumidor</td><td>Panel de Compra (Explorar, preórdenes, reseñas)</td></tr>
+    </table>
+    <div class="nota"><strong>Nota:</strong> Si su cuenta aún no ha sido verificada, verá el mensaje correspondiente. Si su registro fue rechazado, verá un aviso que le indica volver a registrarse. Estos mensajes aparecen en una ventana emergente con un botón <strong>Aceptar</strong> que recarga la página.</div>
+  </div>
+
+  <!-- ================= 6. PERFILES ================= -->
+  <div class="section" id="perfiles">
+    <h1>6. Perfiles de usuario</h1>
+    <p>La plataforma tiene cinco perfiles, cada uno con permisos y funciones diferentes:</p>
+    <table class="tabla">
+      <tr><th>Perfil</th><th>Quién es</th><th>Qué puede hacer</th></tr>
+      <tr><td><span class="tag tag-rojo">Superadmin</span></td><td>Desarrollador / administrador general</td><td>Gestionar perfiles y permisos, configurar los parámetros del sistema y ver todos los paneles.</td></tr>
+      <tr><td><span class="tag tag-info">Admin</span></td><td>Administrador de la plataforma</td><td>Verificar usuarios, gestionar categorías y plazas, atender el chat de soporte, revisar alertas y gestionar solicitudes rechazadas.</td></tr>
+      <tr><td><span class="tag tag-verde">Campesino</span></td><td>Productor agrícola</td><td>Publicar sus productos, crear viajes, activar ofertas flash, recibir preórdenes y gestionar su catálogo.</td></tr>
+      <tr><td><span class="tag tag-amarillo">Consumidor</span></td><td>Comprador en Bogotá</td><td>Explorar productos, hacer preórdenes, cancelar preórdenes y dejar reseñas a los campesinos.</td></tr>
+      <tr><td><span class="tag tag-gris">Bloqueado</span></td><td>Usuario sancionado</td><td>Ninguna: puede ingresar pero no tiene permisos.</td></tr>
+    </table>
+    <p>El menú superior (barra de navegación) muestra únicamente las secciones permitidas según el perfil. Por ejemplo, un campesino no ve la sección Admin, y un consumidor no ve la sección Venta.</p>
+  </div>
+
+  <!-- ================= 7. CAMPESINO ================= -->
+  <div class="section" id="campesino">
+    <h1>7. Manual para el campesino</h1>
+    <p>Al ingresar con una cuenta de campesino, verá el <strong>Panel de Venta</strong> con varias pestañas. Estas son las funciones que encontrará:</p>
+
+    <h2>7.1 Mis productos</h2>
+    <p>Aquí gestiona el catálogo de productos que vende (papas, cebollas, tomates, plátanos, etc.).</p>
+    <div class="pasos">
+      <div class="titulo">Agregar un producto</div>
+      <ol>
+        <li>En la pestaña <strong>Mis productos</strong>, complete el campo <strong>Nombre</strong> del producto.</li>
+        <li>Seleccione la <strong>categoría</strong> correspondiente (verduras, frutas, tubérculos, etc.).</li>
+        <li>Indique la <strong>unidad</strong> de venta (kg, libra, unidad, bulto, docena...).</li>
+        <li>Asigne un <strong>precio</strong> de referencia para ese producto.</li>
+        <li>Si lo desea, suba una <strong>foto</strong> del producto presionando el campo de archivo. La foto se tomará de la galería o de la cámara del celular.</li>
+        <li>Presione <strong>Agregar</strong>. El producto aparecerá en su catálogo.</li>
+      </ol>
+    </div>
+    <p>Para <strong>editar</strong> un producto, presione el ícono de lápiz y modifique los datos. Para <strong>desactivar</strong> un producto (que no se ofrezca temporalmente), use el botón de activo/inactivo. Para <strong>eliminar</strong> un producto definitivamente, presione el botón de papelera y confirme. Tenga en cuenta que la eliminación es permanente y los datos no se pueden recuperar.</p>
+    <div class="nota"><strong>Nota:</strong> los productos que usted crea son suyos: el administrador puede crear productos globales, pero usted gestiona su propio catálogo. Cuando crea un viaje, usted elige cuáles de sus productos va a llevar.</div>
+
+    <h2>7.2 Mis viajes</h2>
+    <p>Un <strong>viaje</strong> es la publicación de lo que usted va a llevar a una plaza de mercado en una fecha determinada. Los consumidores ven su viaje y pueden hacer preórdenes sobre los productos incluidos.</p>
+    <div class="pasos">
+      <div class="titulo">Crear un viaje</div>
+      <ol>
+        <li>Vaya a la pestaña <strong>Mis viajes</strong> y presione <strong>Crear viaje</strong>.</li>
+        <li>Seleccione la <strong>fecha</strong> en la que irá a la plaza.</li>
+        <li>Indique la <strong>hora de inicio</strong> y la <strong>hora de fin</strong> de su jornada en la plaza (opcional, pero recomendado).</li>
+        <li>Seleccione la <strong>plaza</strong> a la que viajará (20 de Julio, Abastos, etc.). La ubicación se toma automáticamente del punto marcado en el mapa.</li>
+        <li>Escriba <strong>notas</strong> para los consumidores (opcional), por ejemplo: "Llego a las 4 a.m., traigo 20 bultos de papa criolla".</li>
+        <li>Si lo desea, agregue una <strong>foto</strong> de su puesto o de su producto.</li>
+        <li>Seleccione los <strong>productos</strong> que llevará de su catálogo y defina la <strong>cantidad</strong> y el <strong>precio</strong> de cada uno.</li>
+        <li>Presione <strong>Crear viaje</strong>. Su viaje quedará visible para los consumidores.</li>
+      </ol>
+    </div>
+    <p>Usted puede <strong>desactivar</strong> un viaje (por ejemplo, si no pudo ir a la plaza), <strong>reprogramar</strong> la fecha y hora de un viaje existente (lo que también lo reactiva), <strong>actualizar la ubicación</strong> del viaje en el mapa durante el día, <strong>agregar más productos</strong> a un viaje ya creado o <strong>retirar productos</strong> de un viaje. El estado de cada viaje se muestra claramente: <strong>activo</strong>, <strong>inactivo</strong> o <strong>expirado</strong> (cuando la fecha u hora ya pasaron).</p>
+
+    <h2>7.3 Ofertas flash</h2>
+    <p>Las <strong>ofertas flash</strong> le permiten rematar producto que no alcanzó a vender, ofreciéndolo con un descuento por tiempo limitado. Es la función que le ayuda a no perder cosecha al final de la jornada.</p>
+    <div class="pasos">
+      <div class="titulo">Activar una oferta flash</div>
+      <ol>
+        <li>Vaya a la pestaña <strong>Ofertas flash</strong>.</li>
+        <li>Seleccione un <strong>viaje activo</strong> y luego un <strong>producto</strong> de ese viaje.</li>
+        <li>Indique el <strong>descuento</strong> (entre 1 % y 100 %). El sistema le muestra el precio final con el descuento aplicado.</li>
+        <li>Si lo desea, defina una <strong>cantidad límite</strong> de unidades en oferta (para que no se agote todo el lote).</li>
+        <li>Presione <strong>Activar oferta</strong>. La oferta aparecerá en el banner de la página de inicio con el descuento y el precio rebajado.</li>
+      </ol>
+    </div>
+    <p>Puede <strong>editar</strong> una oferta (cambiar el descuento o la cantidad límite), <strong>desactivarla</strong> temporalmente o <strong>eliminarla</strong> definitivamente.</p>
+
+    <h2>7.4 Preórdenes recibidas</h2>
+    <p>En esta pestaña ve las preórdenes que los consumidores han hecho sobre sus productos. Cada preorden muestra el producto, la cantidad reservada y el estado.</p>
+    <div class="pasos">
+      <div class="titulo">Gestionar preórdenes</div>
+      <ol>
+        <li>Cuando un consumidor hace una preorden, esta aparece como <strong>pendiente</strong> y la cantidad del producto se aparta de su stock disponible.</li>
+        <li>Al entregar el producto en la plaza, presione <strong>Marcar como entregada</strong>.</li>
+        <li>Si el consumidor <strong>no retira</strong> su preorden, presione <strong>Marcar como no retirada</strong>. El producto vuelve a estar disponible y el consumidor <strong>pierde 10 puntos de confianza</strong>.</li>
+      </ol>
+    </div>
+    <p>Esta función de control de fraude (penalización por no retiro) ayuda a que los consumidores solo hagan preórdenes que realmente van a retirar, protegiendo su producto.</p>
+  </div>
+
+  <!-- ================= 8. CONSUMIDOR ================= -->
+  <div class="section" id="consumidor">
+    <h1>8. Manual para el consumidor</h1>
+    <p>Al ingresar con una cuenta de consumidor, verá el <strong>Panel de Compra</strong> con varias pestañas.</p>
+
+    <h2>8.1 Explorar</h2>
+    <p>Aquí ve los viajes activos de todos los campesinos, organizados por plaza. Cada tarjeta muestra la plaza, el campesino, sus productos, precios, cantidades disponibles y fotos.</p>
+    <ul class="bullet-list">
+      <li>Use el <strong>buscador</strong> para filtrar por nombre de producto (por ejemplo: "papa", "tomate", "fresa").</li>
+      <li>Filtre por <strong>categoría</strong> (verduras, frutas, tubérculos...) o por <strong>plaza</strong> (20 de Julio, Abastos...).</li>
+      <li>Cada producto muestra su precio, la unidad y cuántas unidades quedan disponibles.</li>
+    </ul>
+
+    <h2>8.2 Hacer una preorden</h2>
+    <div class="pasos">
+      <div class="titulo">Reservar un producto</div>
+      <ol>
+        <li>En la pestaña Explorar, busque el producto que le interesa.</li>
+        <li>Defina la <strong>cantidad</strong> que quiere reservar (no puede superar la cantidad disponible).</li>
+        <li>Presione el botón <strong>Preordenar</strong>. La cantidad quedará apartada para usted.</li>
+        <li>En la pestaña <strong>Mis preórdenes</strong> verá sus reservas con su estado.</li>
+      </ol>
+    </div>
+    <div class="advertencia"><strong>Importante:</strong> Una preorden es un compromiso: el campesino aparta su producto para usted. Si no lo retira, perderá <strong>10 puntos de confianza</strong>. Si no puede asistir, cancele su preorden con tiempo desde la pestaña <strong>Mis preórdenes</strong>.</div>
+    <p>Los estados de una preorden son: <strong>Pendiente</strong> (reservada, a la espera de retiro), <strong>Entregado</strong> (el campesino la marcó como entregada), <strong>Cancelado</strong> (usted la canceló) y <strong>No retiro</strong> (no la retiró y fue penalizado).</p>
+
+    <h2>8.3 Reseñas</h2>
+    <p>Después de comprar, puede dejar una <strong>reseña</strong> al campesino (puntuación de 1 a 5 estrellas y un comentario). Esto construye la reputación de los campesinos y ayuda a otros consumidores.</p>
+    <div class="pasos">
+      <div class="titulo">Publicar una reseña</div>
+      <ol>
+        <li>Vaya a la pestaña <strong>Reseñas</strong>.</li>
+        <li>Seleccione el <strong>campesino</strong> al que le compró (solo aparecen campesinos con viajes activos).</li>
+        <li>Asigne una <strong>puntuación</strong> de 1 a 5 estrellas.</li>
+        <li>Escriba un <strong>comentario</strong> con su experiencia (buena o mala).</li>
+        <li>Presione <strong>Publicar reseña</strong>.</li>
+      </ol>
+    </div>
+    <p>Puede <strong>editar</strong> una reseña propia mientras lo necesite. Las reseñas de 1 estrella generan una <strong>alerta</strong> para el administrador (posible problema de salubridad), quien puede eliminarla si la considera injusta o si el campesino la responde adecuadamente. Las reseñas son públicas: cualquier persona puede verlas en la página de inicio seleccionando al campesino.</p>
+  </div>
+
+  <!-- ================= 9. MAPA ================= -->
+  <div class="section" id="mapa">
+    <h1>9. Mapa de campesinos</h1>
+    <p>La sección <strong>Mapa</strong> muestra en tiempo real los puntos donde están los campesinos con viajes activos. Es accesible desde el menú superior para todos los visitantes (no requiere iniciar sesión).</p>
+    <ul class="bullet-list">
+      <li>Cada campesino aparece como un marcador <strong>rojo con la cara de un maíz</strong> (🌽).</li>
+      <li>Presione un marcador para ver el <strong>popup</strong> con el nombre del campesino, la dirección o plaza, y la lista de productos con su precio y la cantidad disponible.</li>
+      <li>El mapa se centra automáticamente en los viajes activos del día.</li>
+      <li>Los campesinos pueden <strong>actualizar su punto en el mapa durante el día</strong>, por ejemplo si se cambiaron de puesto dentro de la plaza.</li>
+    </ul>
+  </div>
+
+  <!-- ================= 10. HOME / OFERTAS ================= -->
+  <div class="section" id="home">
+    <h1>10. Página de inicio y ofertas flash</h1>
+    <p>La página de inicio (Home) es la vitrina pública de la plataforma. Cualquier persona puede verla, incluso sin iniciar sesión.</p>
+    <ul class="bullet-list">
+      <li><strong>Banner de ofertas flash:</strong> en la parte superior se muestran las ofertas activas en tarjetas con la foto del producto, el porcentaje de descuento, el precio rebajado (comparado con el precio normal) y la ubicación del campesino. Si no hay ofertas activas, aparece el mensaje <em>"No hay ofertas activas"</em>.</li>
+      <li><strong>Productos disponibles:</strong> lista de los productos en venta hoy, con precio, unidad, foto, campesino y dirección.</li>
+      <li><strong>Reseñas públicas:</strong> puede seleccionar un campesino y ver todas sus reseñas con sus puntuaciones.</li>
+    </ul>
+  </div>
+
+  <!-- ================= 11. ADMIN ================= -->
+  <div class="section" id="admin">
+    <h1>11. Manual para el administrador</h1>
+    <p>El Panel de Administración le permite gestionar usuarios, categorías, plazas, el chat de soporte, las alertas y las solicitudes rechazadas. Se accede desde el menú superior (Admin).</p>
+
+    <h2>11.1 Pestaña Usuarios</h2>
+    <ul class="bullet-list">
+      <li><strong>Buscar:</strong> filtre los usuarios por nombre, email o cédula.</li>
+      <li><strong>Verificar:</strong> los usuarios nuevos aparecen con el estado "No" en la columna Verificado. Presione el ícono de ojo para <strong>ver la foto del documento</strong> y compararla con los datos registrados. Si es válida, presione <strong>Aprobar y verificar</strong>; si no, presione <strong>Rechazar</strong>.</li>
+      <li><strong>Bloquear/Activar:</strong> bloquee a un usuario por incumplimiento (debe escribir el motivo) o actívelo de nuevo. Un usuario bloqueado no tiene permisos.</li>
+      <li><strong>Resetear contraseña:</strong> si un usuario olvidó su contraseña, asígnele una nueva.</li>
+      <li><strong>Crear usuario:</strong> el administrador puede crear cuentas manualmente (por ejemplo, para un campesino que no tiene celular y desea registrarse con ayuda). Solo puede crear perfiles de Admin, Campesino o Consumidor; el perfil Superadmin solo lo asigna el superadmin.</li>
+    </ul>
+
+    <h2>11.2 Pestaña Categorías</h2>
+    <p>Agregue nuevas categorías de productos (frutas, verduras, tubérculos, lácteos...) y actívelas o desactívelas. Una categoría inactiva no aparece en los catálogos.</p>
+
+    <h2>11.3 Pestaña Chat</h2>
+    <p>Aquí atiende las conversaciones del chat de soporte:</p>
+    <ul class="bullet-list">
+      <li><strong>Pendientes:</strong> conversaciones que ningún administrador ha tomado. Presione <strong>Tomar</strong> para asignársela.</li>
+      <li><strong>Mis chats:</strong> las conversaciones que usted está atendiendo. Escríbale al usuario en el campo de abajo.</li>
+      <li><strong>Historial:</strong> busque conversaciones anteriores por nombre, email o cédula para consultar un caso.</li>
+      <li><strong>Finalizar:</strong> cuando la duda esté resuelta, finalice la conversación.</li>
+    </ul>
+
+    <h2>11.4 Pestaña Rechazados</h2>
+    <p>Lista de solicitudes de registro que usted rechazó (por documento inválido). Cada una muestra el usuario, la cédula, la fecha y el motivo. Si lo desea, puede <strong>eliminar definitivamente</strong> el registro. Recuerde que el usuario puede volver a registrarse con una mejor foto.</p>
+
+    <h2>11.5 Pestaña Alertas</h2>
+    <p>Muestra las <strong>reseñas de 1 estrella</strong> que requieren revisión (posible problema de salubridad o mala práctica). Revise el comentario y decida si la elimina (por ser injusta o malintencionada). Al eliminarla, el campesino no es penalizado, solo se retira la alerta.</p>
+
+    <h2>11.6 Pestaña Plazas</h2>
+    <p>Agregue nuevas plazas de mercado (nombre y dirección opcional) y actívelas o desactívelas. Las plazas activas son las que los campesinos pueden seleccionar al crear sus viajes.</p>
+  </div>
+
+  <!-- ================= 12. SUPERADMIN ================= -->
+  <div class="section" id="superadmin">
+    <h1>12. Manual para el superadministrador</h1>
+    <p>El Panel Superadmin es la máxima autoridad de la plataforma. Se accede desde el menú superior (Superadmin) y solo existe un usuario con este perfil.</p>
+
+    <h2>12.1 Perfiles y permisos</h2>
+    <p>Aquí se gestionan los permisos de cada perfil con <strong>checkboxes (botones)</strong>. Cada permiso es una capacidad específica:</p>
+    <table class="tabla">
+      <tr><th>Permiso</th><th>Qué permite</th></tr>
+      <tr><td>Verificar usuarios</td><td>Aprobar o rechazar solicitudes de registro y gestionar cuentas.</td></tr>
+      <tr><td>Gestionar categorías</td><td>Crear y activar/desactivar categorías de productos.</td></tr>
+      <tr><td>Gestionar perfiles</td><td>Modificar perfiles de usuario.</td></tr>
+      <tr><td>Gestionar permisos</td><td>Asignar o quitar permisos a los perfiles.</td></tr>
+      <tr><td>Ver reportes</td><td>Consultar reportes y alertas del sistema.</td></tr>
+      <tr><td>Gestionar configuración</td><td>Modificar los parámetros globales del sistema.</td></tr>
+    </table>
+    <p>Presione un botón verde (permiso asignado) o gris (no asignado) para activarlo o quitarlo de un perfil. Los cambios son inmediatos. Por ejemplo, puede quitarle el permiso "Verificar usuarios" al perfil Admin si decide que solo usted debe aprobar registros.</p>
+
+    <h2>12.2 Configuración</h2>
+    <p>Aquí se parametriza el sistema sin tocar el código fuente. Cada parámetro tiene una descripción y un valor editable:</p>
+    <ul class="bullet-list">
+      <li>Límites de ofertas flash (descuento máximo permitido, cantidad de ofertas por viaje).</li>
+      <li>Tiempos de expiración de ofertas y viajes.</li>
+      <li>Puntajes de confianza (por ejemplo, cuántos puntos se pierden por no retirar una preorden).</li>
+      <li>Tipos de calidad de producto, entre otros.</li>
+    </ul>
+    <p>Escriba el nuevo valor y presione el botón de guardar (✓). Los cambios son inmediatos y se aplican a toda la plataforma. Esta flexibilidad permite adaptar el sistema a diferentes contextos operativos sin necesidad de reprogramar.</p>
+  </div>
+
+  <!-- ================= 13. CHAT ================= -->
+  <div class="section" id="chat">
+    <h1>13. Chat de soporte (widget)</h1>
+    <p>En la esquina inferior derecha de todas las páginas hay un botón redondo rojo con un ícono de chat (💬). Este es el <strong>widget de chat</strong> con el equipo de soporte. Es la vía rápida para hacer preguntas, reportar errores o pedir ayuda.</p>
+    <div class="pasos">
+      <div class="titulo">Iniciar una conversación (sin necesidad de registrarse)</div>
+      <ol>
+        <li>Presione el botón rojo del chat.</li>
+        <li>Escriba su <strong>nombre</strong> (obligatorio) y, si lo desea, su cédula y correo.</li>
+        <li>Presione <strong>Iniciar conversación</strong>. El sistema envía automáticamente el mensaje "Hola, necesito ayuda".</li>
+        <li>Un administrador atenderá su conversación. Sus mensajes aparecen en burbujas rojas y las respuestas del administrador en burbujas blancas.</li>
+      </ol>
+    </div>
+    <p>Si ya inició sesión, el chat usa sus datos automáticamente. La conversación se guarda en su navegador: si cierra la página y vuelve, el chat continúa donde quedó. Si el administrador <strong>finaliza</strong> la conversación, usted verá el aviso y podrá iniciar una nueva.</p>
+    <div class="nota"><strong>Nota:</strong> el chat es únicamente con el equipo de soporte (administradores). No existe chat directo entre campesinos y consumidores: las reseñas públicas cumplen esa función de comunicación.</div>
+  </div>
+
+  <!-- ================= 14. TICKETS ================= -->
+  <div class="section" id="tickets">
+    <h1>14. Sistema de tickets de soporte</h1>
+    <p>Para solicitudes formales (por ejemplo, "solicitar que se agregue una nueva plaza", reportar un problema con una cuenta o proponer cambios), se usa el sistema de <strong>tickets</strong> en la sección Soporte (ícono de audífonos en el menú).</p>
+    <div class="pasos">
+      <div class="titulo">Abrir un ticket</div>
+      <ol>
+        <li>Ingrese a <strong>Soporte</strong> desde el menú superior.</li>
+        <li>En <strong>Nuevo ticket</strong>, escriba un <strong>asunto</strong> corto (ej.: "Solicitar nueva plaza en Usaquén").</li>
+        <li>Describa su <strong>solicitud</strong> con detalle.</li>
+        <li>Presione <strong>Abrir ticket</strong>. El ticket queda con estado <strong>Abierto</strong>.</li>
+      </ol>
+    </div>
+    <p>Usted puede agregar avances a su ticket, y el administrador puede responderle, marcarlo como <strong>En progreso</strong> o <strong>Finalizado</strong>. Los estados se muestran con colores (amarillo = abierto, azul = en progreso, verde = finalizado). Los administradores ven además una pestaña <strong>Activos</strong> con los tickets pendientes por atender.</p>
+  </div>
+
+  <!-- ================= 15. PERFIL ================= -->
+  <div class="section" id="perfil">
+    <h1>15. Mi perfil y cambio de contraseña</h1>
+    <p>Desde el menú superior, el ícono de engranaje (⚙️) lo lleva a la sección <strong>Mi perfil</strong>.</p>
+    <h2>15.1 Actualizar mis datos</h2>
+    <p>Puede actualizar sus nombres, apellidos, correo y celular. Presione <strong>Guardar cambios</strong>. Los datos quedan actualizados de inmediato.</p>
+    <h2>15.2 Cambiar mi contraseña</h2>
+    <div class="pasos">
+      <div class="titulo">Cambiar la contraseña</div>
+      <ol>
+        <li>En la parte inferior de la página Mi perfil, ingrese su <strong>contraseña actual</strong>.</li>
+        <li>Escriba la <strong>nueva contraseña</strong> (mínimo 6 caracteres).</li>
+        <li>Confirme la <strong>nueva contraseña</strong> (deben coincidir).</li>
+        <li>Presione <strong>Cambiar contraseña</strong>. Verá un mensaje de confirmación.</li>
+      </ol>
+    </div>
+  </div>
+
+  <!-- ================= 16. OFFLINE ================= -->
+  <div class="section" id="offline">
+    <h1>16. Trabajo sin conexión (zonas rurales)</h1>
+    <p>Muchas veredas tienen cobertura 3G/4G limitada. Para que el campesino no pierda tiempo por la señal, MercadoCampesino incluye una <strong>estrategia offline</strong>:</p>
+    <ul class="bullet-list">
+      <li><strong>Borradores de viaje:</strong> el formulario de creación de viaje funciona <strong>sin conexión</strong>. Puede seleccionar productos, cantidades y precios, y guardar el borrador en su celular.</li>
+      <li><strong>Publicación diferida:</strong> cuando recupere señal, un <strong>indicador visual</strong> (un icono de nube con flecha) le avisa que tiene un borrador pendiente. Con un clic, el viaje se publica.</li>
+      <li><strong>Datos en caché:</strong> aunque esté desconectado, puede ver sus viajes y productos anteriores gracias a que la aplicación guarda una copia en el navegador.</li>
+      <li><strong>Indicador de conexión:</strong> en la esquina superior se muestra si está en línea u offline, para que sepa en todo momento si puede publicar.</li>
+    </ul>
+    <div class="advertencia"><strong>Limitación:</strong> subir fotos nuevas requiere conexión a internet. El caso más crítico (dejar listo el viaje con productos y precios desde la vereda) sí está cubierto sin conexión.</div>
+  </div>
+
+  <!-- ================= 17. PROBLEMAS ================= -->
+  <div class="section" id="problemas">
+    <h1>17. Solución de problemas frecuentes</h1>
+    <table class="tabla">
+      <tr><th>Situación</th><th>Causa probable</th><th>Solución</th></tr>
+      <tr><td>No puedo iniciar sesión y aparece "Tu solicitud de registro fue rechazada"</td><td>La foto de su cédula no fue aprobada por el administrador.</td><td>Regístrese nuevamente con una foto de mejor calidad (buena luz, documento legible).</td></tr>
+      <tr><td>No puedo iniciar sesión y aparece "pendiente de verificación"</td><td>El administrador aún no ha aprobado su cuenta.</td><td>Espere (máximo 72 horas). Si pasa más tiempo, contacte al soporte por el chat.</td></tr>
+      <tr><td>Entro pero no veo ninguna función</td><td>Su cuenta fue bloqueada por el administrador.</td><td>Contacte al soporte por el chat o por un ticket para conocer el motivo.</td></tr>
+      <tr><td>Olvidé mi contraseña</td><td>&mdash;</td><td>Contacte al soporte por el chat; un administrador puede asignarle una contraseña nueva.</td></tr>
+      <tr><td>No puedo crear un viaje porque no aparece la plaza</td><td>La plaza está desactivada.</td><td>Contacte al administrador para que active la plaza o solicítela por un ticket.</td></tr>
+      <tr><td>El formulario de viaje no responde sin señal</td><td>Está en una zona sin internet.</td><td>Use los borradores offline (sección 16): guarde el viaje y publíquelo cuando recupere la señal.</td></tr>
+      <tr><td>Un consumidor no retiró su preorden</td><td>&mdash;</td><td>Márquela como "no retirada" desde sus preórdenes; el producto vuelve al stock y el consumidor pierde 10 puntos de confianza.</td></tr>
+      <tr><td>Recibí una reseña injusta de 1 estrella</td><td>&mdash;</td><td>El administrador recibe una alerta automática y puede eliminarla si es injusta.</td></tr>
+      <tr><td>El mapa no muestra mi puesto</td><td>Su viaje está inactivo o expirado.</td><td>Cree un viaje activo para la fecha actual o actualice la ubicación del viaje.</td></tr>
+    </table>
+  </div>
+
+  <!-- ================= 18. PREGUNTAS ================= -->
+  <div class="section" id="preguntas">
+    <h1>18. Preguntas frecuentes</h1>
+    <h2>¿Cuánto cuesta usar MercadoCampesino?</h2>
+    <p>Nada. La plataforma es gratuita para campesinos y consumidores.</p>
+    <h2>¿Cómo se paga la compra?</h2>
+    <p>MercadoCampesino <strong>no maneja pagos</strong>. Es solo una plataforma de conexión. El pago, la entrega y la calidad del producto se acuerdan directamente entre el campesino y el consumidor, por ejemplo en la plaza el día del viaje. Se recomienda usar métodos de pago protegidos (como PSE, Nequi o tarjetas) y conservar los acuerdos por escrito en el chat del ticket si es necesario.</p>
+    <h2>¿Puedo cancelar una preorden?</h2>
+    <p>Sí, desde la pestaña Mis preórdenes. Hágalo con tiempo para que el campesino pueda ofrecer el producto a otros compradores. No retirar una preorden sin avisar le resta 10 puntos de confianza.</p>
+    <h2>¿Puedo ver los productos sin registrarme?</h2>
+    <p>Sí. La página de inicio (productos, ofertas y reseñas públicas) y el Mapa son visibles para cualquier visitante. El registro solo se requiere para comprar (preórdenes), vender o dejar reseñas.</p>
+    <h2>¿Un consumidor puede vender o un campesino comprar?</h2>
+    <p>Dentro de un perfil se accede a las funciones de ese perfil. El superadmin puede ver todos los paneles; el resto ve solo lo suyo. Si necesita cambiar su tipo de cuenta, solicítelo al administrador.</p>
+    <h2>¿Qué pasa si el campesino no lleva el producto que reservé?</h2>
+    <p>Deje una reseña de 1 estrella: el administrador recibirá una alerta y revisará el caso. También puede reportarlo por el chat o un ticket.</p>
+    <h2>¿MercadoCampesino tiene modo oscuro o aplicación para instalar?</h2>
+    <p>La plataforma es PWA: puede agregarla a la pantalla de inicio de su celular y se abre como una aplicación, funcionando también con poca señal.</p>
+  </div>
+
+  <div class="footer">
+    MercadoCampesino &mdash; Manual de Usuario &mdash; Trabajo de Grado 3, CUN Bogotá<br>
+    Plataforma web: Angular + FastAPI + PostgreSQL &mdash; Gratuita para campesinos y consumidores
+  </div>
+
+</div>
+</body>
+</html>
