@@ -181,6 +181,155 @@
     border-top: 1px solid #2a2a4a;
     line-height: 1.7;
   }
+
+  /* ============================================================
+     FORMATO DE IMPRESIÓN (Ctrl+P / Imprimir)
+     ============================================================ */
+  @page {
+    size: letter;
+    margin: 18mm 15mm 18mm 15mm;
+  }
+
+  @media print {
+    * {
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+    }
+
+    html, body {
+      background: #ffffff !important;
+      color: #1a1a1a !important;
+      padding: 0 !important;
+      margin: 0 !important;
+    }
+
+    .container { max-width: 100% !important; }
+
+    /* --- Encabezado de página --- */
+    .header {
+      margin-bottom: 18px !important;
+      padding-bottom: 12px !important;
+      border-bottom: 2px solid #c62828 !important;
+      page-break-after: avoid;
+    }
+    .header h1 {
+      font-size: 1.6rem !important;
+      -webkit-text-fill-color: #c62828 !important;
+      background: none !important;
+      color: #c62828 !important;
+      letter-spacing: 0 !important;
+    }
+    .header .sub { color: #444 !important; font-size: 0.85rem !important; }
+
+    /* --- Tabla de contenido --- */
+    .toc {
+      background: #f5f5f5 !important;
+      border: 1px solid #ccc !important;
+      border-radius: 8px !important;
+      page-break-after: always;  /* el contenido inicia en página nueva */
+    }
+    .toc h3 { color: #c62828 !important; }
+    .toc li { color: #333 !important; font-size: 0.8rem !important; line-height: 1.5 !important; }
+    .toc a { color: #c62828 !important; text-decoration: none !important; }
+
+    /* --- Secciones --- */
+    .section {
+      background: #ffffff !important;
+      border: 1px solid #ddd !important;
+      border-radius: 8px !important;
+      padding: 16px 18px !important;
+      margin-bottom: 14px !important;
+      page-break-inside: avoid;
+    }
+    .section h1 {
+      font-size: 1.15rem !important;
+      color: #c62828 !important;
+      border-bottom: 2px solid #fdd835 !important;
+      padding-bottom: 5px !important;
+      margin-bottom: 10px !important;
+      page-break-after: avoid;
+    }
+    .section h2 { font-size: 0.98rem !important; color: #222 !important; page-break-after: avoid; }
+    .section h3 { font-size: 0.9rem !important; color: #333 !important; page-break-after: avoid; }
+
+    .section p { color: #333 !important; font-size: 0.82rem !important; line-height: 1.55 !important; }
+
+    ul.bullet-list { padding-left: 16px !important; }
+    ul.bullet-list li { color: #333 !important; font-size: 0.82rem !important; line-height: 1.55 !important; }
+    ol.num-list li { color: #333 !important; font-size: 0.82rem !important; line-height: 1.55 !important; }
+
+    /* --- Cajas de pasos, notas y advertencias --- */
+    .pasos {
+      background: #f9f9f9 !important;
+      border: 1px solid #ccc !important;
+      border-radius: 8px !important;
+      padding: 10px 14px !important;
+      margin-bottom: 10px !important;
+      page-break-inside: avoid;
+    }
+    .pasos .titulo { color: #c62828 !important; font-size: 0.85rem !important; }
+    .pasos li { color: #333 !important; font-size: 0.8rem !important; line-height: 1.5 !important; }
+
+    .nota {
+      background: #fff8e1 !important;
+      border-left: 3px solid #fdd835 !important;
+      border-radius: 4px !important;
+      color: #5a4a00 !important;
+      font-size: 0.78rem !important;
+      page-break-inside: avoid;
+    }
+    .nota strong { color: #8e6e00 !important; }
+
+    .advertencia {
+      background: #fff0e6 !important;
+      border-left: 3px solid #ff922b !important;
+      border-radius: 4px !important;
+      color: #6b3a00 !important;
+      font-size: 0.78rem !important;
+      page-break-inside: avoid;
+    }
+    .advertencia strong { color: #d9600f !important; }
+
+    /* --- Tablas --- */
+    .tabla { font-size: 0.78rem !important; page-break-inside: auto; }
+    .tabla th {
+      background: #c62828 !important;
+      color: #ffffff !important;
+      border-color: #a02020 !important;
+      font-size: 0.75rem !important;
+    }
+    .tabla td { color: #333 !important; border-color: #ccc !important; }
+    .tabla td strong { color: #000 !important; }
+    .tabla tr { page-break-inside: avoid; }
+    .tabla thead { display: table-header-group; }  /* repite encabezado en cada página */
+
+    code {
+      background: #f5f5f5 !important;
+      border: 1px solid #ccc !important;
+      color: #c62828 !important;
+      font-size: 0.75rem !important;
+    }
+
+    .tag-rojo { background: #c62828 !important; color: #fff !important; }
+    .tag-amarillo { background: #fdd835 !important; color: #8e0000 !important; }
+    .tag-verde { background: #2e7d32 !important; color: #fff !important; }
+    .tag-gris { background: #546e7a !important; color: #fff !important; }
+    .tag-info { background: #0288d1 !important; color: #fff !important; }
+
+    .footer {
+      color: #666 !important;
+      border-top: 1px solid #ccc !important;
+      font-size: 0.75rem !important;
+      page-break-inside: avoid;
+    }
+
+    /* --- Saltos de página controlados --- */
+    .section + .section { break-before: page; }   /* cada sección inicia en hoja nueva */
+    .section h1 { break-after: avoid; }
+    .section h2 { break-after: avoid; }
+    .section h3 { break-after: avoid; }
+    img, table, tr, .pasos, .nota, .advertencia { break-inside: avoid; }
+  }
 </style>
 </head>
 <body>
