@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>MercadoCampesino — Estadísticas para PowerPoint</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<style>
+  :root{
+    --rojo:#c62828; --rojo-claro:#ef5350; --amarillo:#fdd835; --amarillo-oscuro:#f9a825;
+    --verde:#2e7d32; --azul:#1565c0; --gris:#546e7a; --blanco:#fff; --negro:#212121;
+    --fondo:#fafafa; --borde:#e0e0e0;
+  }
+  *{box-sizing:border-box}
+  body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--fondo);color:var(--negro);margin:0;padding:24px;line-height:1.5}
+  h1{text-align:center;color:var(--rojo);margin-bottom:8px;font-size:1.8rem}
+  .subtitle{text-align:center;color:var(--gris);margin-bottom:32px;font-size:1rem}
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(420px,1fr));gap:24px}
+  @media (max-width:900px){.grid{grid-template-columns:1fr}}
+  .card{background:var(--blanco);border:1px solid var(--borde);border-radius:12px;padding:20px;box-shadow:0 2px 8px rgba(0,0,0,0.06)}
+  .card h2{margin:0 0 16px 0;font-size:1.1rem;color:var(--negro);border-bottom:2px solid var(--amarillo);padding-bottom:8px;display:flex;align-items:center;gap:8px}
+  .card h2::before{content:'';width:10px;height:10px;background:var(--rojo);border-radius:2px}
+  .chart-wrap{position:relative;height:320px}
+  .chart-wrap.small{height:280px}
+  .legend-custom{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px;font-size:0.8rem}
+  .legend-item{display:flex;align-items:center;gap:6px}
+  .legend-color{width:12px;height:12px;border-radius:3px}
+  .note{font-size:0.75rem;color:var(--gris);margin-top:16px;padding-top:12px;border-top:1px dashed var(--borde)}
+  .page-break{page-break-after:always}
+  @media print{
+    body{background:var(--blanco);padding:0}
+    .card{break-inside:avoid;box-shadow:none;border:1px solid #ccc}
+    .page-break{display:block}
+  }
+  .badge{display:inline-block;background:var(--rojo);color:#fff;padding:2px 8px;border-radius:999px;font-size:0.7rem;font-weight:600;margin-left:8px}
+</style>
+</head>
+<body>
+<h1>MercadoCampesino — Estadísticas del Diagnóstico de Campo</h1>
+<p class="subtitle">Plazas 20 de Julio y Abastos — Junio 2026 — n=23 campesinos, n=40 consumidores</p>
+
+<div class="grid">
+
+  <!-- 1. Campesinos: Rango de edad -->
+  <div class="card">
+    <h2>Campesinos — Rango de edad <span class="badge">n=23</span></h2>
+    <div class="chart-wrap"><canvas id="campAge"></canvas></div>
+    <div class="legend-custom" id="legCampAge"></div>
+    <p class="note">56 % entre 46–60 años. Envejecimiento de la población rural y falta de relevo generacional.</p>
+  </div>
+
+  <!-- 2. Campesinos: Sexo -->
+  <div class="card">
+    <h2>Campesinos — Sexo <span class="badge">n=23</span></h2>
+    <div class="chart-wrap"><canvas id="campSex"></canvas></div>
+    <div class="legend-custom" id="legCampSex"></div>
+    <p class="note">74 % masculino, 26 % femenino. Predominio histórico masculino en plazas de mercado.</p>
+  </div>
+
+  <!-- 3. Campesinos: Municipio de origen -->
+  <div class="card">
+    <h2>Campesinos — Municipio de origen <span class="badge">n=23</span></h2>
+    <div class="chart-wrap"><canvas id="campMuni"></canvas></div>
+    <div class="legend-custom" id="legCampMuni"></div>
+    <p class="note">Concentración en oriente (Choachí, Fómeque, Ubaque) y occidente (Facatativá, Zipacón) de Cundinamarca.</p>
+  </div>
+
+  <!-- 4. Campesinos: Plaza donde vende -->
+  <div class="card">
+    <h2>Campesinos — Plaza de venta <span class="badge">n=23</span></h2>
+    <div class="chart-wrap"><canvas id="campPlaza"></canvas></div>
+    <div class="legend-custom" id="legCampPlaza"></div>
+    <p class="note">61 % en Plaza 20 de Julio, 39 % en Central de Abastos. Representativo de dinámicas oriente/occidente.</p>
+  </div>
+
+  <!-- 5. Campesinos: Producto principal -->
+  <div class="card">
+    <h2>Campesinos — Producto principal <span class="badge">n=23</span></h2>
+    <div class="chart-wrap"><canvas id="campProd"></canvas></div>
+    <div class="legend-custom" id="legCampProd"></div>
+    <p class="note">Diversidad: 39 % verduras/hortalizas, 35 % tubérculos, 26 % frutas. Requiere calidades diferenciadas.</p>
+  </div>
+
+  <!-- 6. Campesinos: Pérdida estimada -->
+  <div class="card">
+    <h2>Campesinos — Pérdida al final de jornada <span class="badge">n=23</span></h2>
+    <div class="chart-wrap"><canvas id="campLoss"></canvas></div>
+    <div class="legend-custom" id="legCampLoss"></div>
+    <p class="note"><strong>73 % pierde 10–30 %</strong> de su cosecha. Dato clave: justifica ofertas flash y preórdenes.</p>
+  </div>
+
+  <!-- 7. Campesinos: Smartphone e interés -->
+  <div class="card">
+    <h2>Campesinos — Tecnología y disposición <span class="badge">n=23</span></h2>
+    <div class="chart-wrap small"><canvas id="campTech"></canvas></div>
+    <div class="legend-custom" id="legCampTech"></div>
+    <p class="note">83 % con smartphone + datos. 87 % interesados en plataforma gratuita. 65 % ya usa WhatsApp/FB para vender.</p>
+  </div>
+
+  <!-- 8. Consumidores: Rango de edad -->
+  <div class="card">
+    <h2>Consumidores — Rango de edad <span class="badge">n=40</span></h2>
+    <div class="chart-wrap"><canvas id="consAge"></canvas></div>
+    <div class="legend-custom" id="legConsAge"></div>
+    <p class="note">Distribución más pareja que campesinos. 53 % entre 31–60 años.</p>
+  </div>
+
+  <!-- 9. Consumidores: Sexo -->
+  <div class="card">
+    <h2>Consumidores — Sexo <span class="badge">n=40</span></h2>
+    <div class="chart-wrap"><canvas id="consSex"></canvas></div>
+    <div class="legend-custom" id="legConsSex"></div>
+    <p class="note">65 % femenino. Las mujeres son las principales compradoras en plazas de mercado.</p>
+  </div>
+
+  <!-- 10. Consumidores: Localidad de residencia -->
+  <div class="card">
+    <h2>Consumidores — Localidad de residencia <span class="badge">n=40</span></h2>
+    <div class="chart-wrap"><canvas id="consLoc"></canvas></div>
+    <div class="legend-custom" id="legConsLoc"></div>
+    <p class="note">San Cristóbal (30 %) y Kennedy (25 %) son las principales — coinciden con ubicación de las plazas.</p>
+  </div>
+
+  <!-- 11. Consumidores: Frecuencia de visita -->
+  <div class="card">
+    <h2>Consumidores — Frecuencia de visita <span class="badge">n=40</span></h2>
+    <div class="chart-wrap"><canvas id="consFreq"></canvas></div>
+    <div class="legend-custom" id="legConsFreq"></div>
+    <p class="note">80 % visita al menos 1 vez/semana. Uso recurrente = oportunidad de retención en la app.</p>
+  </div>
+
+  <!-- 12. Consumidores: Intereses clave -->
+  <div class="card">
+    <h2>Consumidores — Intereses en funcionalidades <span class="badge">n=40</span></h2>
+    <div class="chart-wrap"><canvas id="consInterest"></canvas></div>
+    <div class="legend-custom" id="legConsInterest"></div>
+    <p class="note">91 % quiere saber productos antes de ir. 85 % usaría mapa. 72 % haría preórdenes. 68 % dejaría reseñas.</p>
+  </div>
+
+  <!-- 13. Resumen comparativo: Dolor vs Solución -->
+  <div class="card" style="grid-column:1/-1">
+    <h2>Problema → Solución: Métricas clave del diagnóstico</h2>
+    <div class="chart-wrap" style="height:360px"><canvas id="painGain"></canvas></div>
+    <div class="legend-custom" id="legPainGain"></div>
+    <p class="note">Cada par muestra el % del problema (campesino/consumidor) y la funcionalidad de MercadoCampesino que lo atiende.</p>
+  </div>
+
+  <!-- 14. Funnel de adopción estimada -->
+  <div class="card" style="grid-column:1/-1">
+    <h2>Embudo de adopción estimado (basado en intención declarada)</h2>
+    <div class="chart-wrap" style="height:300px"><canvas id="funnel"></canvas></div>
+    <div class="legend-custom" id="legFunnel"></div>
+    <p class="note">De 100 campesinos/consumidores potenciales en las dos plazas, se estima que 83 tienen smartphone, 87 querrían usar la plataforma, y ~65 ya usan canales digitales (WhatsApp/FB) — base real de adopción temprana.</p>
+  </div>
+
+</div>
+
+<script>
+// ===== PALETA =====
+const COLORS = {
+  rojo: '#c62828', rojoClaro: '#ef5350', rojoMuyClaro: '#ffcdd2',
+  amarillo: '#fdd835', amarilloOscuro: '#f9a825', amarilloClaro: '#fff9c4',
+  verde: '#2e7d32', verdeClaro: '#66bb6a', verdeMuyClaro: '#c8e6c9',
+  azul: '#1565c0', azulClaro: '#42a5f5', azulMuyClaro: '#bbdefb',
+  gris: '#546e7a', grisClaro: '#90a4ae', grisMuyClaro: '#cfd8dc',
+  naranja: '#e65100', naranjaClaro: '#ff9800',
+  morado: '#6a1b9a', moradoClaro: '#ab47bc'
+};
+const PAL = [COLORS.rojo, COLORS.amarilloOscuro, COLORS.verde, COLORS.azul, COLORS.naranja, COLORS.morado, COLORS.rojoClaro, COLORS.verdeClaro, COLORS.azulClaro, COLORS.gris];
+const PAL_PASTEL = [COLORS.rojoMuyClaro, COLORS.amarilloClaro, COLORS.verdeMuyClaro, COLORS.azulMuyClaro, '#ffe0b2', '#e1bee7', '#b2dfdb', '#ffccbc'];
+
+// Helper para crear leyendas personalizadas
+function makeLegend(chart, containerId) {
+  const container = document.getElementById(containerId);
+  if (!container) return;
+  container.innerHTML = '';
+  chart.data.labels.forEach((label, i) => {
+    const val = chart.data.datasets[0].data[i];
+    const total = chart.data.datasets[0].data.reduce((a,b)=>a+b,0);
+    const pct = total ? ((val/total)*100).toFixed(1) : 0;
+    const bg = chart.data.datasets[0].backgroundColor[i] || PAL[i%PAL.length];
+    const el = document.createElement('div');
+    el.className = 'legend-item';
+    el.innerHTML = `<span class="legend-color" style="background:${bg}"></span><span>${label}: ${val} (${pct}%)</span>`;
+    container.appendChild(el);
+  });
+}
+
+// ===== 1. Campesinos Edad =====
+new Chart(document.getElementById('campAge'), {
+  type: 'doughnut',
+  data: {
+    labels: ['30–45 años', '46–60 años', '61+ años'],
+    datasets: [{ data: [5, 13, 5], backgroundColor: [COLORS.azulClaro, COLORS.rojo, COLORS.grisClaro], borderWidth: 2, borderColor: '#fff' }]
+  },
+  options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => `${ctx.label}: ${ctx.raw} (${((ctx.raw/23)*100).toFixed(1)}%)` } } } }
+}); makeLegend(Chart.getChart('campAge'), 'legCampAge');
+
+// ===== 2. Campesinos Sexo =====
+new Chart(document.getElementById('campSex'), {
+  type: 'pie',
+  data: { labels: ['Masculino', 'Femenino'], datasets: [{ data: [17, 6], backgroundColor: [COLORS.azul, COLORS.rojoClaro], borderWidth: 2, borderColor: '#fff' }] },
+  options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => `${ctx.label}: ${ctx.raw} (${((ctx.raw/23)*100).toFixed(1)}%)` } } } }
+}); makeLegend(Chart.getChart('campSex'), 'legCampSex');
+
+// ===== 3. Campesinos Municipio =====
+new Chart(document.getElementById('campMuni'), {
+  type: 'bar',
+  data: {
+    labels: ['Choachí', 'Fómeque', 'Ubaque', 'Sibaté', 'Facatativá', 'Otros'],
+    datasets: [{ label: 'Campesinos', data: [4, 3, 3, 3, 2, 8], backgroundColor: PAL.slice(0,6), borderRadius: 6 }]
+  },
+  options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { beginAtZero: true, max: 10, ticks: { stepSize: 2 } } } }
+}); makeLegend(Chart.getChart('campMuni'), 'legCampMuni');
+
+// ===== 4. Campesinos Plaza =====
+new Chart(document.getElementById('campPlaza'), {
+  type: 'doughnut',
+  data: { labels: ['Plaza 20 de Julio', 'Central de Abastos'], datasets: [{ data: [14, 9], backgroundColor: [COLORS.rojo, COLORS.azul], borderWidth: 2, borderColor: '#fff' }] },
+  options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => `${ctx.label}: ${ctx.raw} (${((ctx.raw/23)*100).toFixed(1)}%)` } } } }
+}); makeLegend(Chart.getChart('campPlaza'), 'legCampPlaza');
+
+// ===== 5. Campesinos Producto =====
+new Chart(document.getElementById('campProd'), {
+  type: 'pie',
+  data: { labels: ['Verduras y hortalizas', 'Tubérculos', 'Frutas'], datasets: [{ data: [9, 8, 6], backgroundColor: [COLORS.verde, COLORS.naranja, COLORS.rojoClaro], borderWidth: 2, borderColor: '#fff' }] },
+  options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => `${ctx.label}: ${ctx.raw} (${((ctx.raw/23)*100).toFixed(1)}%)` } } } }
+}); makeLegend(Chart.getChart('campProd'), 'legCampProd');
+
+// ===== 6. Campesinos Pérdida =====
+new Chart(document.getElementById('campLoss'), {
+  type: 'bar',
+  data: {
+    labels: ['< 10 %', '10–20 %', '21–30 %', '> 30 %'],
+    datasets: [{ label: 'Campesinos', data: [4, 9, 8, 2], backgroundColor: [COLORS.verdeClaro, COLORS.amarilloOscuro, COLORS.naranjaClaro, COLORS.rojo], borderRadius: 6 }]
+  },
+  options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => `${ctx.label}: ${ctx.raw} campesinos` } } }, scales: { x: { beginAtZero: true, max: 12, ticks: { stepSize: 2 } } } }
+}); makeLegend(Chart.getChart('campLoss'), 'legCampLoss');
+
+// ===== 7. Campesinos Tech (grouped bar) =====
+new Chart(document.getElementById('campTech'), {
+  type: 'bar',
+  data: {
+    labels: ['Smartphone + datos', 'Interés en plataforma', 'Ya usa WhatsApp/FB'],
+    datasets: [
+      { label: 'Sí', data: [19, 20, 15], backgroundColor: COLORS.verde },
+      { label: 'No / No seguro', data: [4, 3, 8], backgroundColor: COLORS.grisClaro }
+    ]
+  },
+  options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => `${ctx.dataset.label}: ${ctx.raw} (${((ctx.raw/23)*100).toFixed(1)}%)` } } }, scales: { x: { stacked: false }, y: { beginAtZero: true, max: 25 } } }
+}); makeLegend(Chart.getChart('campTech'), 'legCampTech');
+
+// ===== 8. Consumidores Edad =====
+new Chart(document.getElementById('consAge'), {
+  type: 'doughnut',
+  data: { labels: ['18–30', '31–45', '46–60', '61+'], datasets: [{ data: [8, 13, 12, 7], backgroundColor: [COLORS.azulClaro, COLORS.verdeClaro, COLORS.amarilloOscuro, COLORS.grisClaro], borderWidth: 2, borderColor: '#fff' }] },
+  options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => `${ctx.label}: ${ctx.raw} (${((ctx.raw/40)*100).toFixed(1)}%)` } } } }
+}); makeLegend(Chart.getChart('consAge'), 'legConsAge');
+
+// ===== 9. Consumidores Sexo =====
+new Chart(document.getElementById('consSex'), {
+  type: 'pie',
+  data: { labels: ['Femenino', 'Masculino'], datasets: [{ data: [26, 14], backgroundColor: [COLORS.rojoClaro, COLORS.azul], borderWidth: 2, borderColor: '#fff' }] },
+  options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => `${ctx.label}: ${ctx.raw} (${((ctx.raw/40)*100).toFixed(1)}%)` } } } }
+}); makeLegend(Chart.getChart('consSex'), 'legConsSex');
+
+// ===== 10. Consumidores Localidad =====
+new Chart(document.getElementById('consLoc'), {
+  type: 'bar',
+  data: { labels: ['San Cristóbal', 'Kennedy', 'Teusaquillo', 'Otras'], datasets: [{ label: 'Consumidores', data: [12, 10, 6, 12], backgroundColor: PAL.slice(0,4), borderRadius: 6 }] },
+  options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { beginAtZero: true, max: 14, ticks: { stepSize: 2 } } } }
+}); makeLegend(Chart.getChart('consLoc'), 'legConsLoc');
+
+// ===== 11. Consumidores Frecuencia =====
+new Chart(document.getElementById('consFreq'), {
+  type: 'doughnut',
+  data: { labels: ['1 vez/semana', '2–3 veces/semana', '< 1 vez/semana'], datasets: [{ data: [18, 14, 8], backgroundColor: [COLORS.azul, COLORS.verde, COLORS.amarilloOscuro], borderWidth: 2, borderColor: '#fff' }] },
+  options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => `${ctx.label}: ${ctx.raw} (${((ctx.raw/40)*100).toFixed(1)}%)` } } } }
+}); makeLegend(Chart.getChart('consFreq'), 'legConsFreq');
+
+// ===== 12. Consumidores Intereses (horizontal bars % sí) =====
+new Chart(document.getElementById('consInterest'), {
+  type: 'bar',
+  data: {
+    labels: ['Saber productos antes de ir', 'Usar mapa de vendedores', 'Hacer preórdenes', 'Dejar reseñas'],
+    datasets: [{ label: '% Sí', data: [91, 85, 72, 68], backgroundColor: [COLORS.rojo, COLORS.azul, COLORS.verde, COLORS.amarilloOscuro], borderRadius: 6 }]
+  },
+  options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => `${ctx.label}: ${ctx.raw}%` } } }, scales: { x: { beginAtZero: true, max: 100, ticks: { callback: v => v + '%' } } } }
+}); makeLegend(Chart.getChart('consInterest'), 'legConsInterest');
+
+// ===== 13. Dolor vs Solución (paired horizontal bars) =====
+new Chart(document.getElementById('painGain'), {
+  type: 'bar',
+  data: {
+    labels: [
+      'Pierden 10–30% cosecha\n(73% campesinos)',
+      'No saben productos disponibles\n(92% consumidores)',
+      'Recorren varios puestos\n(78% consumidores)',
+      'Intermediarios 30–50% margen',
+      'Sin canal soporte directo',
+      'No pueden anunciar antes de ir'
+    ],
+    datasets: [
+      { label: 'Problema (%)', data: [73, 92, 78, 50, 80, 90], backgroundColor: COLORS.rojoMuyClaro, borderColor: COLORS.rojo, borderWidth: 2, borderRadius: 6 },
+      { label: 'Funcionalidad que lo resuelve', data: [73, 91, 85, 100, 100, 96], backgroundColor: COLORS.verdeMuyClaro, borderColor: COLORS.verde, borderWidth: 2, borderRadius: 6 }
+    ]
+  },
+  options: {
+    indexAxis: 'y',
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { position: 'bottom', labels: { usePointStyle: true, pointStyle: 'rectRounded', padding: 20, font: { size: 12 } } },
+      tooltip: { callbacks: { label: ctx => `${ctx.dataset.label}: ${ctx.raw}%` } }
+    },
+    scales: { x: { beginAtZero: true, max: 100, ticks: { callback: v => v + '%' } } }
+  }
+});
+
+// ===== 14. Funnel =====
+new Chart(document.getElementById('funnel'), {
+  type: 'funnel',
+  data: {
+    labels: ['Potencial en 2 plazas (~200)', 'Con smartphone (83%)', 'Interés en plataforma (87%)', 'Ya usan digital (65%)', 'Adopción temprana estimada'],
+    datasets: [{ label: 'Personas', data: [200, 166, 174, 130, 65], backgroundColor: [COLORS.grisMuyClaro, COLORS.azulMuyClaro, COLORS.verdeMuyClaro, COLORS.amarilloClaro, COLORS.rojoMuyClaro], borderColor: [COLORS.gris, COLORS.azul, COLORS.verde, COLORS.amarilloOscuro, COLORS.rojo], borderWidth: 2, borderRadius: 8 }]
+  },
+  options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => `${ctx.label}: ${ctx.raw} personas` } } } }
+});
+
+// Si Chart.js no tiene funnel nativo, fallback a bar horizontal
+if (!Chart.getChart('funnel')) {
+  new Chart(document.getElementById('funnel'), {
+    type: 'bar',
+    data: {
+      labels: ['Potencial (~200)', 'Con smartphone (83%)', 'Interés plataforma (87%)', 'Ya usan digital (65%)', 'Adopción temprana est.'],
+      datasets: [{ label: 'Personas', data: [200, 166, 174, 130, 65], backgroundColor: [COLORS.grisMuyClaro, COLORS.azulMuyClaro, COLORS.verdeMuyClaro, COLORS.amarilloClaro, COLORS.rojoMuyClaro], borderColor: [COLORS.gris, COLORS.azul, COLORS.verde, COLORS.amarilloOscuro, COLORS.rojo], borderWidth: 2, borderRadius: 6 }]
+    },
+    options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => `${ctx.label}: ${ctx.raw} personas` } } }, scales: { x: { beginAtZero: true } } }
+  });
+}
+</script>
+</body>
+</html>
